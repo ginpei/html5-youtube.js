@@ -72,9 +72,7 @@
 			width: 640,
 			videoId: this.videoId,
 			events: {
-				onReady: function(event) {
-					this._triggerYtEvent('ready', event);
-				}.bind(this)
+				onReady: this._triggerYtEvent.bind(this, 'ready')
 			}
 		});
 	};
