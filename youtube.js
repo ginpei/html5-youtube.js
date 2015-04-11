@@ -71,6 +71,7 @@
 	 */
 	$p._initializeEventer = function() {
 		this._eventer = document.createElement('ytapiplayer');
+		this.on('onReady', this.onReady.bind(this));
 	};
 
 	$p._setupVideo = function() {
@@ -79,7 +80,10 @@
 			width: 640,
 			videoId: this.videoId,
 			events: {
-				onReady: this._triggerYtEvent.bind(this, 'ready')
+				onError: this._triggerYtEvent.bind(this, 'onError'),
+				onPlaybackQualityChange: this._triggerYtEvent.bind(this, 'onPlaybackQualityChange'),
+				onReady: this._triggerYtEvent.bind(this, 'onReady'),
+				onStateChange: this._triggerYtEvent.bind(this, 'onStateChange')
 			}
 		});
 	};
@@ -96,6 +100,10 @@
 		event.originalEvent = originalEvent;
 
 		this._eventer.dispatchEvent(event);
+	};
+
+	$p.onReady = function(event) {
+		this._triggerYtEvent('ready', event);
 	};
 
 
