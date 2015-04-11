@@ -66,6 +66,13 @@
 		Player.loadYTScript(callback);
 	};
 
+	/**
+	 * YT.Player has add/removeEventListener methods but they doesn't work correctly
+	 */
+	$p._initializeEventer = function() {
+		this._eventer = document.createElement('ytapiplayer');
+	};
+
 	$p._setupVideo = function() {
 		this.player = new YT.Player(this.el, {
 			height: 390,
@@ -75,13 +82,6 @@
 				onReady: this._triggerYtEvent.bind(this, 'ready')
 			}
 		});
-	};
-
-	/**
-	 * YT.Player has add/removeEventListener methods but they doesn't work correctly
-	 */
-	$p._initializeEventer = function() {
-		this._eventer = document.createElement('ytapiplayer');
 	};
 
 	$p.on = function(type, listener) {
