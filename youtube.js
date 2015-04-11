@@ -87,6 +87,9 @@
 		});
 	};
 
+	// ----------------------------------------------------------------
+	// Events
+
 	$p.on = function(type, listener) {
 		this._eventer.addEventListener(type, listener);
 		return this;
@@ -136,7 +139,16 @@
 		}
 	};
 
+	// ----------------------------------------------------------------
+	// Manip
 
+	$p.play = function() {
+		this.player.playVideo();
+	};
+
+	$p.pause = function() {
+		this.player.pauseVideo();
+	};
 
 	return;
 
