@@ -58,13 +58,24 @@
 		this.el = options.el;
 		this.videoId = options.id;
 
-		this._loadYTScript(function() {
-			console.log('ready', this.videoId);
-		}.bind(this));
+		this._loadYTScript(this._setupVideo.bind(this));
 	};
 
 	$p._loadYTScript = function(callback) {
 		Player.loadYTScript(callback);
+	};
+
+	$p._setupVideo = function() {
+		this.player = new YT.Player(this.el, {
+			height: 390,
+			width: 640,
+			videoId: this.videoId,
+			events: {
+				onReady: function(event) {
+					console.log(this.videoId);
+				}.bind(this)
+			}
+		});
 	};
 
 
