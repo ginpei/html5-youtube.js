@@ -31,19 +31,19 @@ youtube({ el:elPlayer, id:videoId });
 (function() {
     var elPlayer = document.querySelector('.js-player');
     var videoId = elPlayer.getAttribute('data-youtube-videoid');
-    var elPlay = document.querySelector('js-play');
-    var elPause = document.querySelector('js-pause');
+    var elPlay = document.querySelector('.js-play');
+    var elPause = document.querySelector('.js-pause');
 
     var player = youtube({ el:elPlayer, id:videoId })
         .on('ready', function(event) {
             player.play();
         })
         .on('play', function(event) {
-            elPlayer.disabled = true;
+            elPlay.disabled = true;
             elPause.disabled = false;
         })
         .on('pause', function(event) {
-            elPlayer.disabled = false;
+            elPlay.disabled = false;
             elPause.disabled = true;
         })
         .on('end', function(event) {
