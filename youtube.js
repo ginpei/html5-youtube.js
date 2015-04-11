@@ -71,7 +71,6 @@
 	 */
 	$p._initializeEventer = function() {
 		this._eventer = document.createElement('ytapiplayer');
-		this.on('onReady', this.onReady.bind(this));
 	};
 
 	$p._setupVideo = function() {
@@ -80,10 +79,10 @@
 			width: 640,
 			videoId: this.videoId,
 			events: {
-				onError: this._triggerYtEvent.bind(this, 'onError'),
-				onPlaybackQualityChange: this._triggerYtEvent.bind(this, 'onPlaybackQualityChange'),
-				onReady: this._triggerYtEvent.bind(this, 'onReady'),
-				onStateChange: this._triggerYtEvent.bind(this, 'onStateChange')
+				onError: this.onError.bind(this),
+				onPlaybackQualityChange: this.onPlaybackQualityChange.bind(this),
+				onReady: this.onReady.bind(this),
+				onStateChange: this.onStateChange.bind(this),
 			}
 		});
 	};
@@ -102,8 +101,21 @@
 		this._eventer.dispatchEvent(event);
 	};
 
+	$p.onError = function(event) {
+		this._triggerYtEvent('onError', event);
+	};
+
+	$p.onPlaybackQualityChange = function(event) {
+		this._triggerYtEvent('onPlaybackQualityChange', event);
+	};
+
 	$p.onReady = function(event) {
+		this._triggerYtEvent('onReady', event);
 		this._triggerYtEvent('ready', event);
+	};
+
+	$p.onStateChange = function(event) {
+		this._triggerYtEvent('onStateChange', event);
 	};
 
 
