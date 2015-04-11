@@ -89,6 +89,7 @@
 
 	$p.on = function(type, listener) {
 		this._eventer.addEventListener(type, listener);
+		return this;
 	};
 
 	$p._triggerYtEvent = function(type, originalEvent) {
