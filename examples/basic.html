@@ -16,8 +16,11 @@ var videoId = '2EEsa_pqGAs';
 youtube({ el:elPlayer, id:videoId });
 
 youtube({el:document.getElementById('my-youtube-player2'), id:'_bOppBGib0k'})
-	.on('ready', function(event) {
-		console.log('ready');
+	.on('play', function(event) {
+		console.log('play', this.videoId);
+	})
+	.on('pause', function(event) {
+		console.log('pause', this.videoId);
 	});
 		</script>
 	</body>

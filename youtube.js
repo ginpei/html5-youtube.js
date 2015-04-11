@@ -117,6 +117,23 @@
 
 	$p.onStateChange = function(event) {
 		this._triggerYtEvent('onStateChange', event);
+
+		var state = event.data;
+		if (state === YT.PlayerState.UNSTARTED) {
+			this._triggerYtEvent('unstart', event);
+		}
+		else if (state === YT.PlayerState.PLAYING) {
+			this._triggerYtEvent('play', event);
+		}
+		else if (state === YT.PlayerState.PAUSED) {
+			this._triggerYtEvent('pause', event);
+		}
+		else if (state === YT.PlayerState.BUFFERING) {
+			this._triggerYtEvent('buffer', event);
+		}
+		else if (state === YT.PlayerState.ENDED) {
+			this._triggerYtEvent('end', event);
+		}
 	};
 
 
