@@ -15,7 +15,10 @@ var videoId = '2EEsa_pqGAs';
 
 youtube({ el:elPlayer, id:videoId });
 
-youtube({el:document.getElementById('my-youtube-player2'), id:'_bOppBGib0k'});
+youtube({el:document.getElementById('my-youtube-player2'), id:'_bOppBGib0k'})
+	.on('ready', function(event) {
+		console.log('ready');
+	});
 		</script>
 	</body>
 </html>

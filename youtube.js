@@ -58,6 +58,7 @@
 		this.el = options.el;
 		this.videoId = options.id;
 
+		this._initializeEventer();
 		this._loadYTScript(this._setupVideo.bind(this));
 	};
 
@@ -72,10 +73,31 @@
 			videoId: this.videoId,
 			events: {
 				onReady: function(event) {
-					console.log(this.videoId);
+					this._triggerYtEvent('ready', event);
 				}.bind(this)
 			}
 		});
+	};
+
+	/**
+	 * YT.Player has add/removeEventListener methods but they doesn't work correctly
+	 */
+	$p._initializeEventer = function() {
+		this._eventer = document.createElement('ytapiplayer');
+	};
+
+	$p.on = function(type, listener) {
+		this._eventer.addEventListener(type, listener);
+	};
+
+	$p._triggerYtEvent = function(type, originalEvent) {
+		var event = document.createEvent('CustomEvent');
+		event.initEvent(type, false, true);
+		event.playerData = originalEvent.data;
+		event.player = originalEvent.target;
+		event.originalEvent = originalEvent;
+
+		this._eventer.dispatchEvent(event);
 	};
 
 
