@@ -1,4 +1,10 @@
 (function() {
+	var elPlayer, videoId;
+	window.youtube = function(options) {
+		elPlayer = options.el;
+		videoId = options.id;
+	};
+
 	var url = 'https://www.youtube.com/iframe_api';
 	var elScript = document.createElement('script');
 	elScript.src = url;
@@ -18,7 +24,7 @@
 			this.dispatchEvent(event);
 		};
 
-		var player = new YT.Player('ytapiplayer', {
+		var player = new YT.Player(elPlayer, {
 			height: 390,
 			width: 640,
 			events: {
@@ -33,7 +39,6 @@
 
 		playerEventer.addEventListener('ready', function(event) {
 			console.log(':ready');
-			var videoId = '2EEsa_pqGAs';
 			player.loadVideoById(videoId);
 		});
 		playerEventer.addEventListener('statechange', function(event) {
