@@ -89,8 +89,10 @@
 			width: width,
 			videoId: videoId,
 			events: {
+				onApiChange: this.onApiChang.bind(this),
 				onError: this.onError.bind(this),
 				onPlaybackQualityChange: this.onPlaybackQualityChange.bind(this),
+				onPlaybackRateChange: this.onPlaybackRateChange.bind(this),
 				onReady: this.onReady.bind(this),
 				onStateChange: this.onStateChange.bind(this),
 			}
@@ -116,12 +118,20 @@
 		this._eventer.dispatchEvent(event);
 	};
 
+	$p.onApiChang = function(event) {
+		this._triggerYtEvent('onApiChang', event);
+	};
+
 	$p.onError = function(event) {
 		this._triggerYtEvent('onError', event);
 	};
 
 	$p.onPlaybackQualityChange = function(event) {
 		this._triggerYtEvent('onPlaybackQualityChange', event);
+	};
+
+	$p.onPlaybackRateChange = function(event) {
+		this._triggerYtEvent('onPlaybackRateChange', event);
 	};
 
 	$p.onReady = function(event) {
