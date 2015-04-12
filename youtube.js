@@ -95,6 +95,7 @@
 				onStateChange: this.onStateChange.bind(this),
 			}
 		});
+		this.el = this.player.getIframe();
 	};
 
 	// ----------------------------------------------------------------
