@@ -74,9 +74,21 @@
 	};
 
 	$p._setupVideo = function() {
-		this.player = new YT.Player(this.el, {
-			height: 390,
-			width: 640,
+		var el = this.el;
+
+		var width;
+		var height = el.clientHeight;
+		if (height) {
+			width  = el.clientWidth;
+		}
+		else {
+			height = 390;
+			width = 640;
+		}
+
+		this.player = new YT.Player(el, {
+			height: height,
+			width: width,
 			videoId: this.videoId,
 			events: {
 				onError: this.onError.bind(this),
