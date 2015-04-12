@@ -55,11 +55,8 @@
 	var $p = Player.prototype;
 
 	$p.initialize = function(options) {
-		this.el = options.el;
-		this.videoId = options.id;
-
 		this._initializeEventer();
-		this._loadYTScript(this._setupVideo.bind(this));
+		this._loadYTScript(this._setupVideo.bind(this, options));
 	};
 
 	$p._loadYTScript = function(callback) {
@@ -73,8 +70,9 @@
 		this._eventer = document.createElement('ytapiplayer');
 	};
 
-	$p._setupVideo = function() {
-		var el = this.el;
+	$p._setupVideo = function(options) {
+		var el = options.el;
+		var videoId = options.id;
 
 		var width;
 		var height = el.clientHeight;
@@ -89,7 +87,7 @@
 		this.player = new YT.Player(el, {
 			height: height,
 			width: width,
-			videoId: this.videoId,
+			videoId: videoId,
 			events: {
 				onError: this.onError.bind(this),
 				onPlaybackQualityChange: this.onPlaybackQualityChange.bind(this),
