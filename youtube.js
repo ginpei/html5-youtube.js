@@ -94,7 +94,7 @@
 				onPlaybackQualityChange: this.onPlaybackQualityChange.bind(this),
 				onPlaybackRateChange: this.onPlaybackRateChange.bind(this),
 				onReady: this.onReady.bind(this),
-				onStateChange: this.onStateChange.bind(this),
+				onStateChange: this.onStateChange.bind(this)
 			}
 		});
 		this.el = this.player.getIframe();
