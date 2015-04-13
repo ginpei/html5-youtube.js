@@ -120,6 +120,16 @@
 		}.bind(this), 100);
 	};
 
+	$p._observeVolume = function() {
+		this._tmVolume = setInterval(function() {
+			var volume = this.player.getVolume();
+			if (volume !== this.volume) {
+				this.volume = volume;
+				this.trigger('volumechange');
+			}
+		}.bind(this), 100);
+	};
+
 	// ----------------------------------------------------------------
 	// Events
 
@@ -164,6 +174,7 @@
 		this._triggerYtEvent('onReady', event);
 		this._updateMeta();
 		this._observeProgress();
+		this._observeVolume();
 		this._triggerYtEvent('ready', event);
 	};
 

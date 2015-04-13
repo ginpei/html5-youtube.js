@@ -17,6 +17,8 @@
 			<button class="js-play" disabled>Play</button>
 			<button class="js-pause" disabled>Pause</button>
 			<input class="js-progress" type="range" min="0" max="1" value="0" disabled />
+			<br />
+			<input class="js-volume" type="range" min="0" max="100" value="0" disabled />
 		</div>
 		<script src="../youtube.js"></script>
 		<script>
@@ -26,6 +28,7 @@
 	var elPlay = document.querySelector('.js-play');
 	var elPause = document.querySelector('.js-pause');
 	var elProgress = document.querySelector('.js-progress');
+	var elVolume = document.querySelector('.js-volume');
 
 	var player = youtube({ el:elPlayer, id:videoId })
 		.on('ready', function(event) {
@@ -33,6 +36,7 @@
 			elPause.disabled = false;
 			elProgress.disabled = false;
 			elProgress.max = player.duration;
+			elVolume.value = player.volume;
 		})
 		.on('play', function(event) {
 			elPlay.disabled = true;
@@ -47,6 +51,9 @@
 		})
 		.on('end', function(event) {
 			player.play();
+		})
+		.on('volumechange', function(event) {
+			elVolume.value = player.volume;
 		});
 
 	elPlay.addEventListener('click', function(event) {
