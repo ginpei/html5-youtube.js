@@ -58,3 +58,68 @@ youtube({ el:elPlayer, id:videoId });
     });
 })();
 ```
+
+## References
+
+### player
+
+The original YouTube Player object.
+
+* `YT.Player`
+
+See: [YouTube Player API Reference for iframe Embeds](https://developers.google.com/youtube/iframe_api_reference).
+
+### el
+
+The element that owned by the original YouTube Player object.
+
+* `HTMLIFrameElement`
+
+It is equal to the result of `player.getIframe()`.
+
+### paused
+
+Playing or not.
+
+* `boolean`
+
+### duration
+
+* `number`
+
+### currentTime
+
+* `number`
+
+Updated with progress.
+
+### volume
+
+* `number`
+
+### play()
+
+Start playing a video.
+
+* returns ... {undefined}
+
+### pause()
+
+Stop playing a video.
+
+* returns ... {undefined}
+
+### on(type, listener)
+
+Set an event listener.
+
+* `type` ... {string} event name.
+* `listener` ... {Function} event listener.
+* returns ... {undefined}
+
+### trigger(type)
+
+Fire the event.
+
+* `type` ... {string} event name.
+* returns ... {undefined}
