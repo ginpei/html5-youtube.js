@@ -115,6 +115,12 @@
 		return this;
 	};
 
+	$p.trigger = function(type) {
+		var event = document.createEvent('CustomEvent');
+		event.initEvent(type, false, true);
+		this._eventer.dispatchEvent(event);
+	};
+
 	$p._triggerYtEvent = function(type, originalEvent) {
 		var event = document.createEvent('CustomEvent');
 		event.initEvent(type, false, true);
