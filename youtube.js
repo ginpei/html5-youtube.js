@@ -122,8 +122,10 @@
 
 	$p._observeVolume = function() {
 		this._tmVolume = setInterval(function() {
+			var muted = this.player.isMuted();
 			var volume = this.player.getVolume();
 			if (volume !== this.volume) {
+				this.muted = muted;
 				this.volume = volume;
 				this.trigger('volumechange');
 			}
