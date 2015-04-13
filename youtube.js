@@ -56,6 +56,7 @@
 
 	$p.initialize = function(options) {
 		this.currentTime = null;
+		this.paused = null;
 
 		this._initializeEventer();
 		this._loadYTScript(this._setupVideo.bind(this, options));
@@ -170,6 +171,9 @@
 		this._triggerYtEvent('onStateChange', event);
 
 		var state = event.data;
+
+		this.paused = (state !== YT.PlayerState.PLAYING);
+
 		if (state === YT.PlayerState.UNSTARTED) {
 			this._triggerYtEvent('unstart', event);
 		}
