@@ -103,7 +103,7 @@
 	/**
 	 * Called when be ready.
 	 */
-	$p._initializeMeta = function() {
+	$p._updateMeta = function() {
 		this.duration = this.player.getDuration();
 	};
 
@@ -160,7 +160,7 @@
 
 	$p.onReady = function(event) {
 		this._triggerYtEvent('onReady', event);
-		this._initializeMeta();
+		this._updateMeta();
 		this._setupProgress();
 		this._triggerYtEvent('ready', event);
 	};
