@@ -35,7 +35,9 @@
 			elPlay.disabled = true;
 			elPause.disabled = false;
 			elProgress.disabled = false;
+
 			elProgress.max = player.duration;
+			elProgress.value = player.currentTime;
 			elVolume.value = player.volume;
 		})
 		.on('play', function(event) {
