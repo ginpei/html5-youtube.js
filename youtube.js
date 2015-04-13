@@ -55,6 +55,8 @@
 	var $p = Player.prototype;
 
 	$p.initialize = function(options) {
+		this.currentTime = null;
+
 		this._initializeEventer();
 		this._loadYTScript(this._setupVideo.bind(this, options));
 	};
@@ -108,7 +110,6 @@
 	};
 
 	$p._setupProgress = function() {
-		this.currentTime = null;
 		this._tmProgress = setInterval(function() {
 			var time = this.player.getCurrentTime();
 			if (time !== this.currentTime) {
