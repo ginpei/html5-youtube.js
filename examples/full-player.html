@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<title>youtube.js</title>
+		<style>
+			.player {
+				height: 300px;
+				width: 400px;
+			}
+		</style>
+	</head>
+	<body>
+		<h1>youtube.js</h1>
+		<div class="player js-player" data-youtube-videoid="2EEsa_pqGAs"></div>
+		<div>
+			<button class="js-play" disabled>Play</button>
+			<button class="js-pause" disabled>Pause</button>
+			<input class="js-progress" type="range" min="0" max="1" value="0" disabled />
+		</div>
+		<script src="../youtube.js"></script>
+		<script>
+(function() {
+	var elPlayer = document.querySelector('.js-player');
+	var videoId = elPlayer.getAttribute('data-youtube-videoid');
+	var elPlay = document.querySelector('.js-play');
+	var elPause = document.querySelector('.js-pause');
+	var elProgress = document.querySelector('.js-progress');
+
+	var player = youtube({ el:elPlayer, id:videoId })
+		.on('ready', function(event) {
+			elPlay.disabled = true;
+			elPause.disabled = false;
+			elProgress.disabled = false;
+			elProgress.max = player.duration;
+		})
+		.on('play', function(event) {
+			elPlay.disabled = true;
+			elPause.disabled = false;
+		})
+		.on('pause', function(event) {
+			elPlay.disabled = false;
+			elPause.disabled = true;
+		})
+		.on('end', function(event) {
+			player.play();
+		});
+
+	elPlay.addEventListener('click', function(event) {
+		player.play();
+	});
+	elPause.addEventListener('click', function(event) {
+		player.pause();
+	});
+})();
+		</script>
+	</body>
+</html>

@@ -100,6 +100,13 @@
 		this.el = this.player.getIframe();
 	};
 
+	/**
+	 * Called when be ready.
+	 */
+	$p._initializeMeta = function() {
+		this.duration = this.player.getDuration();
+	};
+
 	// ----------------------------------------------------------------
 	// Events
 
@@ -136,6 +143,7 @@
 
 	$p.onReady = function(event) {
 		this._triggerYtEvent('onReady', event);
+		this._initializeMeta();
 		this._triggerYtEvent('ready', event);
 	};
 
