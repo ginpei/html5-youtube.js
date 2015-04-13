@@ -46,8 +46,8 @@
 
 	var player = youtube({ el:elPlayer, id:videoId })
 		.on('ready', function(event) {
-			elPlay.disabled = true;
-			elPause.disabled = false;
+			elPlay.disabled = false;
+			elPause.disabled = true;
 
 			elProgress.max = player.duration;
 			elProgress.value = player.currentTime;
