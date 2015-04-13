@@ -38,6 +38,9 @@
 			elPlay.disabled = true;
 			elPause.disabled = false;
 		})
+		.on('progress', function(event) {
+			elProgress.value = player.currentTime;
+		})
 		.on('pause', function(event) {
 			elPlay.disabled = false;
 			elPause.disabled = true;

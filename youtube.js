@@ -107,6 +107,17 @@
 		this.duration = this.player.getDuration();
 	};
 
+	$p._setupProgress = function() {
+		this.currentTime = null;
+		this._tmProgress = setInterval(function() {
+			var time = this.player.getCurrentTime();
+			if (time !== this.currentTime) {
+				this.currentTime = time;
+				this.trigger('progress');
+			}
+		}.bind(this), 100);
+	};
+
 	// ----------------------------------------------------------------
 	// Events
 
@@ -150,6 +161,7 @@
 	$p.onReady = function(event) {
 		this._triggerYtEvent('onReady', event);
 		this._initializeMeta();
+		this._setupProgress();
 		this._triggerYtEvent('ready', event);
 	};
 
