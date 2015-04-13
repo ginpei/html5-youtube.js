@@ -110,7 +110,7 @@
 		this.duration = this.player.getDuration();
 	};
 
-	$p._setupProgress = function() {
+	$p._observeProgress = function() {
 		this._tmProgress = setInterval(function() {
 			var time = this.player.getCurrentTime();
 			if (time !== this.currentTime) {
@@ -163,7 +163,7 @@
 	$p.onReady = function(event) {
 		this._triggerYtEvent('onReady', event);
 		this._updateMeta();
-		this._setupProgress();
+		this._observeProgress();
 		this._triggerYtEvent('ready', event);
 	};
 
