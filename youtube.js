@@ -55,7 +55,7 @@
 	var $p = Player.prototype;
 
 	$p.initialize = function(options) {
-		this.currentTime = null;
+		this._currentTime = null;
 		this.paused = null;
 
 		this._initializeEventer();
@@ -113,8 +113,8 @@
 	$p._observeProgress = function() {
 		this._tmProgress = setInterval(function() {
 			var time = this.player.getCurrentTime();
-			if (time !== this.currentTime) {
-				this.currentTime = time;
+			if (time !== this._currentTime) {
+				this._currentTime = time;
 				this.trigger('progress');
 			}
 		}.bind(this), 100);
@@ -214,4 +214,13 @@
 	$p.pause = function() {
 		this.player.pauseVideo();
 	};
+
+	Object.defineProperty($p, 'currentTime', {
+		get: function() {
+			return this._currentTime;
+		},
+		set: function(value) {
+			this.player.seekTo(this._currentTime=value, true);
+		}
+	});
 })();
