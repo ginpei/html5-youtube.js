@@ -55,11 +55,11 @@
 	var $p = Player.prototype;
 
 	$p.initialize = function(options) {
-		this.el = options.el;
-		this.videoId = options.id;
+		this.currentTime = null;
+		this.paused = null;
 
 		this._initializeEventer();
-		this._loadYTScript(this._setupVideo.bind(this));
+		this._loadYTScript(this._setupVideo.bind(this, options));
 	};
 
 	$p._loadYTScript = function(callback) {
@@ -73,18 +73,63 @@
 		this._eventer = document.createElement('ytapiplayer');
 	};
 
-	$p._setupVideo = function() {
-		this.player = new YT.Player(this.el, {
-			height: 390,
-			width: 640,
-			videoId: this.videoId,
+	$p._setupVideo = function(options) {
+		var el = options.el;
+		var videoId = options.id;
+
+		var width;
+		var height = el.clientHeight;
+		if (height) {
+			width  = el.clientWidth;
+		}
+		else {
+			height = 390;
+			width = 640;
+		}
+
+		this.player = new YT.Player(el, {
+			height: height,
+			width: width,
+			videoId: videoId,
 			events: {
+				onApiChange: this.onApiChang.bind(this),
 				onError: this.onError.bind(this),
 				onPlaybackQualityChange: this.onPlaybackQualityChange.bind(this),
+				onPlaybackRateChange: this.onPlaybackRateChange.bind(this),
 				onReady: this.onReady.bind(this),
-				onStateChange: this.onStateChange.bind(this),
+				onStateChange: this.onStateChange.bind(this)
 			}
 		});
+		this.el = this.player.getIframe();
+	};
+
+	/**
+	 * Called when be ready.
+	 */
+	$p._updateMeta = function() {
+		this.duration = this.player.getDuration();
+	};
+
+	$p._observeProgress = function() {
+		this._tmProgress = setInterval(function() {
+			var time = this.player.getCurrentTime();
+			if (time !== this.currentTime) {
+				this.currentTime = time;
+				this.trigger('progress');
+			}
+		}.bind(this), 100);
+	};
+
+	$p._observeVolume = function() {
+		this._tmVolume = setInterval(function() {
+			var muted = this.player.isMuted();
+			var volume = this.player.getVolume();
+			if (muted !== this.muted || volume !== this.volume) {
+				this.muted = muted;
+				this.volume = volume;
+				this.trigger('volumechange');
+			}
+		}.bind(this), 100);
 	};
 
 	// ----------------------------------------------------------------
@@ -93,6 +138,12 @@
 	$p.on = function(type, listener) {
 		this._eventer.addEventListener(type, listener);
 		return this;
+	};
+
+	$p.trigger = function(type) {
+		var event = document.createEvent('CustomEvent');
+		event.initEvent(type, false, true);
+		this._eventer.dispatchEvent(event);
 	};
 
 	$p._triggerYtEvent = function(type, originalEvent) {
@@ -105,6 +156,10 @@
 		this._eventer.dispatchEvent(event);
 	};
 
+	$p.onApiChang = function(event) {
+		this._triggerYtEvent('onApiChang', event);
+	};
+
 	$p.onError = function(event) {
 		this._triggerYtEvent('onError', event);
 	};
@@ -113,8 +168,15 @@
 		this._triggerYtEvent('onPlaybackQualityChange', event);
 	};
 
+	$p.onPlaybackRateChange = function(event) {
+		this._triggerYtEvent('onPlaybackRateChange', event);
+	};
+
 	$p.onReady = function(event) {
 		this._triggerYtEvent('onReady', event);
+		this._updateMeta();
+		this._observeProgress();
+		this._observeVolume();
 		this._triggerYtEvent('ready', event);
 	};
 
@@ -122,6 +184,9 @@
 		this._triggerYtEvent('onStateChange', event);
 
 		var state = event.data;
+
+		this.paused = (state !== YT.PlayerState.PLAYING);
+
 		if (state === YT.PlayerState.UNSTARTED) {
 			this._triggerYtEvent('unstart', event);
 		}
