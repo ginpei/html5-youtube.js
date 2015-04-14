@@ -44,7 +44,7 @@
 		this.innerHTML = text;
 	};
 
-	var player = youtube({ el:elPlayer, id:videoId })
+	window.player = youtube({ el:elPlayer, id:videoId })
 		.on('ready', function(event) {
 			elPlay.disabled = false;
 			elPause.disabled = true;
