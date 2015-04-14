@@ -10,6 +10,11 @@
 		}
 	};
 
+	Player.bind = function(fn) {
+		var args = Array.prototype.slice.call(arguments, 1);
+		return Function.prototype.bind.apply(fn, args);
+	}
+
 	/**
 	 * Load YoutTube API script.
 	 * Status is changed as: initial->loading->ready.
@@ -33,13 +38,13 @@
 			document.body.appendChild(elScript);
 
 			// set callbacks
-			window.onYouTubeIframeAPIReady = function() {
+			window.onYouTubeIframeAPIReady = Player.bind(function() {
 				callbacks.forEach(function(callback, index) {
 					callback();
 				});
 				delete this._ytCallbacks;
 				this._ytStatus = 2;
-			}.bind(this);
+			}, this);
 
 			// update status
 			this._ytStatus = 1;
@@ -59,7 +64,7 @@
 		this.paused = null;
 
 		this._initializeEventer();
-		this._loadYTScript(this._setupVideo.bind(this, options));
+		this._loadYTScript(Player.bind(this._setupVideo, this, options));
 	};
 
 	$p._loadYTScript = function(callback) {
@@ -92,12 +97,12 @@
 			width: width,
 			videoId: videoId,
 			events: {
-				onApiChange: this.onApiChang.bind(this),
-				onError: this.onError.bind(this),
-				onPlaybackQualityChange: this.onPlaybackQualityChange.bind(this),
-				onPlaybackRateChange: this.onPlaybackRateChange.bind(this),
-				onReady: this.onReady.bind(this),
-				onStateChange: this.onStateChange.bind(this)
+				onApiChange: Player.bind(this.onApiChang, this),
+				onError: Player.bind(this.onError, this),
+				onPlaybackQualityChange: Player.bind(this.onPlaybackQualityChange, this),
+				onPlaybackRateChange: Player.bind(this.onPlaybackRateChange, this),
+				onReady: Player.bind(this.onReady, this),
+				onStateChange: Player.bind(this.onStateChange, this)
 			}
 		});
 		this.el = this.player.getIframe();
@@ -111,17 +116,17 @@
 	};
 
 	$p._observeProgress = function() {
-		this._tmProgress = setInterval(function() {
+		this._tmProgress = setInterval(Player.bind(function() {
 			var time = this.player.getCurrentTime();
 			if (time !== this._currentTime) {
 				this._currentTime = time;
 				this.trigger('progress');
 			}
-		}.bind(this), 100);
+		}, this), 100);
 	};
 
 	$p._observeVolume = function() {
-		this._tmVolume = setInterval(function() {
+		this._tmVolume = setInterval(Player.bind(function() {
 			var muted = this.player.isMuted();
 			var volume = this.player.getVolume();
 			if (muted !== this.muted || volume !== this.volume) {
@@ -129,7 +134,7 @@
 				this.volume = volume;
 				this.trigger('volumechange');
 			}
-		}.bind(this), 100);
+		}, this), 100);
 	};
 
 	// ----------------------------------------------------------------
