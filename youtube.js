@@ -1,5 +1,10 @@
 (function() {
 	var Player = window.youtube = function(options) {
+		if (Player._undefinedProperties) {
+			Player._execDefineProperty();
+			delete Player._undefinedProperties;
+		}
+
 		if (this instanceof Player) {
 			return this.initialize(options);
 		}
@@ -14,6 +19,21 @@
 		var args = Array.prototype.slice.call(arguments, 1);
 		return Function.prototype.bind.apply(fn, args);
 	};
+
+	Player.defineProperty = function(prop, descriptor) {
+		Player._undefinedProperties.push(arguments);
+	};
+
+	Player._execDefineProperty = function() {
+		var obj = this.prototype;
+		this._undefinedProperties.forEach(function(args, index) {
+			var prop = args[0];
+			var descriptor = args[1];
+			Object.defineProperty(obj, prop, descriptor);
+		});
+	};
+
+	Player._undefinedProperties = [];
 
 	/**
 	 * Load YoutTube API script.
@@ -220,7 +240,7 @@
 		this.player.pauseVideo();
 	};
 
-	Object.defineProperty($p, 'currentTime', {
+	Player.defineProperty('currentTime', {
 		get: function() {
 			return this._currentTime;
 		},
