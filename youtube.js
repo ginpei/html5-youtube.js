@@ -15,16 +15,30 @@
 		}
 	};
 
+	/**
+	 * Proxy for `Function#bind`.
+	 * It will be placed for IE 7.
+	 * @param {Function} fn
+	 * @returns {Function}
+	 */
 	Player.bind = function(fn) {
 		var args = Array.prototype.slice.call(arguments, 1);
 		return Function.prototype.bind.apply(fn, args);
 	};
 
+	/**
+	 * Proxy for `Object.defineProperty`.
+	 * This logic is used for IE 7.
+	 * @param {String} prop Property's name.
+	 * @param {Object} descriptor
+	 */
 	Player.defineProperty = function(prop, descriptor) {
 		Player._undefinedProperties.push(arguments);
 	};
 
 	Player._execDefineProperty = function() {
+		// This method is called only once when the first instance is created.
+
 		var obj = this.prototype;
 		this._undefinedProperties.forEach(function(args, index) {
 			var prop = args[0];
@@ -79,6 +93,10 @@
 
 	var $p = Player.prototype;
 
+	/**
+	 * Initialize the instance ownself.
+	 * @param {Object} options
+	 */
 	$p.initialize = function(options) {
 		this._currentTime = null;
 		this.paused = null;
@@ -128,9 +146,6 @@
 		this.el = this.player.getIframe();
 	};
 
-	/**
-	 * Called when be ready.
-	 */
 	$p._updateMeta = function() {
 		this.duration = this.player.getDuration();
 	};
@@ -160,11 +175,20 @@
 	// ----------------------------------------------------------------
 	// Events
 
+	/**
+	 * Attach an event handler function.
+	 * @param {String} type A event type like `"play"`, '"progress"` or `"onReady"`.
+	 * @param {Function} listener A function to execute when the event is triggered.
+	 */
 	$p.on = function(type, listener) {
 		this._eventer.addEventListener(type, listener);
 		return this;
 	};
 
+	/**
+	 * Trigger an event.
+	 * @param {String} type A event type like `"play"`, '"progress"` or `"onReady"`.
+	 */
 	$p.trigger = function(type) {
 		var event = document.createEvent('CustomEvent');
 		event.initEvent(type, false, true);
@@ -232,14 +256,28 @@
 	// ----------------------------------------------------------------
 	// Manip
 
+	/**
+	 * Play the video.
+	 */
 	$p.play = function() {
 		this.player.playVideo();
 	};
 
+	/**
+	 * Stop the video.
+	 */
 	$p.pause = function() {
 		this.player.pauseVideo();
 	};
 
+	// ----------------------------------------------------------------
+	// Properties
+
+	/**
+	 * Returns the current playback position, in seconds, as a position between zero time and the current duration.
+	 * Can be set, to seek to the given time.
+	 * @type number
+	 */
 	Player.defineProperty('currentTime', {
 		get: function() {
 			return this._currentTime;
