@@ -25,6 +25,7 @@
 			<input class="js-volume" type="range" min="0" max="100" value="0" disabled />
 		</div>
 		<script src="../youtube.js"></script>
+		<script src="../youtube.ie7.js"></script>
 		<script>
 (function() {
 	var elPlayer = document.querySelector('.js-player');
@@ -50,8 +51,8 @@
 			elPause.disabled = true;
 
 			elProgress.max = player.duration;
-			elProgress.value = player.currentTime;
-			elProgressText.setTime(player.currentTime);
+			elProgress.value = player.currentTime();
+			elProgressText.setTime(player.currentTime());
 			elDurationText.setTime(player.duration);
 			elVolume.checked = player.muted;
 			elVolume.value = player.volume;
@@ -61,8 +62,8 @@
 			elPause.disabled = false;
 		})
 		.on('progress', function(event) {
-			elProgress.value = player.currentTime;
-			elProgressText.setTime(player.currentTime);
+			elProgress.value = player.currentTime();
+			elProgressText.setTime(player.currentTime());
 		})
 		.on('pause', function(event) {
 			elPlay.disabled = false;

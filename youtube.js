@@ -1,5 +1,10 @@
 (function() {
 	var Player = window.youtube = function(options) {
+		if (Player._undefinedProperties) {
+			Player._execDefineProperty();
+			delete Player._undefinedProperties;
+		}
+
 		if (this instanceof Player) {
 			return this.initialize(options);
 		}
@@ -9,6 +14,40 @@
 			return player;
 		}
 	};
+
+	/**
+	 * Proxy for `Function#bind`.
+	 * It will be placed for IE 7.
+	 * @param {Function} fn
+	 * @returns {Function}
+	 */
+	Player.bind = function(fn) {
+		var args = Array.prototype.slice.call(arguments, 1);
+		return Function.prototype.bind.apply(fn, args);
+	};
+
+	/**
+	 * Proxy for `Object.defineProperty`.
+	 * This logic is used for IE 7.
+	 * @param {String} prop Property's name.
+	 * @param {Object} descriptor
+	 */
+	Player.defineProperty = function(prop, descriptor) {
+		Player._undefinedProperties.push(arguments);
+	};
+
+	Player._execDefineProperty = function() {
+		// This method is called only once when the first instance is created.
+
+		var obj = this.prototype;
+		this._undefinedProperties.forEach(function(args, index) {
+			var prop = args[0];
+			var descriptor = args[1];
+			Object.defineProperty(obj, prop, descriptor);
+		});
+	};
+
+	Player._undefinedProperties = [];
 
 	/**
 	 * Load YoutTube API script.
@@ -33,13 +72,13 @@
 			document.body.appendChild(elScript);
 
 			// set callbacks
-			window.onYouTubeIframeAPIReady = function() {
+			window.onYouTubeIframeAPIReady = Player.bind(function() {
 				callbacks.forEach(function(callback, index) {
 					callback();
 				});
 				delete this._ytCallbacks;
 				this._ytStatus = 2;
-			}.bind(this);
+			}, this);
 
 			// update status
 			this._ytStatus = 1;
@@ -54,12 +93,16 @@
 
 	var $p = Player.prototype;
 
+	/**
+	 * Initialize the instance ownself.
+	 * @param {Object} options
+	 */
 	$p.initialize = function(options) {
-		this.currentTime = null;
+		this._currentTime = null;
 		this.paused = null;
 
 		this._initializeEventer();
-		this._loadYTScript(this._setupVideo.bind(this, options));
+		this._loadYTScript(Player.bind(this._setupVideo, this, options));
 	};
 
 	$p._loadYTScript = function(callback) {
@@ -92,36 +135,33 @@
 			width: width,
 			videoId: videoId,
 			events: {
-				onApiChange: this.onApiChang.bind(this),
-				onError: this.onError.bind(this),
-				onPlaybackQualityChange: this.onPlaybackQualityChange.bind(this),
-				onPlaybackRateChange: this.onPlaybackRateChange.bind(this),
-				onReady: this.onReady.bind(this),
-				onStateChange: this.onStateChange.bind(this)
+				onApiChange: Player.bind(this.onApiChang, this),
+				onError: Player.bind(this.onError, this),
+				onPlaybackQualityChange: Player.bind(this.onPlaybackQualityChange, this),
+				onPlaybackRateChange: Player.bind(this.onPlaybackRateChange, this),
+				onReady: Player.bind(this.onReady, this),
+				onStateChange: Player.bind(this.onStateChange, this)
 			}
 		});
 		this.el = this.player.getIframe();
 	};
 
-	/**
-	 * Called when be ready.
-	 */
 	$p._updateMeta = function() {
 		this.duration = this.player.getDuration();
 	};
 
 	$p._observeProgress = function() {
-		this._tmProgress = setInterval(function() {
+		this._tmProgress = setInterval(Player.bind(function() {
 			var time = this.player.getCurrentTime();
-			if (time !== this.currentTime) {
-				this.currentTime = time;
+			if (time !== this._currentTime) {
+				this._currentTime = time;
 				this.trigger('progress');
 			}
-		}.bind(this), 100);
+		}, this), 100);
 	};
 
 	$p._observeVolume = function() {
-		this._tmVolume = setInterval(function() {
+		this._tmVolume = setInterval(Player.bind(function() {
 			var muted = this.player.isMuted();
 			var volume = this.player.getVolume();
 			if (muted !== this.muted || volume !== this.volume) {
@@ -129,17 +169,26 @@
 				this.volume = volume;
 				this.trigger('volumechange');
 			}
-		}.bind(this), 100);
+		}, this), 100);
 	};
 
 	// ----------------------------------------------------------------
 	// Events
 
+	/**
+	 * Attach an event handler function.
+	 * @param {String} type A event type like `"play"`, '"progress"` or `"onReady"`.
+	 * @param {Function} listener A function to execute when the event is triggered.
+	 */
 	$p.on = function(type, listener) {
 		this._eventer.addEventListener(type, listener);
 		return this;
 	};
 
+	/**
+	 * Trigger an event.
+	 * @param {String} type A event type like `"play"`, '"progress"` or `"onReady"`.
+	 */
 	$p.trigger = function(type) {
 		var event = document.createEvent('CustomEvent');
 		event.initEvent(type, false, true);
@@ -207,11 +256,34 @@
 	// ----------------------------------------------------------------
 	// Manip
 
+	/**
+	 * Play the video.
+	 */
 	$p.play = function() {
 		this.player.playVideo();
 	};
 
+	/**
+	 * Stop the video.
+	 */
 	$p.pause = function() {
 		this.player.pauseVideo();
 	};
+
+	// ----------------------------------------------------------------
+	// Properties
+
+	/**
+	 * Returns the current playback position, in seconds, as a position between zero time and the current duration.
+	 * Can be set, to seek to the given time.
+	 * @type number
+	 */
+	Player.defineProperty('currentTime', {
+		get: function() {
+			return this._currentTime;
+		},
+		set: function(value) {
+			this.player.seekTo(this._currentTime=value, true);
+		}
+	});
 })();
