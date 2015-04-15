@@ -106,11 +106,7 @@
 	};
 
 	$p._buildPlayer = function(options) {
-		this._loadYTScript(Player.bind(this._setupVideo, this, options));
-	};
-
-	$p._loadYTScript = function(callback) {
-		Player.loadYTScript(callback);
+		Player.loadYTScript(Player.bind(this._setupVideo, this, options));
 	};
 
 	/**
