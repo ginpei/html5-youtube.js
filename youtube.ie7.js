@@ -102,7 +102,9 @@
 			target.dispatchEvent(event);
 		}
 		else {
-			target.detachEvent(event);
+			// TODO: change types because 'onReady' is invalid event type for old IEs.
+			// ('onclick' or 'onClick' are OK.)
+			target.fireEvent(event.type, event);
 		}
 	};
 
