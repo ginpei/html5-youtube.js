@@ -194,10 +194,10 @@
 	$p.trigger = function(type, originalEvent) {
 		var event = document.createEvent('CustomEvent');
 		event.initEvent(type, false, true);
+		event.player = this;
 
 		if (originalEvent) {
 			event.playerData = originalEvent.data;
-			event.player = originalEvent.target;
 			event.originalEvent = originalEvent;
 		}
 
