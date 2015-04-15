@@ -14,6 +14,8 @@
 		return this.initialize(options);
 	};
 
+	Player.PlayerState = { UNSTARTED:-1, ENDED:0, PLAYING:1, PAUSED:2, BUFFERING:3, CUED:5 };
+
 	/**
 	 * Proxy for `Function#bind`.
 	 * It will be placed for IE 7.
@@ -239,29 +241,23 @@
 	$p.onStateChange = function(event) {
 		this._triggerYtEvent('onStateChange', event);
 
-		if (!window.YT) {  // FIXME
-			window.YT = {
-				PlayerState: {}
-			};
-		}
-
 		var state = event.data;
 
-		this.paused = (state !== YT.PlayerState.PLAYING);
+		this.paused = (state !== Player.PlayerState.PLAYING);
 
-		if (state === YT.PlayerState.UNSTARTED) {
+		if (state === Player.PlayerState.UNSTARTED) {
 			this._triggerYtEvent('unstart', event);
 		}
-		else if (state === YT.PlayerState.PLAYING) {
+		else if (state === Player.PlayerState.PLAYING) {
 			this._triggerYtEvent('play', event);
 		}
-		else if (state === YT.PlayerState.PAUSED) {
+		else if (state === Player.PlayerState.PAUSED) {
 			this._triggerYtEvent('pause', event);
 		}
-		else if (state === YT.PlayerState.BUFFERING) {
+		else if (state === Player.PlayerState.BUFFERING) {
 			this._triggerYtEvent('buffer', event);
 		}
-		else if (state === YT.PlayerState.ENDED) {
+		else if (state === Player.PlayerState.ENDED) {
 			this._triggerYtEvent('end', event);
 		}
 	};
