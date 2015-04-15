@@ -67,6 +67,10 @@
 		}
 	};
 
+	Player.prototype._initializeEventer = function() {
+		this._eventer = { on:eventPrototype.on, trigger:eventPrototype.trigger };
+	};
+
 	Player.prototype._buildPlayer = function(options) {
 		var that = this;
 
@@ -150,13 +154,17 @@
 	};
 
 	Player.prototype.on = function(type, listener) {
-		var target = this._eventer;
-		if (target.addEventListener) {
-			target.addEventListener(type, listener);
-		}
-		else {
-			target.attachEvent('on'+type, listener);
-		}
+		this._eventer.on(type, listener);
+		return this;
+	};
+
+	Player.prototype.trigger = function(type) {
+		this._eventer.trigger(type);
+		return this;
+	};
+
+	Player.prototype._triggerYtEvent = function(type) {
+		this._eventer.trigger(type);
 		return this;
 	};
 })(window.youtube.Player);
