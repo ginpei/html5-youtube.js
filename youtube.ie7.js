@@ -102,4 +102,15 @@
 			target.detachEvent(event);
 		}
 	};
+
+	Player.prototype.on = function(type, listener) {
+		var target = this._eventer;
+		if (target.addEventListener) {
+			target.addEventListener(type, listener);
+		}
+		else {
+			target.attachEvent('on'+type, listener);
+		}
+		return this;
+	};
 })(window.youtube.Player);

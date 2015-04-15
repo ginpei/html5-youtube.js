@@ -78,12 +78,22 @@
 			elVolume.value = player.volume;
 		});
 
-	elPlay.addEventListener('click', function(event) {
-		player.play();
-	});
-	elPause.addEventListener('click', function(event) {
-		player.pause();
-	});
+	if (document.body.addEventListener) {
+		elPlay.addEventListener('click', function(event) {
+			player.play();
+		});
+		elPause.addEventListener('click', function(event) {
+			player.pause();
+		});
+	}
+	else {
+		elPlay.attachEvent('onclick', function(event) {
+			player.play();
+		});
+		elPause.attachEvent('onclick', function(event) {
+			player.pause();
+		});
+	}
 })();
 		</script>
 	</body>
