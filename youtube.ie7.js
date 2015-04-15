@@ -50,9 +50,9 @@
 			for (var i=0, l=types.length; i<l; i++) {
 				var type = types[i];
 				var callbackName = prefix + type;
-				window[callbackName] = Player.bind(function(type, state) {
+				window[callbackName] = Player.bind(function(type, data) {
 					try {  // error will be wasted by swf
-						var event = { type:type, data:state, target:this };
+						var event = { type:type, data:data, target:this };
 						this[type](event);
 					}
 					catch (error) {
