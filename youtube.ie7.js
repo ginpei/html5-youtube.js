@@ -8,7 +8,9 @@ window.youtube.bind = function(fn, context) {
 
 window.youtube._execDefineProperty = function() {
 	var obj = this.prototype;
-	this._undefinedProperties.forEach(function(args, index) {
+	var properties = this._undefinedProperties;
+	for (var i=0, l=properties.length; i<l; i++) {
+		var args = properties[i];
 		var prop = args[0];
 		var descriptor = args[1];
 		obj[prop] = function(value) {
@@ -20,5 +22,5 @@ window.youtube._execDefineProperty = function() {
 				return descriptor.get.call(this);
 			}
 		};
-	});
+	}
 };
