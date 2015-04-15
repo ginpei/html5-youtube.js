@@ -85,6 +85,7 @@
 		}
 		else {
 			event = document.createEventObject('CustomEvent');
+			event.type = type;
 		}
 
 		if (originalEvent) {
