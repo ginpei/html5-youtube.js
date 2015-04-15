@@ -127,8 +127,25 @@
 		return this;
 	};
 
-	Player.prototype.trigger = function(type) {
-		this._eventer.trigger(type);
+	Player.prototype.trigger = function(type, originalEvent) {
+		var event;
+
+		if (document.createEvent) {
+			event = document.createEvent('CustomEvent');
+			event.initEvent(type, false, true);
+		}
+		else {
+			event = document.createEventObject();
+			event.type = type;
+		}
+		event.player = this;
+
+		if (originalEvent) {
+			event.playerData = originalEvent.data;
+			event.originalEvent = originalEvent;
+		}
+
+		this._eventer.trigger(type, event);
 		return this;
 	};
 })(window.youtube.Player);
