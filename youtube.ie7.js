@@ -61,6 +61,9 @@
 				}, that, type);
 				player.addEventListener(type, callbackName);
 			}
+
+			var event = { type:'onReady', data:null, target:player };
+			that.onReady(event);
 		};
 
 		// load
