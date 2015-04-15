@@ -74,12 +74,30 @@ window.youtube.prototype._buildPlayer = function(options) {
 };
 
 window.youtube.prototype._triggerYtEvent = function(type, originalEvent) {
-	// TODO: support modern browsers
-	var event = document.createEventObject('CustomEvent');
-	// event.initEvent(type, false, true);
+	var event = window.youtube.createEvent(type, originalEvent);
+	window.youtube.dispatchEvent(this._eventer, event);
+};
+
+window.youtube.createEvent = function(type, originalEvent) {
+	var event;
+	if (document.createEvent) {
+		event = document.createEvent('CustomEvent');
+		event.initEvent(type, false, true);
+	}
+	else {
+		event = document.createEventObject('CustomEvent');
+	}
 	event.playerData = originalEvent.data;
 	event.player = originalEvent.target;
 	event.originalEvent = originalEvent;
+	return event;
+};
 
-	this._eventer.detachEvent(event);
+window.youtube.dispatchEvent = function(target, event) {
+	if (target.dispatchEvent) {
+		target.dispatchEvent(event);
+	}
+	else {
+		target.detachEvent(event);
+	}
 };

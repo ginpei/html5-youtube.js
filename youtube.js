@@ -91,6 +91,19 @@
 		}
 	};
 
+	Player.createEvent = function(type, originalEvent) {
+		var event = document.createEvent('CustomEvent');
+		event.initEvent(type, false, true);
+		event.playerData = originalEvent.data;
+		event.player = originalEvent.target;
+		event.originalEvent = originalEvent;
+		return event;
+	};
+
+	Player.dispatchEvent = function(target, event) {
+		target.dispatchEvent(event);
+	};
+
 	var $p = Player.prototype;
 
 	/**
@@ -192,17 +205,12 @@
 	$p.trigger = function(type) {
 		var event = document.createEvent('CustomEvent');
 		event.initEvent(type, false, true);
-		this._eventer.dispatchEvent(event);
+		Player.dispatchEvent(this._eventer, event);
 	};
 
 	$p._triggerYtEvent = function(type, originalEvent) {
-		var event = document.createEvent('CustomEvent');
-		event.initEvent(type, false, true);
-		event.playerData = originalEvent.data;
-		event.player = originalEvent.target;
-		event.originalEvent = originalEvent;
-
-		this._eventer.dispatchEvent(event);
+		var event = Player.createEvent(type, originalEvent);
+		Player.dispatchEvent(this._eventer, event);
 	};
 
 	$p.onApiChang = function(event) {
@@ -231,6 +239,12 @@
 
 	$p.onStateChange = function(event) {
 		this._triggerYtEvent('onStateChange', event);
+
+		if (!window.YT) {  // FIXME
+			window.YT = {
+				PlayerState: {}
+			};
+		}
 
 		var state = event.data;
 
