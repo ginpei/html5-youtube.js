@@ -67,11 +67,13 @@
 		}
 	};
 
-	Player.prototype._initializeEventer = function() {
+	var $p = Player.prototype;
+
+	$p._initializeEventer = function() {
 		this._eventer = { on:eventPrototype.on, trigger:eventPrototype.trigger };
 	};
 
-	Player.prototype._buildPlayer = function(options) {
+	$p._buildPlayer = function(options) {
 		var that = this;
 
 		if (!window.swfobject) {
@@ -122,12 +124,12 @@
 		swfobject.embedSWF(url, playerId, width, height, '8', null, null, params, attr);
 	};
 
-	Player.prototype.on = function(type, listener) {
+	$p.on = function(type, listener) {
 		this._eventer.on(type, listener);
 		return this;
 	};
 
-	Player.prototype.trigger = function(type, originalEvent) {
+	$p.trigger = function(type, originalEvent) {
 		var event;
 
 		if (document.createEvent) {
