@@ -92,23 +92,6 @@
 		}
 	};
 
-	Player.createEvent = function(type, originalEvent) {
-		var event = document.createEvent('CustomEvent');
-		event.initEvent(type, false, true);
-
-		if (originalEvent) {
-			event.playerData = originalEvent.data;
-			event.player = originalEvent.target;
-			event.originalEvent = originalEvent;
-		}
-
-		return event;
-	};
-
-	Player.dispatchEvent = function(target, event) {
-		target.dispatchEvent(event);
-	};
-
 	var $p = Player.prototype;
 
 	/**
@@ -209,8 +192,16 @@
 	 * @param {String} type A event type like `"play"`, '"progress"` or `"onReady"`.
 	 */
 	$p.trigger = function(type, originalEvent) {
-		var event = Player.createEvent(type);
-		Player.dispatchEvent(this._eventer, event);
+		var event = document.createEvent('CustomEvent');
+		event.initEvent(type, false, true);
+
+		if (originalEvent) {
+			event.playerData = originalEvent.data;
+			event.player = originalEvent.target;
+			event.originalEvent = originalEvent;
+		}
+
+		this._eventer.dispatchEvent(event);
 	};
 
 	$p.onApiChang = function(event) {

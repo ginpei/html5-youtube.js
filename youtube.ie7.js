@@ -122,37 +122,6 @@
 		swfobject.embedSWF(url, playerId, width, height, '8', null, null, params, attr);
 	};
 
-	Player.createEvent = function(type, originalEvent) {
-		var event;
-		if (document.createEvent) {
-			event = document.createEvent('CustomEvent');
-			event.initEvent(type, false, true);
-		}
-		else {
-			event = document.createEventObject('CustomEvent');
-			event.type = type;
-		}
-
-		if (originalEvent) {
-			event.playerData = originalEvent.data;
-			event.player = originalEvent.target;
-			event.originalEvent = originalEvent;
-		}
-
-		return event;
-	};
-
-	Player.dispatchEvent = function(target, event) {
-		if (target.dispatchEvent) {
-			target.dispatchEvent(event);
-		}
-		else {
-			// TODO: change types because 'onReady' is invalid event type for old IEs.
-			// ('onclick' or 'onClick' are OK.)
-			target.fireEvent(event.type, event);
-		}
-	};
-
 	Player.prototype.on = function(type, listener) {
 		this._eventer.on(type, listener);
 		return this;
