@@ -1,5 +1,5 @@
-(function() {
-	window.youtube.bind = function(fn, context) {
+(function(Player) {
+	Player.bind = function(fn, context) {
 		var args = Array.prototype.slice.call(arguments, 2);
 		return function() {
 			var curArgs = args.concat(Array.prototype.slice.call(arguments));
@@ -7,7 +7,7 @@
 		};
 	};
 
-	window.youtube._execDefineProperty = function() {
+	Player._execDefineProperty = function() {
 		var obj = this.prototype;
 		var properties = this._undefinedProperties;
 		for (var i=0, l=properties.length; i<l; i++) {
@@ -26,7 +26,7 @@
 		}
 	};
 
-	window.youtube.prototype._buildPlayer = function(options) {
+	Player.prototype._buildPlayer = function(options) {
 		var that = this;
 
 		if (!window.swfobject) {
@@ -50,7 +50,7 @@
 			for (var i=0, l=types.length; i<l; i++) {
 				var type = types[i];
 				var callbackName = prefix + type;
-				window[callbackName] = window.youtube.bind(function(type, state) {
+				window[callbackName] = Player.bind(function(type, state) {
 					try {  // error will be wasted by swf
 						var event = { type:type, data:state, target:this };
 						this[type](event);
@@ -74,12 +74,12 @@
 		swfobject.embedSWF(url, playerId, width, height, '8', null, null, params, attr);
 	};
 
-	window.youtube.prototype._triggerYtEvent = function(type, originalEvent) {
-		var event = window.youtube.createEvent(type, originalEvent);
-		window.youtube.dispatchEvent(this._eventer, event);
+	Player.prototype._triggerYtEvent = function(type, originalEvent) {
+		var event = Player.createEvent(type, originalEvent);
+		Player.dispatchEvent(this._eventer, event);
 	};
 
-	window.youtube.createEvent = function(type, originalEvent) {
+	Player.createEvent = function(type, originalEvent) {
 		var event;
 		if (document.createEvent) {
 			event = document.createEvent('CustomEvent');
@@ -94,7 +94,7 @@
 		return event;
 	};
 
-	window.youtube.dispatchEvent = function(target, event) {
+	Player.dispatchEvent = function(target, event) {
 		if (target.dispatchEvent) {
 			target.dispatchEvent(event);
 		}
@@ -102,4 +102,4 @@
 			target.detachEvent(event);
 		}
 	};
-})();
+})(window.youtube);
