@@ -208,8 +208,7 @@
 	 * @param {String} type A event type like `"play"`, '"progress"` or `"onReady"`.
 	 */
 	$p.trigger = function(type) {
-		var event = document.createEvent('CustomEvent');
-		event.initEvent(type, false, true);
+		var event = Player.createEvent(type);
 		Player.dispatchEvent(this._eventer, event);
 	};
 
