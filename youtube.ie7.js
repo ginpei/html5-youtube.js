@@ -162,9 +162,4 @@
 		this._eventer.trigger(type);
 		return this;
 	};
-
-	Player.prototype._triggerYtEvent = function(type) {
-		this._eventer.trigger(type);
-		return this;
-	};
 })(window.youtube.Player);

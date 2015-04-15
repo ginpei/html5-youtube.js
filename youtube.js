@@ -208,61 +208,56 @@
 	 * Trigger an event.
 	 * @param {String} type A event type like `"play"`, '"progress"` or `"onReady"`.
 	 */
-	$p.trigger = function(type) {
+	$p.trigger = function(type, originalEvent) {
 		var event = Player.createEvent(type);
 		Player.dispatchEvent(this._eventer, event);
 	};
 
-	$p._triggerYtEvent = function(type, originalEvent) {
-		var event = Player.createEvent(type, originalEvent);
-		Player.dispatchEvent(this._eventer, event);
-	};
-
 	$p.onApiChang = function(event) {
-		this._triggerYtEvent('onApiChang', event);
+		this.trigger('onApiChang', event);
 	};
 
 	$p.onError = function(event) {
-		this._triggerYtEvent('onError', event);
+		this.trigger('onError', event);
 	};
 
 	$p.onPlaybackQualityChange = function(event) {
-		this._triggerYtEvent('onPlaybackQualityChange', event);
+		this.trigger('onPlaybackQualityChange', event);
 	};
 
 	$p.onPlaybackRateChange = function(event) {
-		this._triggerYtEvent('onPlaybackRateChange', event);
+		this.trigger('onPlaybackRateChange', event);
 	};
 
 	$p.onReady = function(event) {
-		this._triggerYtEvent('onReady', event);
+		this.trigger('onReady', event);
 		this._updateMeta();
 		this._observeProgress();
 		this._observeVolume();
-		this._triggerYtEvent('ready', event);
+		this.trigger('ready', event);
 	};
 
 	$p.onStateChange = function(event) {
-		this._triggerYtEvent('onStateChange', event);
+		this.trigger('onStateChange', event);
 
 		var state = event.data;
 
 		this.paused = (state !== Player.PlayerState.PLAYING);
 
 		if (state === Player.PlayerState.UNSTARTED) {
-			this._triggerYtEvent('unstart', event);
+			this.trigger('unstart', event);
 		}
 		else if (state === Player.PlayerState.PLAYING) {
-			this._triggerYtEvent('play', event);
+			this.trigger('play', event);
 		}
 		else if (state === Player.PlayerState.PAUSED) {
-			this._triggerYtEvent('pause', event);
+			this.trigger('pause', event);
 		}
 		else if (state === Player.PlayerState.BUFFERING) {
-			this._triggerYtEvent('buffer', event);
+			this.trigger('buffer', event);
 		}
 		else if (state === Player.PlayerState.ENDED) {
-			this._triggerYtEvent('end', event);
+			this.trigger('end', event);
 		}
 	};
 
