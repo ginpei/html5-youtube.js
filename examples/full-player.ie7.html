@@ -12,7 +12,7 @@
 	</head>
 	<body>
 		<h1>youtube.js</h1>
-		<div class="player js-player" data-youtube-videoid="2EEsa_pqGAs"></div>
+		<div id="js-player" class="player js-player" data-youtube-videoid="2EEsa_pqGAs"></div>
 		<div>
 			<button class="js-play" disabled>Play</button>
 			<button class="js-pause" disabled>Pause</button>
@@ -24,10 +24,15 @@
 			<label><input class="js-mute" type="checkbox" disabled>Mute</label>
 			<input class="js-volume" type="range" min="0" max="100" value="0" disabled />
 		</div>
+		<script src="//cdnjs.cloudflare.com/ajax/libs/swfobject/2.2/swfobject.js"></script>
 		<script src="../youtube.js"></script>
 		<script src="../youtube.ie7.js"></script>
 		<script>
 (function() {
+	var elPlayer = document.getElementById('js-player');
+	var videoId = elPlayer.getAttribute('data-youtube-videoid');
+	window.player = youtube({ el:elPlayer, id:videoId });
+	return;  // FIXME
 	var elPlayer = document.querySelector('.js-player');
 	var videoId = elPlayer.getAttribute('data-youtube-videoid');
 	var elPlay = document.querySelector('.js-play');
