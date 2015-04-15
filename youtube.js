@@ -95,9 +95,13 @@
 	Player.createEvent = function(type, originalEvent) {
 		var event = document.createEvent('CustomEvent');
 		event.initEvent(type, false, true);
-		event.playerData = originalEvent.data;
-		event.player = originalEvent.target;
-		event.originalEvent = originalEvent;
+
+		if (originalEvent) {
+			event.playerData = originalEvent.data;
+			event.player = originalEvent.target;
+			event.originalEvent = originalEvent;
+		}
+
 		return event;
 	};
 

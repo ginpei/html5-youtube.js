@@ -91,9 +91,13 @@
 		else {
 			event = document.createEventObject('CustomEvent');
 		}
-		event.playerData = originalEvent.data;
-		event.player = originalEvent.target;
-		event.originalEvent = originalEvent;
+
+		if (originalEvent) {
+			event.playerData = originalEvent.data;
+			event.player = originalEvent.target;
+			event.originalEvent = originalEvent;
+		}
+
 		return event;
 	};
 
