@@ -76,6 +76,17 @@
 	$p._buildPlayer = function(options) {
 		var that = this;
 
+		var el = options.el;
+		var width;
+		var height = el.clientHeight;
+		if (height) {
+			width  = el.clientWidth;
+		}
+		else {
+			height = 390;
+			width = 640;
+		}
+
 		if (!window.swfobject) {
 			throw new Error('swfobject is required. Use this code:\n<script src="//cdnjs.cloudflare.com/ajax/libs/swfobject/2.2/swfobject.js"></script>');
 		}
@@ -119,8 +130,6 @@
 			'?wmode=opaque&fs=0&enablejsapi=1&version=3&playerapiid=' + playerId;
 		var params = { allowScriptAccess:'always',  wmode:'transparent' };
 		var attr = { id:playerId };
-		var height = 236;  // FIXME
-		var width = 420;  // FIXME
 		swfobject.embedSWF(url, playerId, width, height, '8', null, null, params, attr);
 	};
 
