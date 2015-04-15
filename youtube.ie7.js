@@ -102,4 +102,4 @@
 			target.detachEvent(event);
 		}
 	};
-})(window.youtube);
+})(window.youtube.Player);

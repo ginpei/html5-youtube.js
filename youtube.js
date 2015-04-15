@@ -1,18 +1,17 @@
 (function() {
-	var Player = window.youtube = function(options) {
+	window.youtube = function(options) {
+		var player = new Player(options);
+		// player.play();
+		return player;
+	};
+
+	var Player = window.youtube.Player = function(options) {
 		if (Player._undefinedProperties) {
 			Player._execDefineProperty();
 			delete Player._undefinedProperties;
 		}
 
-		if (this instanceof Player) {
-			return this.initialize(options);
-		}
-		else {
-			var player = new Player(options);
-			// player.play();
-			return player;
-		}
+		return this.initialize(options);
 	};
 
 	/**
