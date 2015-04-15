@@ -1,4 +1,42 @@
 (function(Player) {
+	// via Osteoporosis.js
+	// https://github.com/ginpei/Osteoporosis.js/blob/ccf3380fef9f8fd850c44fa017ad863af2ddb9b7/osteoporosis.js#L32-L69
+	var eventPrototype = {
+		/**
+		 * Binds `listener` to this object as a callback function.
+		 * FYI: `off()` is not provided.
+		 * @param {String} type
+		 * @param {Function} listener
+		 */
+		on: function(type, listener) {
+			var allListeners = this[S__LISTENERS];
+			if (!allListeners) {
+				allListeners = this[S__LISTENERS] = {};
+			}
+
+			var listeners = allListeners[type];
+			if (!listeners) {
+				listeners = allListeners[type] = [];
+			}
+
+			listeners.push(listener);
+		},
+
+		/**
+		 * Fires an event named `type`.
+		 * @param {String} type
+		 */
+		trigger: function(type) {
+			var allListeners = this[S__LISTENERS];
+			if (allListeners && allListeners[type]) {
+				var args = slice.call(arguments, 1);
+				allListeners[type].forEach(function(listener) {
+					listener.apply(null, args);
+				});
+			}
+		}
+	};
+
 	Player.bind = function(fn, context) {
 		var args = Array.prototype.slice.call(arguments, 2);
 		return function() {
