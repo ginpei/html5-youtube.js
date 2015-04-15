@@ -132,6 +132,7 @@
 	 */
 	$p._initializeEventer = function() {
 		this._eventer = document.createElement('ytapiplayer');
+		document.body.appendChild(this._eventer);
 	};
 
 	$p._setupVideo = function(options) {
