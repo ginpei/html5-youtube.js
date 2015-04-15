@@ -77,11 +77,6 @@
 		swfobject.embedSWF(url, playerId, width, height, '8', null, null, params, attr);
 	};
 
-	Player.prototype._triggerYtEvent = function(type, originalEvent) {
-		var event = Player.createEvent(type, originalEvent);
-		Player.dispatchEvent(this._eventer, event);
-	};
-
 	Player.createEvent = function(type, originalEvent) {
 		var event;
 		if (document.createEvent) {
