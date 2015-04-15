@@ -102,6 +102,10 @@
 		this.paused = null;
 
 		this._initializeEventer();
+		this._buildPlayer(options);
+	};
+
+	$p._buildPlayer = function(options) {
 		this._loadYTScript(Player.bind(this._setupVideo, this, options));
 	};
 
