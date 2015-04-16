@@ -166,9 +166,9 @@
 		this._tmVolume = setInterval(Player.bind(function() {
 			var muted = this.player.isMuted();
 			var volume = this.player.getVolume();
-			if (muted !== this.muted || volume !== this.volume) {
+			if (muted !== this.muted || volume !== this._volume) {
 				this.muted = muted;
-				this.volume = volume;
+				this._volume = volume;
 				this.trigger('volumechange');
 			}
 		}, this), 100);
@@ -283,6 +283,20 @@
 		},
 		set: function(value) {
 			this.player.seekTo(value, true);
+		}
+	});
+
+	/**
+	 * Returns the current playback volume multiplier, as a number in the range 0.0 to 1.0, where 0.0 is the quietest and 1.0 the loudest.
+	 * Can be set, to change the volume multiplier.
+	 * @type number
+	 */
+	Player.defineProperty('volume', {
+		get: function() {
+			return this._volume / 100;
+		},
+		set: function(value) {
+			this.player.setVolume(value * 100);
 		}
 	});
 })();
