@@ -52,17 +52,16 @@
 		var obj = this.prototype;
 		var properties = this._undefinedProperties;
 		for (var i=0, l=properties.length; i<l; i++) {
-			obj[properties[i][0]] = (function(args) {
-				var prop = args[0];
-				var descriptor = args[1];
+			obj[properties[i].name] = (function(definition) {
+				var prop = definition.name;
 
 				return function(value) {
 					if (arguments.length > 0) {
-						descriptor.set.call(this, value);
+						definition.set.call(this, value);
 						return value;
 					}
 					else {
-						return descriptor.get.call(this);
+						return definition.get.call(this);
 					}
 				};
 			})(properties[i]);

@@ -29,22 +29,23 @@
 
 	/**
 	 * Proxy for `Object.defineProperty`.
-	 * This logic is used for IE 7.
-	 * @param {String} prop Property's name.
-	 * @param {Object} descriptor
+	 * @param {Array} definitions
+	 * @param {String} definitions[].name Property's name.
+	 * @param {Function} definitions[].get
+	 * @param {Function} definitions[].set
 	 */
-	Player.defineProperty = function(prop, descriptor) {
-		Player._undefinedProperties.push(arguments);
+	Player.defineProperties = function(definitions) {
+		for (var i=0, l=definitions.length; i<l; i++) {
+			Player._undefinedProperties.push(definitions[i]);
+		}
 	};
 
 	Player._execDefineProperty = function() {
 		// This method is called only once when the first instance is created.
 
 		var obj = this.prototype;
-		this._undefinedProperties.forEach(function(args, index) {
-			var prop = args[0];
-			var descriptor = args[1];
-			Object.defineProperty(obj, prop, descriptor);
+		this._undefinedProperties.forEach(function(definition, index) {
+			Object.defineProperty(obj, definition.name, definition);
 		});
 	};
 
@@ -272,31 +273,34 @@
 	// ----------------------------------------------------------------
 	// Properties
 
-	/**
-	 * Returns the current playback position, in seconds, as a position between zero time and the current duration.
-	 * Can be set, to seek to the given time.
-	 * @type number
-	 */
-	Player.defineProperty('currentTime', {
-		get: function() {
-			return this._currentTime;
+	Player.defineProperties([
+		/**
+		 * Returns the current playback position, in seconds, as a position between zero time and the current duration.
+		 * Can be set, to seek to the given time.
+		 * @type number
+		 */
+		{
+			name: 'currentTime',
+			get: function() {
+				return this._currentTime;
+			},
+			set: function(value) {
+				this.player.seekTo(value, true);
+			}
 		},
-		set: function(value) {
-			this.player.seekTo(value, true);
-		}
-	});
 
-	/**
-	 * Returns the current playback volume multiplier, as a number in the range 0.0 to 1.0, where 0.0 is the quietest and 1.0 the loudest.
-	 * Can be set, to change the volume multiplier.
-	 * @type number
-	 */
-	Player.defineProperty('volume', {
-		get: function() {
-			return this._volume / 100;
-		},
-		set: function(value) {
-			this.player.setVolume(value * 100);
-		}
-	});
+		/**
+		 * Returns the current playback volume multiplier, as a number in the range 0.0 to 1.0, where 0.0 is the quietest and 1.0 the loudest.
+		 * Can be set, to change the volume multiplier.
+		 * @type number
+		 */
+		{
+			name: 'volume',
+			get: function() {
+				return this._volume / 100;
+			},
+			set: function(value) {
+				this.player.setVolume(value * 100);
+			}}
+	]);
 })();
