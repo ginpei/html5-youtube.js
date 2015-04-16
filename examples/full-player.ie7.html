@@ -50,6 +50,7 @@
 		.on('ready', function(event) {
 			elPlay.disabled = false;
 			elPause.disabled = true;
+			elVolume.disabled = false;
 
 			elProgress.max = player.duration;
 			elProgress.value = player.currentTime();
@@ -95,6 +96,9 @@
 	});
 	listen(elPause, 'click', function(event) {
 		player.pause();
+	});
+	listen(elVolume, 'change', function(event) {
+		player.volume(elVolume.value);
 	});
 })();
 		</script>
