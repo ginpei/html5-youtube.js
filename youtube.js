@@ -7,7 +7,7 @@
 
 	var Player = window.youtube.Player = function(options) {
 		if (Player._undefinedProperties) {
-			Player._execDefineProperty();
+			Player._execDefineProperties();
 			delete Player._undefinedProperties;
 		}
 
@@ -40,7 +40,7 @@
 		}
 	};
 
-	Player._execDefineProperty = function() {
+	Player._execDefineProperties = function() {
 		// This method is called only once when the first instance is created.
 
 		var obj = this.prototype;

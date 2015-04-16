@@ -48,7 +48,7 @@
 		};
 	};
 
-	Player._execDefineProperty = function() {
+	Player._execDefineProperties = function() {
 		var obj = this.prototype;
 		var properties = this._undefinedProperties;
 		for (var i=0, l=properties.length; i<l; i++) {
