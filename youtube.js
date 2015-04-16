@@ -52,6 +52,7 @@
 	};
 
 	/**
+	 * Proxy for `Object.defineProperty`.
 	 * It can be placed for IE 7.
 	 */
 	Player._execDefineProperty = function(obj, prop, descriptor) {
