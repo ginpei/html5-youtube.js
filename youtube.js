@@ -282,7 +282,7 @@
 			return this._currentTime;
 		},
 		set: function(value) {
-			this.player.seekTo(this._currentTime=value, true);
+			this.player.seekTo(value, true);
 		}
 	});
 })();
