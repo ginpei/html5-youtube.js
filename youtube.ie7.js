@@ -52,18 +52,20 @@
 		var obj = this.prototype;
 		var properties = this._undefinedProperties;
 		for (var i=0, l=properties.length; i<l; i++) {
-			var args = properties[i];
-			var prop = args[0];
-			var descriptor = args[1];
-			obj[prop] = function(value) {
-				if (arguments.length > 0) {
-					descriptor.set.call(this, value);
-					return value;
-				}
-				else {
-					return descriptor.get.call(this);
-				}
-			};
+			obj[properties[i][0]] = (function(args) {
+				var prop = args[0];
+				var descriptor = args[1];
+
+				return function(value) {
+					if (arguments.length > 0) {
+						descriptor.set.call(this, value);
+						return value;
+					}
+					else {
+						return descriptor.get.call(this);
+					}
+				};
+			})(properties[i]);
 		}
 	};
 
