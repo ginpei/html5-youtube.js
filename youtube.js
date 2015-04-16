@@ -18,7 +18,7 @@
 
 	/**
 	 * Proxy for `Function#bind`.
-	 * It will be placed for IE 7.
+	 * It can be placed for IE 7.
 	 * @param {Function} fn
 	 * @returns {Function}
 	 */
@@ -52,7 +52,7 @@
 	};
 
 	/**
-	 * It will be placed for IE 7.
+	 * It can be placed for IE 7.
 	 */
 	Player._execDefineProperty = function(obj, prop, descriptor) {
 		Object.defineProperty(obj, prop, descriptor);
@@ -117,7 +117,7 @@
 	};
 
 	/**
-	 * It will be placed for IE 7.
+	 * It can be placed for IE 7.
 	 */
 	$p._buildPlayer = function(options) {
 		Player.loadYTScript(Player.bind(this._setupVideo, this, options));
@@ -125,7 +125,7 @@
 
 	/**
 	 * YT.Player has add/removeEventListener methods but they doesn't work correctly
-	 * It will be placed for IE 7.
+	 * It can be placed for IE 7.
 	 */
 	$p._initializeEventer = function() {
 		this._eventer = document.createElement('ytapiplayer');
@@ -193,7 +193,7 @@
 
 	/**
 	 * Attach an event handler function.
-	 * It will be placed for IE 7.
+	 * It can be placed for IE 7.
 	 * @param {String} type A event type like `"play"`, '"progress"` or `"onReady"`.
 	 * @param {Function} listener A function to execute when the event is triggered.
 	 */
@@ -204,7 +204,7 @@
 
 	/**
 	 * Trigger an event.
-	 * It will be placed for IE 7.
+	 * It can be placed for IE 7.
 	 * @param {String} type A event type like `"play"`, '"progress"` or `"onReady"`.
 	 */
 	$p.trigger = function(type, originalEvent) {
