@@ -53,8 +53,6 @@
 		var properties = this._undefinedProperties;
 		for (var i=0, l=properties.length; i<l; i++) {
 			obj[properties[i].name] = (function(definition) {
-				var prop = definition.name;
-
 				return function(value) {
 					if (arguments.length > 0) {
 						definition.set.call(this, value);
