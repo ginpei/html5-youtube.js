@@ -317,6 +317,7 @@
 			},
 			set: function(value) {
 				this.player.setVolume(value * 100);
-			}}
+			}
+		}
 	]);
 })(window, document);
