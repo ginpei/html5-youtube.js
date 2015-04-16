@@ -78,22 +78,24 @@
 			elVolume.value = player.volume();
 		});
 
+	var listen;
 	if (document.body.addEventListener) {
-		elPlay.addEventListener('click', function(event) {
-			player.play();
-		});
-		elPause.addEventListener('click', function(event) {
-			player.pause();
-		});
+		listen = function (target, type, listener) {
+			target.addEventListener(type, listener);
+		};
 	}
 	else {
-		elPlay.attachEvent('onclick', function(event) {
-			player.play();
-		});
-		elPause.attachEvent('onclick', function(event) {
-			player.pause();
-		});
+		listen = function (target, type, listener) {
+			target.attachEvent('on' + type, listener);
+		};
 	}
+
+	listen(elPlay, 'click', function(event) {
+		player.play();
+	});
+	listen(elPause, 'click', function(event) {
+		player.pause();
+	});
 })();
 		</script>
 	</body>
