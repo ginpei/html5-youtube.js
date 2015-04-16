@@ -1,4 +1,4 @@
-(function() {
+(function(window, document) {
 	window.youtube = function(options) {
 		var player = new Player(options);
 		// player.play();
@@ -318,4 +318,4 @@
 				this.player.setVolume(value * 100);
 			}}
 	]);
-})();
+})(window, document);
