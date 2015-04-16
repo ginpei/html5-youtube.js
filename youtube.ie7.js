@@ -48,22 +48,16 @@
 		};
 	};
 
-	Player._execDefineProperties = function() {
-		var obj = this.prototype;
-		var properties = this._undefinedProperties;
-		for (var i=0, l=properties.length; i<l; i++) {
-			obj[properties[i].name] = (function(definition) {
-				return function(value) {
-					if (arguments.length > 0) {
-						definition.set.call(this, value);
-						return value;
-					}
-					else {
-						return definition.get.call(this);
-					}
-				};
-			})(properties[i]);
-		}
+	Player._execDefineProperty = function(obj, prop, descriptor) {
+		obj[prop] = function(value) {
+			if (arguments.length > 0) {
+				descriptor.set.call(this, value);
+				return value;
+			}
+			else {
+				return descriptor.get.call(this);
+			}
+		};
 	};
 
 	var $p = Player.prototype;

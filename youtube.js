@@ -44,9 +44,15 @@
 		// This method is called only once when the first instance is created.
 
 		var obj = this.prototype;
-		this._undefinedProperties.forEach(function(definition, index) {
-			Object.defineProperty(obj, definition.name, definition);
-		});
+		var properties = this._undefinedProperties;
+		for (var i=0, l=properties.length; i<l; i++) {
+			var definition = properties[i];
+			this._execDefineProperty(obj, definition.name, definition);
+		}
+	};
+
+	Player._execDefineProperty = function(obj, prop, descriptor) {
+		Object.defineProperty(obj, prop, descriptor);
 	};
 
 	Player._undefinedProperties = [];
