@@ -50,6 +50,7 @@
 		.on('ready', function(event) {
 			elPlay.disabled = false;
 			elPause.disabled = true;
+			elProgress.disabled = false;
 			elMute.disabled = false;
 			elVolume.disabled = false;
 
@@ -97,6 +98,9 @@
 	});
 	listen(elPause, 'click', function(event) {
 		player.pause();
+	});
+	listen(elProgress, 'change', function(event) {
+		player.currentTime(elProgress.value);
 	});
 	listen(elMute, 'click', function(event) {
 		player.muted(elMute.checked);
