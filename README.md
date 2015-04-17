@@ -1,6 +1,6 @@
 # youtube.js
 
-YouTube HTML5 API wrapper.
+YouTube Player API wrapper.
 
 ## Usage
 
