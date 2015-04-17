@@ -250,21 +250,24 @@
 
 		var state = event.data;
 
-		this.paused = (state !== Player.PlayerState.PLAYING);
+		this.played = this.paused = this.ended = false;
 
 		if (state === Player.PlayerState.UNSTARTED) {
 			this.trigger('unstart', event);
 		}
 		else if (state === Player.PlayerState.PLAYING) {
+			this.played = true;
 			this.trigger('play', event);
 		}
 		else if (state === Player.PlayerState.PAUSED) {
+			this.paused = true;
 			this.trigger('pause', event);
 		}
 		else if (state === Player.PlayerState.BUFFERING) {
 			this.trigger('buffer', event);
 		}
 		else if (state === Player.PlayerState.ENDED) {
+			this.ended = true;
 			this.trigger('end', event);
 		}
 	};
