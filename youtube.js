@@ -1,23 +1,24 @@
-(function() {
-	var Player = window.youtube = function(options) {
+(function(window, document) {
+	window.youtube = function(options) {
+		var player = new Player(options);
+		// player.play();
+		return player;
+	};
+
+	var Player = window.youtube.Player = function(options) {
 		if (Player._undefinedProperties) {
-			Player._execDefineProperty();
+			Player._execDefineProperties();
 			delete Player._undefinedProperties;
 		}
 
-		if (this instanceof Player) {
-			return this.initialize(options);
-		}
-		else {
-			var player = new Player(options);
-			// player.play();
-			return player;
-		}
+		return this.initialize(options);
 	};
+
+	Player.PlayerState = { UNSTARTED:-1, ENDED:0, PLAYING:1, PAUSED:2, BUFFERING:3, CUED:5 };
 
 	/**
 	 * Proxy for `Function#bind`.
-	 * It will be placed for IE 7.
+	 * It can be placed for compat.
 	 * @param {Function} fn
 	 * @returns {Function}
 	 */
@@ -28,23 +29,34 @@
 
 	/**
 	 * Proxy for `Object.defineProperty`.
-	 * This logic is used for IE 7.
-	 * @param {String} prop Property's name.
-	 * @param {Object} descriptor
+	 * @param {Array} definitions
+	 * @param {String} definitions[].name Property's name.
+	 * @param {Function} definitions[].get
+	 * @param {Function} definitions[].set
 	 */
-	Player.defineProperty = function(prop, descriptor) {
-		Player._undefinedProperties.push(arguments);
+	Player.defineProperties = function(definitions) {
+		for (var i=0, l=definitions.length; i<l; i++) {
+			Player._undefinedProperties.push(definitions[i]);
+		}
 	};
 
-	Player._execDefineProperty = function() {
+	Player._execDefineProperties = function() {
 		// This method is called only once when the first instance is created.
 
 		var obj = this.prototype;
-		this._undefinedProperties.forEach(function(args, index) {
-			var prop = args[0];
-			var descriptor = args[1];
-			Object.defineProperty(obj, prop, descriptor);
-		});
+		var properties = this._undefinedProperties;
+		for (var i=0, l=properties.length; i<l; i++) {
+			var definition = properties[i];
+			this._execDefineProperty(obj, definition.name, definition);
+		}
+	};
+
+	/**
+	 * Proxy for `Object.defineProperty`.
+	 * It can be placed for compat.
+	 */
+	Player._execDefineProperty = function(obj, prop, descriptor) {
+		Object.defineProperty(obj, prop, descriptor);
 	};
 
 	Player._undefinedProperties = [];
@@ -102,18 +114,23 @@
 		this.paused = null;
 
 		this._initializeEventer();
-		this._loadYTScript(Player.bind(this._setupVideo, this, options));
+		this._buildPlayer(options);
 	};
 
-	$p._loadYTScript = function(callback) {
-		Player.loadYTScript(callback);
+	/**
+	 * It can be placed for compat.
+	 */
+	$p._buildPlayer = function(options) {
+		Player.loadYTScript(Player.bind(this._setupVideo, this, options));
 	};
 
 	/**
 	 * YT.Player has add/removeEventListener methods but they doesn't work correctly
+	 * It can be placed for compat.
 	 */
 	$p._initializeEventer = function() {
 		this._eventer = document.createElement('ytapiplayer');
+		document.body.appendChild(this._eventer);
 	};
 
 	$p._setupVideo = function(options) {
@@ -150,12 +167,12 @@
 		this.duration = this.player.getDuration();
 	};
 
-	$p._observeProgress = function() {
-		this._tmProgress = setInterval(Player.bind(function() {
+	$p._observeTimeUpdate = function() {
+		this._tmTimeUpdate = setInterval(Player.bind(function() {
 			var time = this.player.getCurrentTime();
 			if (time !== this._currentTime) {
 				this._currentTime = time;
-				this.trigger('progress');
+				this.trigger('timeupdate');
 			}
 		}, this), 100);
 	};
@@ -164,9 +181,9 @@
 		this._tmVolume = setInterval(Player.bind(function() {
 			var muted = this.player.isMuted();
 			var volume = this.player.getVolume();
-			if (muted !== this.muted || volume !== this.volume) {
-				this.muted = muted;
-				this.volume = volume;
+			if (muted !== this._muted || volume !== this._volume) {
+				this._muted = muted;
+				this._volume = volume;
 				this.trigger('volumechange');
 			}
 		}, this), 100);
@@ -177,79 +194,81 @@
 
 	/**
 	 * Attach an event handler function.
-	 * @param {String} type A event type like `"play"`, '"progress"` or `"onReady"`.
+	 * It can be placed for compat.
+	 * @param {String} type A event type like `"play"`, '"timeupdate"` or `"onReady"`.
 	 * @param {Function} listener A function to execute when the event is triggered.
 	 */
 	$p.on = function(type, listener) {
-		this._eventer.addEventListener(type, listener);
+		this._eventer.addEventListener(type, Player.bind(listener, this));
 		return this;
 	};
 
 	/**
 	 * Trigger an event.
-	 * @param {String} type A event type like `"play"`, '"progress"` or `"onReady"`.
+	 * It can be placed for compat.
+	 * @param {String} type A event type like `"play"`, '"timeupdate"` or `"onReady"`.
 	 */
-	$p.trigger = function(type) {
+	$p.trigger = function(type, originalEvent) {
 		var event = document.createEvent('CustomEvent');
 		event.initEvent(type, false, true);
-		this._eventer.dispatchEvent(event);
-	};
+		event.player = this;
 
-	$p._triggerYtEvent = function(type, originalEvent) {
-		var event = document.createEvent('CustomEvent');
-		event.initEvent(type, false, true);
-		event.playerData = originalEvent.data;
-		event.player = originalEvent.target;
-		event.originalEvent = originalEvent;
+		if (originalEvent) {
+			event.playerData = originalEvent.data;
+			event.originalEvent = originalEvent;
+		}
 
 		this._eventer.dispatchEvent(event);
 	};
 
 	$p.onApiChang = function(event) {
-		this._triggerYtEvent('onApiChang', event);
+		this.trigger('onApiChang', event);
 	};
 
 	$p.onError = function(event) {
-		this._triggerYtEvent('onError', event);
+		this.trigger('onError', event);
 	};
 
 	$p.onPlaybackQualityChange = function(event) {
-		this._triggerYtEvent('onPlaybackQualityChange', event);
+		this.trigger('onPlaybackQualityChange', event);
 	};
 
 	$p.onPlaybackRateChange = function(event) {
-		this._triggerYtEvent('onPlaybackRateChange', event);
+		this.trigger('onPlaybackRateChange', event);
 	};
 
 	$p.onReady = function(event) {
-		this._triggerYtEvent('onReady', event);
+		this.trigger('onReady', event);
 		this._updateMeta();
-		this._observeProgress();
+		this._observeTimeUpdate();
 		this._observeVolume();
-		this._triggerYtEvent('ready', event);
+		this.trigger('ready', event);
 	};
 
 	$p.onStateChange = function(event) {
-		this._triggerYtEvent('onStateChange', event);
+		this.trigger('onStateChange', event);
 
 		var state = event.data;
 
-		this.paused = (state !== YT.PlayerState.PLAYING);
+		this.played = this.paused = this.ended = false;
 
-		if (state === YT.PlayerState.UNSTARTED) {
-			this._triggerYtEvent('unstart', event);
+		if (state === Player.PlayerState.UNSTARTED) {
+			this.trigger('unstart', event);
 		}
-		else if (state === YT.PlayerState.PLAYING) {
-			this._triggerYtEvent('play', event);
+		else if (state === Player.PlayerState.PLAYING) {
+			this.played = true;
+			this.trigger('play', event);
 		}
-		else if (state === YT.PlayerState.PAUSED) {
-			this._triggerYtEvent('pause', event);
+		else if (state === Player.PlayerState.PAUSED) {
+			this.paused = true;
+			this.trigger('pause', event);
 		}
-		else if (state === YT.PlayerState.BUFFERING) {
-			this._triggerYtEvent('buffer', event);
+		else if (state === Player.PlayerState.BUFFERING) {
+			this.trigger('buffer', event);
 		}
-		else if (state === YT.PlayerState.ENDED) {
-			this._triggerYtEvent('end', event);
+		else if (state === Player.PlayerState.ENDED) {
+			this.ended = true;
+			this.trigger('end', event);
 		}
 	};
 
@@ -273,17 +292,50 @@
 	// ----------------------------------------------------------------
 	// Properties
 
-	/**
-	 * Returns the current playback position, in seconds, as a position between zero time and the current duration.
-	 * Can be set, to seek to the given time.
-	 * @type number
-	 */
-	Player.defineProperty('currentTime', {
-		get: function() {
-			return this._currentTime;
+	Player.defineProperties([
+		/**
+		 * Returns the current playback position, in seconds, as a position between zero time and the current duration.
+		 * Can be set, to seek to the given time.
+		 * @type number
+		 */
+		{
+			name: 'currentTime',
+			get: function() {
+				return this._currentTime;
+			},
+			set: function(value) {
+				this.player.seekTo(value, true);
+			}
 		},
-		set: function(value) {
-			this.player.seekTo(this._currentTime=value, true);
+
+		/**
+		 * Returns the current playback volume multiplier, as a number in the range 0.0 to 1.0, where 0.0 is the quietest and 1.0 the loudest.
+		 * Can be set, to change the volume multiplier.
+		 * @type number
+		 */
+		{
+			name: 'volume',
+			get: function() {
+				return this._volume / 100;
+			},
+			set: function(value) {
+				this.player.setVolume(value * 100);
+			}
+		},
+
+		/**
+		 * Returns true if all audio is muted (regardless of other attributes either on the controller or on any media elements slaved to this controller), and false otherwise.
+		 * Can be set, to change whether the audio is muted or not.
+		 * @type number
+		 */
+		{
+			name: 'muted',
+			get: function() {
+				return this._muted;
+			},
+			set: function(value) {
+				this.player[value?'mute':'unMute']();
+			}
 		}
-	});
-})();
+	]);
+})(window, document);
