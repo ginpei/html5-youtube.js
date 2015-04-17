@@ -16,8 +16,8 @@
 		<div>
 			<button id="js-play" disabled>Play</button>
 			<button id="js-pause" disabled>Pause</button>
-			<input id="js-progress" type="range" min="0" max="1" value="0" disabled />
-			<span id="js-progressText">-:--</span>
+			<input id="js-currentTime" type="range" min="0" max="1" value="0" disabled />
+			<span id="js-currentTimeText">-:--</span>
 			/
 			<span id="js-durationText">-:--</span>
 			<br />
@@ -33,13 +33,13 @@
 	var videoId = elPlayer.getAttribute('data-youtube-videoid');
 	var elPlay = document.getElementById('js-play');
 	var elPause = document.getElementById('js-pause');
-	var elProgress = document.getElementById('js-progress');
-	var elProgressText = document.getElementById('js-progressText');
+	var elCurrentTime = document.getElementById('js-currentTime');
+	var elCurrentTimeText = document.getElementById('js-currentTimeText');
 	var elDurationText = document.getElementById('js-durationText');
 	var elMute = document.getElementById('js-mute');
 	var elVolume = document.getElementById('js-volume');
 
-	elProgressText.setTime = elDurationText.setTime = function(time) {
+	elCurrentTimeText.setTime = elDurationText.setTime = function(time) {
 		var min = parseInt(time/60, 10);
 		var sec = ('0' + parseInt(time%60, 10)).slice(-2);
 		var text = min + ':' + sec;
@@ -50,13 +50,13 @@
 		.on('ready', function(event) {
 			elPlay.disabled = false;
 			elPause.disabled = true;
-			elProgress.disabled = false;
+			elCurrentTime.disabled = false;
 			elMute.disabled = false;
 			elVolume.disabled = false;
 
-			elProgress.max = player.duration;
-			elProgress.value = player.currentTime();
-			elProgressText.setTime(player.currentTime());
+			elCurrentTime.max = player.duration;
+			elCurrentTime.value = player.currentTime();
+			elCurrentTimeText.setTime(player.currentTime());
 			elDurationText.setTime(player.duration);
 			elVolume.checked = player.muted();
 			elVolume.value = player.volume();
@@ -66,8 +66,8 @@
 			elPause.disabled = false;
 		})
 		.on('timeupdate', function(event) {
-			elProgress.value = player.currentTime();
-			elProgressText.setTime(player.currentTime());
+			elCurrentTime.value = player.currentTime();
+			elCurrentTimeText.setTime(player.currentTime());
 		})
 		.on('pause', function(event) {
 			elPlay.disabled = false;
@@ -96,8 +96,8 @@
 	listen(elPause, 'click', function(event) {
 		player.pause();
 	});
-	listen(elProgress, 'change', function(event) {
-		player.currentTime(elProgress.value);
+	listen(elCurrentTime, 'change', function(event) {
+		player.currentTime(elCurrentTime.value);
 	});
 	listen(elMute, 'click', function(event) {
 		player.muted(elMute.checked);
