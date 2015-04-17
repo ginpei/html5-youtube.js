@@ -50,13 +50,14 @@
 		.on('ready', function(event) {
 			elPlay.disabled = false;
 			elPause.disabled = true;
+			elMute.disabled = false;
 			elVolume.disabled = false;
 
 			elProgress.max = player.duration;
 			elProgress.value = player.currentTime();
 			elProgressText.setTime(player.currentTime());
 			elDurationText.setTime(player.duration);
-			elVolume.checked = player.muted;
+			elVolume.checked = player.muted();
 			elVolume.value = player.volume();
 		})
 		.on('play', function(event) {
@@ -75,7 +76,7 @@
 			player.play();
 		})
 		.on('volumechange', function(event) {
-			elMute.checked = player.muted;
+			elMute.checked = player.muted();
 			elVolume.value = player.volume();
 		});
 
@@ -96,6 +97,9 @@
 	});
 	listen(elPause, 'click', function(event) {
 		player.pause();
+	});
+	listen(elMute, 'click', function(event) {
+		player.muted(elMute.checked);
 	});
 	listen(elVolume, 'change', function(event) {
 		player.volume(elVolume.value);

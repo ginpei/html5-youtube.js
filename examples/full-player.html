@@ -48,6 +48,7 @@
 		.on('ready', function(event) {
 			elPlay.disabled = false;
 			elPause.disabled = true;
+			elMute.disabled = false;
 			elVolume.disabled = false;
 
 			elProgress.max = player.duration;
@@ -82,6 +83,9 @@
 	});
 	elPause.addEventListener('click', function(event) {
 		player.pause();
+	});
+	elMute.addEventListener('click', function(event) {
+		player.muted = elMute.checked;
 	});
 	elVolume.addEventListener('change', function(event) {
 		player.volume = this.value;

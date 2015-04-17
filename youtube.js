@@ -181,8 +181,8 @@
 		this._tmVolume = setInterval(Player.bind(function() {
 			var muted = this.player.isMuted();
 			var volume = this.player.getVolume();
-			if (muted !== this.muted || volume !== this._volume) {
-				this.muted = muted;
+			if (muted !== this._muted || volume !== this._volume) {
+				this._muted = muted;
 				this._volume = volume;
 				this.trigger('volumechange');
 			}
@@ -317,6 +317,21 @@
 			},
 			set: function(value) {
 				this.player.setVolume(value * 100);
+			}
+		},
+
+		/**
+		 * Returns true if all audio is muted (regardless of other attributes either on the controller or on any media elements slaved to this controller), and false otherwise.
+		 * Can be set, to change whether the audio is muted or not.
+		 * @type number
+		 */
+		{
+			name: 'muted',
+			get: function() {
+				return this._muted;
+			},
+			set: function(value) {
+				this.player[value?'mute':'unMute']();
 			}
 		}
 	]);
