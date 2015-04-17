@@ -199,7 +199,7 @@
 	 * @param {Function} listener A function to execute when the event is triggered.
 	 */
 	$p.on = function(type, listener) {
-		this._eventer.addEventListener(type, listener);
+		this._eventer.addEventListener(type, Player.bind(listener, this));
 		return this;
 	};
 

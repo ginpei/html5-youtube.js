@@ -127,7 +127,7 @@
 	};
 
 	$p.on = function(type, listener) {
-		this._eventer.on(type, listener);
+		this._eventer.on(type, Player.bind(listener, this));
 		return this;
 	};
 
