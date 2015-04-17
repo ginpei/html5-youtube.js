@@ -73,9 +73,6 @@
 			elPlay.disabled = false;
 			elPause.disabled = true;
 		})
-		.on('end', function(event) {
-			player.play();
-		})
 		.on('volumechange', function(event) {
 			elMute.checked = player.muted();
 			elVolume.value = player.volume();
