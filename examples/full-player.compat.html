@@ -65,7 +65,7 @@
 			elPlay.disabled = true;
 			elPause.disabled = false;
 		})
-		.on('progress', function(event) {
+		.on('timeupdate', function(event) {
 			elProgress.value = player.currentTime();
 			elProgressText.setTime(player.currentTime());
 		})

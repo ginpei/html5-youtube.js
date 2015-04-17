@@ -167,12 +167,12 @@
 		this.duration = this.player.getDuration();
 	};
 
-	$p._observeProgress = function() {
-		this._tmProgress = setInterval(Player.bind(function() {
+	$p._observeTimeUpdate = function() {
+		this._tmTimeUpdate = setInterval(Player.bind(function() {
 			var time = this.player.getCurrentTime();
 			if (time !== this._currentTime) {
 				this._currentTime = time;
-				this.trigger('progress');
+				this.trigger('timeupdate');
 			}
 		}, this), 100);
 	};
@@ -195,7 +195,7 @@
 	/**
 	 * Attach an event handler function.
 	 * It can be placed for compat.
-	 * @param {String} type A event type like `"play"`, '"progress"` or `"onReady"`.
+	 * @param {String} type A event type like `"play"`, '"timeupdate"` or `"onReady"`.
 	 * @param {Function} listener A function to execute when the event is triggered.
 	 */
 	$p.on = function(type, listener) {
@@ -206,7 +206,7 @@
 	/**
 	 * Trigger an event.
 	 * It can be placed for compat.
-	 * @param {String} type A event type like `"play"`, '"progress"` or `"onReady"`.
+	 * @param {String} type A event type like `"play"`, '"timeupdate"` or `"onReady"`.
 	 */
 	$p.trigger = function(type, originalEvent) {
 		var event = document.createEvent('CustomEvent');
@@ -240,7 +240,7 @@
 	$p.onReady = function(event) {
 		this.trigger('onReady', event);
 		this._updateMeta();
-		this._observeProgress();
+		this._observeTimeUpdate();
 		this._observeVolume();
 		this.trigger('ready', event);
 	};
