@@ -165,6 +165,7 @@
 
 	$p._updateMeta = function() {
 		this.duration = this.player.getDuration();
+		this._playbackRate = this.player.getPlaybackRate();
 	};
 
 	$p._observeTimeUpdate = function() {
@@ -289,6 +290,17 @@
 		this.player.pauseVideo();
 	};
 
+	/**
+	 * This function returns the set of playback rates in which the current video is available. The default value is 1, which indicates that the video is playing in normal speed.
+	 *
+	 * The function returns an array of numbers ordered from slowest to fastest playback speed. Even if the player does not support variable playback speeds, the array should always contain at least one value (1).
+	 * @returns {Array}
+	 * @see https://developers.google.com/youtube/iframe_api_reference#getAvailablePlaybackRates
+	 */
+	$p.getAvailablePlaybackRates = function() {
+		return this.player.getAvailablePlaybackRates();
+	};
+
 	// ----------------------------------------------------------------
 	// Properties
 
@@ -335,6 +347,21 @@
 			},
 			set: function(value) {
 				this.player[value?'mute':'unMute']();
+			}
+		},
+
+		/**
+		 * Returns the default rate of playback, for when the user is not fast-forwarding or reversing through the media resource.
+		 * Can be set, to change the default rate of playback.
+		 * @type number
+		 */
+		{
+			name: 'playbackRate',
+			get: function() {
+				return this._playbackRate;
+			},
+			set: function(value) {
+				this.player.setPlaybackRate(value);
 			}
 		}
 	]);
