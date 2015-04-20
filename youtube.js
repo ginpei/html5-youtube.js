@@ -164,6 +164,7 @@
 	};
 
 	$p._updateMeta = function() {
+		this.src = this.currentSrc = this.player.getVideoUrl();
 		this.duration = this.player.getDuration();
 		this._playbackRate = this.player.getPlaybackRate();
 	};
