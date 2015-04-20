@@ -152,7 +152,7 @@
 			width: width,
 			videoId: videoId,
 			events: {
-				onApiChange: Player.bind(this.onApiChang, this),
+				onApiChange: Player.bind(this.onApiChange, this),
 				onError: Player.bind(this.onError, this),
 				onPlaybackQualityChange: Player.bind(this.onPlaybackQualityChange, this),
 				onPlaybackRateChange: Player.bind(this.onPlaybackRateChange, this),
@@ -223,8 +223,8 @@
 		this._eventer.dispatchEvent(event);
 	};
 
-	$p.onApiChang = function(event) {
-		this.trigger('onApiChang', event);
+	$p.onApiChange = function(event) {
+		this.trigger('onApiChange', event);
 	};
 
 	/**
