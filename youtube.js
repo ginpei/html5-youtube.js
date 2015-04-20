@@ -226,8 +226,13 @@
 		this.trigger('onApiChang', event);
 	};
 
+	/**
+	 * @param {Number} event.playerData The error ID.
+	 * @see https://developers.google.com/youtube/iframe_api_reference#onError
+	 */
 	$p.onError = function(event) {
 		this.trigger('onError', event);
+		this.trigger('error', event);
 	};
 
 	$p.onPlaybackQualityChange = function(event) {

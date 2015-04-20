@@ -76,6 +76,9 @@
 		.on('volumechange', function(event) {
 			elMute.checked = player.muted();
 			elVolume.value = player.volume();
+		})
+		.on('error', function(event) {
+			console.error(event);
 		});
 
 	var listen;
