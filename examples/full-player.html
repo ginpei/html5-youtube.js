@@ -16,6 +16,7 @@
 		<div>
 			<select class="js-videos" disabled>
 				<option value="2EEsa_pqGAs" selected>【MV】→Pia-no-jaC← / 残月 [Zangetsu,Pieces Of The Moon]</option>
+				<option value="KFstP0C9sVk">fox capture plan / 疾走する閃光</option>
 			</select>
 			<button class="js-load" disabled>Load</button>
 			<br />
@@ -34,6 +35,8 @@
 (function() {
 	var elPlayer = document.querySelector('.js-player');
 	var videoId = elPlayer.getAttribute('data-youtube-videoid');
+	var elVideos = document.querySelector('.js-videos');
+	var elLoad = document.querySelector('.js-load');
 	var elPlay = document.querySelector('.js-play');
 	var elPause = document.querySelector('.js-pause');
 	var elCurrentTime = document.querySelector('.js-currentTime');
@@ -51,6 +54,8 @@
 
 	window.player = youtube({ el:elPlayer, id:videoId })
 		.on('ready', function(event) {
+			elVideos.disabled = false;
+			elLoad.disabled = false;
 			elPlay.disabled = false;
 			elPause.disabled = true;
 			elCurrentTime.disabled = false;
@@ -84,6 +89,11 @@
 			console.error(event);
 		});
 
+	elLoad.addEventListener('click', function(event) {
+		var videoId = elVideos.value;
+		console.log(videoId);
+		// player.src = videoId;
+	});
 	elPlay.addEventListener('click', function(event) {
 		player.play();
 	});
