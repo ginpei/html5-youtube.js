@@ -291,6 +291,7 @@
 		else if (state === Player.PlayerState.PLAYING) {
 			this.played = true;
 			this.trigger('play', event);
+			this.trigger('playing', event);
 		}
 		else if (state === Player.PlayerState.PAUSED) {
 			this.paused = true;
