@@ -166,6 +166,7 @@
 	$p._updateMeta = function() {
 		this.src = this.currentSrc = this.player.getVideoUrl();
 		this.duration = this.player.getDuration();
+		this.trigger('durationchange');
 	};
 
 	$p._observeTimeUpdate = function() {
