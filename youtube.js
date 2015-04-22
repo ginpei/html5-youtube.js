@@ -283,6 +283,10 @@
 		if (state === Player.PlayerState.UNSTARTED) {
 			this.trigger('unstart', event);
 		}
+		else if (state === Player.PlayerState.ENDED) {
+			this.ended = true;
+			this.trigger('ended', event);
+		}
 		else if (state === Player.PlayerState.PLAYING) {
 			this.played = true;
 			this.trigger('play', event);
@@ -293,10 +297,6 @@
 		}
 		else if (state === Player.PlayerState.BUFFERING) {
 			this.trigger('buffer', event);
-		}
-		else if (state === Player.PlayerState.ENDED) {
-			this.ended = true;
-			this.trigger('ended', event);
 		}
 	};
 
