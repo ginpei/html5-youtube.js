@@ -298,6 +298,10 @@
 		else if (state === Player.PlayerState.BUFFERING) {
 			this.trigger('buffer', event);
 		}
+		else if (state === Player.PlayerState.CUED) {
+			this._updateMeta();
+			this.trigger('canplay');
+		}
 	};
 
 	// ----------------------------------------------------------------
