@@ -89,6 +89,37 @@
 			console.error(event);
 		});
 
+	var typeListener = function(event) { console.log(':'+event.type); };
+	player
+		.on('onApiChange', typeListener)
+		.on('onError', typeListener)
+		.on('onPlaybackQualityChange', typeListener)
+		.on('onPlaybackRateChange', typeListener)
+		.on('onReady', typeListener)
+		.on('onStateChange', typeListener)
+		.on('loadstart', typeListener)
+		.on('progress', typeListener)
+		.on('suspended', typeListener)
+		.on('abort', typeListener)
+		.on('error', typeListener)
+		.on('emptied', typeListener)
+		.on('stalled', typeListener)
+		.on('loadedmetadata', typeListener)
+		.on('loadeddata', typeListener)
+		.on('canplay', typeListener)
+		.on('canplaythrough', typeListener)
+		.on('playing', typeListener)
+		.on('waiting', typeListener)
+		.on('seeking', typeListener)
+		.on('seeked', typeListener)
+		.on('ended', typeListener)
+		.on('durationchange', typeListener)
+		.on('timeupdate', typeListener)
+		.on('play', typeListener)
+		.on('pause', typeListener)
+		.on('ratechange', typeListener)
+		.on('volumechange ', typeListener);
+
 	elLoad.addEventListener('click', function(event) {
 		var videoId = elVideos.value;
 		console.log(videoId);
