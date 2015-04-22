@@ -29,6 +29,8 @@
 			<br />
 			<label><input id="js-mute" type="checkbox" disabled>Mute</label>
 			<input id="js-volume" type="range" min="0" max="1" step="0.01" value="0" disabled />
+			<br />
+			<label><input id="js-logging" type="checkbox" />Log all events in console</label>
 		</div>
 		<script src="//cdnjs.cloudflare.com/ajax/libs/swfobject/2.2/swfobject.js"></script>
 		<script src="../youtube.js"></script>
@@ -46,6 +48,7 @@
 	var elDurationText = document.getElementById('js-durationText');
 	var elMute = document.getElementById('js-mute');
 	var elVolume = document.getElementById('js-volume');
+	var elLogging = document.getElementById('js-logging');
 
 	elCurrentTimeText.setTime = elDurationText.setTime = function(time) {
 		var min = parseInt(time/60, 10);
@@ -91,7 +94,7 @@
 			console.error(event);
 		});
 
-	var typeListener = function(event) { console.log(':'+event.type); };
+	var typeListener = function(event) { elLogging.checked && console.log(':'+event.type); };
 	player
 		.on('onApiChange', typeListener)
 		.on('onError', typeListener)
