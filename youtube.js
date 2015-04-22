@@ -260,6 +260,7 @@
 		this._observeVolume();
 		this._observePlaybackRate();
 		this.trigger('ready', event);
+		this.trigger('canplay', event);
 	};
 
 	$p.onStateChange = function(event) {
