@@ -14,6 +14,8 @@
 		return this.initialize(options);
 	};
 
+	var $p = Player.prototype;
+
 	Player.PlayerState = { UNSTARTED:-1, ENDED:0, PLAYING:1, PAUSED:2, BUFFERING:3, CUED:5 };
 
 	/**
@@ -102,8 +104,6 @@
 			callback();
 		}
 	};
-
-	var $p = Player.prototype;
 
 	/**
 	 * Initialize the instance ownself.
