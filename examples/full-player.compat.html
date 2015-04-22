@@ -91,6 +91,24 @@
 			console.error(event);
 		});
 
+	var typeListener = function(event) { console.log(':'+event.type); };
+	player
+		.on('onApiChange', typeListener)
+		.on('onError', typeListener)
+		.on('onPlaybackQualityChange', typeListener)
+		.on('onPlaybackRateChange', typeListener)
+		.on('onReady', typeListener)
+		.on('onStateChange', typeListener)
+		.on('error', typeListener)
+		.on('canplay', typeListener)
+		.on('ended', typeListener)
+		.on('durationchange', typeListener)
+		.on('timeupdate', typeListener)
+		.on('play', typeListener)
+		.on('pause', typeListener)
+		.on('ratechange', typeListener)
+		.on('volumechange', typeListener);
+
 	var listen;
 	if (document.body.addEventListener) {
 		listen = function (target, type, listener) {
