@@ -126,8 +126,7 @@
 
 	listen(elLoad, 'click', function(event) {
 		var videoId = elVideos.value;
-		console.log(videoId);
-		// player.src(videoId);
+		player.src(videoId);
 	});
 	listen(elPlay, 'click', function(event) {
 		player.play();

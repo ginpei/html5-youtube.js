@@ -164,7 +164,7 @@
 	};
 
 	$p._updateMeta = function() {
-		this.src = this.currentSrc = this.player.getVideoUrl();
+		this._src = this.currentSrc = this.player.getVideoUrl();
 		this.duration = this.player.getDuration();
 		this.trigger('durationchange');
 	};
@@ -380,6 +380,21 @@
 			},
 			set: function(value) {
 				this.player.setPlaybackRate(value);
+			}
+		},
+
+		/**
+		 * Returns the address of the current media resource.
+		 * Can be set, to change the video URL.
+		 * @type number
+		 */
+		{
+			name: 'src',
+			get: function() {
+				return this._src;
+			},
+			set: function(value) {
+				this.player.cueVideoById(value);
 			}
 		}
 	]);
