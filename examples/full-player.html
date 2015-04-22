@@ -82,6 +82,10 @@
 			elPlay.disabled = false;
 			elPause.disabled = true;
 		})
+		.on('emptied', function(event) {
+			elPlay.disabled = false;
+			elPause.disabled = true;
+		})
 		.on('durationchange', function(event) {
 			elCurrentTime.max = player.duration;
 			elDurationText.setTime(player.duration);
