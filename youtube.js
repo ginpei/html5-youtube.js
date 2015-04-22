@@ -281,7 +281,7 @@
 		this.played = this.paused = this.ended = false;
 
 		if (state === Player.PlayerState.UNSTARTED) {
-			this.trigger('unstart', event);
+			this.trigger('emptied', event);
 		}
 		else if (state === Player.PlayerState.ENDED) {
 			this.ended = true;
