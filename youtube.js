@@ -271,6 +271,7 @@
 		this._observeDuration();
 		this.trigger('ready', event);
 		this.trigger('canplay', event);
+		this.trigger('canplaythrough');
 	};
 
 	$p.onStateChange = function(event) {
@@ -301,6 +302,7 @@
 		else if (state === Player.PlayerState.CUED) {
 			this._updateMeta();
 			this.trigger('canplay');
+			this.trigger('canplaythrough');
 		}
 	};
 
