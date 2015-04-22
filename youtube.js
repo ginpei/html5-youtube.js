@@ -286,7 +286,7 @@
 		}
 		else if (state === Player.PlayerState.ENDED) {
 			this.ended = true;
-			this.trigger('end', event);
+			this.trigger('ended', event);
 		}
 	};
 
