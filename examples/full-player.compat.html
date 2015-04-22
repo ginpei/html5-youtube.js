@@ -67,10 +67,8 @@
 			elMute.disabled = false;
 			elVolume.disabled = false;
 
-			elCurrentTime.max = player.duration;
 			elCurrentTime.value = player.currentTime();
 			elCurrentTimeText.setTime(player.currentTime());
-			elDurationText.setTime(player.duration);
 			elVolume.checked = player.muted();
 			elVolume.value = player.volume();
 		})
@@ -85,6 +83,10 @@
 		.on('pause', function(event) {
 			elPlay.disabled = false;
 			elPause.disabled = true;
+		})
+		.on('durationchange', function(event) {
+			elCurrentTime.max = player.duration;
+			elDurationText.setTime(player.duration);
 		})
 		.on('volumechange', function(event) {
 			elMute.checked = player.muted();

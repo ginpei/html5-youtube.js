@@ -165,8 +165,6 @@
 
 	$p._updateMeta = function() {
 		this._src = this.currentSrc = this.player.getVideoUrl();
-		this.duration = this.player.getDuration();
-		this.trigger('durationchange');
 	};
 
 	$p._observeTimeUpdate = function() {
@@ -197,6 +195,16 @@
 			if (playbackRate !== this._playbackRate) {
 				this._playbackRate = playbackRate;
 				this.trigger('ratechange');
+			}
+		}, this), 100);
+	};
+
+	$p._observeDuration = function() {
+		this._tmDuration = setInterval(Player.bind(function() {
+			var duration = this.player.getDuration() || 0;
+			if (duration !== this.duration) {
+				this.duration = duration;
+				this.trigger('durationchange');
 			}
 		}, this), 100);
 	};
@@ -260,6 +268,7 @@
 		this._observeTimeUpdate();
 		this._observeVolume();
 		this._observePlaybackRate();
+		this._observeDuration();
 		this.trigger('ready', event);
 		this.trigger('canplay', event);
 	};
