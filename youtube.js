@@ -47,11 +47,11 @@
 	/**
 	 * Proxy for `Object.defineProperty`.
 	 * This function only store definitions and they will defined in `_execDefineProperties`.
-	 * @param {Array} definitions
+	 * @param {Array} properties
 	 */
-	Player.defineProperties = function(definitions) {
-		for (var name in definitions) {
-			Player._undefinedProperties[name] = definitions[name];
+	Player.defineProperties = function(properties) {
+		for (var name in properties) {
+			Player._undefinedProperties[name] = properties[name];
 		}
 	};
 
