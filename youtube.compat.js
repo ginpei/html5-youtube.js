@@ -67,7 +67,6 @@
 	};
 
 	$p._buildPlayer = function(options) {
-		var that = this;
 		var videoOptions = this._getVideoOptions(options);
 
 		if (!window.swfobject) {
@@ -81,17 +80,7 @@
 		}
 
 		// callback
-		window.onYouTubePlayerReady = function(playerId) {  // TODO: allow multiple callbacks
-			// get player
-			var player = that.player = document.getElementById(playerId);
-
-			// binding
-			var prefix = playerId.replace(/-/g, '_');
-			that._registerVideoEvents(player, prefix);
-
-			var event = { type:'onReady', data:null, target:player };
-			that.onReady(event);
-		};
+		window.onYouTubePlayerReady = Player.bind(this.onYouTubePlayerReady, this);
 
 		// load
 		// `fs=0` is required because fullscreen button does not work (OMG)
@@ -100,6 +89,16 @@
 		var params = { allowScriptAccess:'always',  wmode:'transparent' };
 		var attr = { id:playerId };
 		swfobject.embedSWF(url, playerId, videoOptions.width, videoOptions.height, '8', null, null, params, attr);
+	};
+
+	$p.onYouTubePlayerReady = function(playerId) {  // TODO: allow multiple callbacks
+		var player = this.player = document.getElementById(playerId);
+
+		var prefix = playerId.replace(/-/g, '_');
+		this._registerVideoEvents(player, prefix);
+
+		var event = { type:'onReady', data:null, target:player };
+		this.onReady(event);
 	};
 
 	$p._registerVideoEvents = function(player, prefix) {
