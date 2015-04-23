@@ -48,13 +48,10 @@
 	 * Proxy for `Object.defineProperty`.
 	 * This function only store definitions and they will defined in `_execDefineProperties`.
 	 * @param {Array} definitions
-	 * @param {String} definitions[].name Property's name.
-	 * @param {Function} definitions[].get
-	 * @param {Function} definitions[].set
 	 */
 	Player.defineProperties = function(definitions) {
-		for (var i=0, l=definitions.length; i<l; i++) {
-			Player._undefinedProperties.push(definitions[i]);
+		for (var name in definitions) {
+			Player._undefinedProperties[name] = definitions[name];
 		}
 	};
 
@@ -65,9 +62,8 @@
 	Player._execDefineProperties = function() {
 		var obj = this.prototype;
 		var properties = this._undefinedProperties;
-		for (var i=0, l=properties.length; i<l; i++) {
-			var definition = properties[i];
-			this._execDefineProperty(obj, definition.name, definition);
+		for (var name in properties) {
+			this._execDefineProperty(obj, name, properties[name]);
 		}
 	};
 
@@ -83,7 +79,7 @@
 	 * Definitions are stored here in `defineProperties`.
 	 * @type Array
 	 */
-	Player._undefinedProperties = [];
+	Player._undefinedProperties = {};
 
 	/**
 	 * Load YoutTube API script.
@@ -396,14 +392,13 @@
 	// ----------------------------------------------------------------
 	// Properties
 
-	Player.defineProperties([
+	Player.defineProperties({
 		/**
 		 * Returns the current playback position, in seconds, as a position between zero time and the current duration.
 		 * Can be set, to seek to the given time.
 		 * @type number
 		 */
-		{
-			name: 'currentTime',
+		currentTime: {
 			get: function() {
 				return this._currentTime;
 			},
@@ -417,8 +412,7 @@
 		 * Can be set, to change the volume multiplier.
 		 * @type number
 		 */
-		{
-			name: 'volume',
+		volume: {
 			get: function() {
 				return this._volume / 100;
 			},
@@ -432,8 +426,7 @@
 		 * Can be set, to change whether the audio is muted or not.
 		 * @type number
 		 */
-		{
-			name: 'muted',
+		muted: {
 			get: function() {
 				return this._muted;
 			},
@@ -447,8 +440,7 @@
 		 * Can be set, to change the default rate of playback.
 		 * @type number
 		 */
-		{
-			name: 'playbackRate',
+		playbackRate: {
 			get: function() {
 				return this._playbackRate;
 			},
@@ -462,8 +454,7 @@
 		 * Can be set, to change the video URL.
 		 * @type number
 		 */
-		{
-			name: 'src',
+		src: {
 			get: function() {
 				return this._src;
 			},
@@ -471,5 +462,5 @@
 				this.player.cueVideoById(value);
 			}
 		}
-	]);
+	});
 })(window, document);
