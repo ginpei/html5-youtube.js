@@ -87,21 +87,7 @@
 
 			// binding
 			var prefix = playerId.replace(/-/g, '_');
-			var types = ['onApiChang', 'onError', 'onPlaybackQualityChange', 'onPlaybackRateChange', 'onReady', 'onStateChange'];
-			for (var i=0, l=types.length; i<l; i++) {
-				var type = types[i];
-				var callbackName = prefix + type;
-				window[callbackName] = Player.bind(function(type, data) {
-					try {  // error will be wasted by swf
-						var event = { type:type, data:data, target:this };
-						this[type](event);
-					}
-					catch (error) {
-						console.error(error);
-					}
-				}, that, type);
-				player.addEventListener(type, callbackName);
-			}
+			that._registerVideoEvents(player, prefix);
 
 			var event = { type:'onReady', data:null, target:player };
 			that.onReady(event);
@@ -114,6 +100,29 @@
 		var params = { allowScriptAccess:'always',  wmode:'transparent' };
 		var attr = { id:playerId };
 		swfobject.embedSWF(url, playerId, videoOptions.width, videoOptions.height, '8', null, null, params, attr);
+	};
+
+	$p._registerVideoEvents = function(player, prefix) {
+		this._registerVideoEvent(player, prefix, 'onApiChang');
+		this._registerVideoEvent(player, prefix, 'onError');
+		this._registerVideoEvent(player, prefix, 'onPlaybackQualityChange');
+		this._registerVideoEvent(player, prefix, 'onPlaybackRateChange');
+		this._registerVideoEvent(player, prefix, 'onReady');
+		this._registerVideoEvent(player, prefix, 'onStateChange');
+	};
+
+	$p._registerVideoEvent = function(player, prefix, type) {
+		var callbackName = prefix + type;
+		player.addEventListener(type, callbackName);
+		window[callbackName] = Player.bind(function(type, data) {
+			try {  // error will be wasted by swf
+				var event = { type:type, data:data, target:this };
+				this[type](event);
+			}
+			catch (error) {
+				console.error(error);
+			}
+		}, this, type);
 	};
 
 	$p.on = function(type, listener) {
