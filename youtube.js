@@ -45,18 +45,7 @@
 	};
 
 	/**
-	 * Proxy for `Object.defineProperty`.
-	 * This function only store definitions and they will defined in `_execDefineProperties`.
-	 * @param {Array} properties
-	 */
-	Player.defineProperties = function(properties) {
-		for (var name in properties) {
-			Player._undefinedProperties[name] = properties[name];
-		}
-	};
-
-	/**
-	 * Execute property definig for stored values in `defineProperties`.
+	 * Execute property definig for stored values in `_undefinedProperties`.
 	 * This method is called only once when the first instance is created.
 	 */
 	Player._execDefineProperties = function() {
@@ -74,12 +63,6 @@
 	Player._execDefineProperty = function(obj, prop, descriptor) {
 		Object.defineProperty(obj, prop, descriptor);
 	};
-
-	/**
-	 * Definitions are stored here in `defineProperties`.
-	 * @type Array
-	 */
-	Player._undefinedProperties = {};
 
 	/**
 	 * Load YoutTube API script.
@@ -392,7 +375,11 @@
 	// ----------------------------------------------------------------
 	// Properties
 
-	Player.defineProperties({
+	/**
+	 * Definitions are stored here.
+	 * @type Array
+	 */
+	Player._undefinedProperties = {
 		/**
 		 * Returns the current playback position, in seconds, as a position between zero time and the current duration.
 		 * Can be set, to seek to the given time.
@@ -462,5 +449,5 @@
 				this.player.cueVideoById(value);
 			}
 		}
-	});
+	};
 })(window, document);
