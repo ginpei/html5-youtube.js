@@ -166,6 +166,24 @@
 	 * @param {Object} options
 	 */
 	$p._setupVideo = function(options) {
+		var videoOptions = this._getVideoOptions(options);
+		this.player = new YT.Player(videoOptions.el, {
+			height: videoOptions.height,
+			width: videoOptions.width,
+			videoId: videoOptions.videoId,
+			events: {
+				onApiChange: Player.bind(this.onApiChange, this),
+				onError: Player.bind(this.onError, this),
+				onPlaybackQualityChange: Player.bind(this.onPlaybackQualityChange, this),
+				onPlaybackRateChange: Player.bind(this.onPlaybackRateChange, this),
+				onReady: Player.bind(this.onReady, this),
+				onStateChange: Player.bind(this.onStateChange, this)
+			}
+		});
+		this.el = this.player.getIframe();
+	};
+
+	$p._getVideoOptions = function(options) {
 		var el = options.el;
 		var videoId = options.id;
 
@@ -179,20 +197,12 @@
 			width = 640;
 		}
 
-		this.player = new YT.Player(el, {
+		return {
+			el: el,
 			height: height,
-			width: width,
 			videoId: videoId,
-			events: {
-				onApiChange: Player.bind(this.onApiChange, this),
-				onError: Player.bind(this.onError, this),
-				onPlaybackQualityChange: Player.bind(this.onPlaybackQualityChange, this),
-				onPlaybackRateChange: Player.bind(this.onPlaybackRateChange, this),
-				onReady: Player.bind(this.onReady, this),
-				onStateChange: Player.bind(this.onStateChange, this)
-			}
-		});
-		this.el = this.player.getIframe();
+			width: width
+		};
 	};
 
 	$p._updateMeta = function() {
