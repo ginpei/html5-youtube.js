@@ -10,6 +10,7 @@
 	 * The constructor.
 	 */
 	var Player = window.youtube.Player = function(options) {
+		// define property's getters and setters if they have not yet
 		if (Player._undefinedProperties) {
 			Player._execDefineProperties();
 			delete Player._undefinedProperties;
