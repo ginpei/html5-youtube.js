@@ -60,13 +60,13 @@
 		};
 	};
 
-	var $p = Player.prototype;
+	var prototype = Player.prototype;
 
-	$p._initializeEventer = function() {
+	prototype._initializeEventer = function() {
 		this._eventer = { on:eventPrototype.on, trigger:eventPrototype.trigger };
 	};
 
-	$p._buildPlayer = function(options) {
+	prototype._buildPlayer = function(options) {
 		var videoOptions = this._getVideoOptions(options);
 
 		if (!window.swfobject) {
@@ -91,7 +91,7 @@
 		swfobject.embedSWF(url, playerId, videoOptions.width, videoOptions.height, '8', null, null, params, attr);
 	};
 
-	$p.onYouTubePlayerReady = function(playerId) {  // TODO: allow multiple callbacks
+	prototype.onYouTubePlayerReady = function(playerId) {  // TODO: allow multiple callbacks
 		var player = this.player = document.getElementById(playerId);
 
 		var prefix = playerId.replace(/-/g, '_');
@@ -101,7 +101,7 @@
 		this.onReady(event);
 	};
 
-	$p._registerVideoEvents = function(player, prefix) {
+	prototype._registerVideoEvents = function(player, prefix) {
 		this._registerVideoEvent(player, prefix, 'onApiChang');
 		this._registerVideoEvent(player, prefix, 'onError');
 		this._registerVideoEvent(player, prefix, 'onPlaybackQualityChange');
@@ -110,7 +110,7 @@
 		this._registerVideoEvent(player, prefix, 'onStateChange');
 	};
 
-	$p._registerVideoEvent = function(player, prefix, type) {
+	prototype._registerVideoEvent = function(player, prefix, type) {
 		var callbackName = prefix + type;
 		player.addEventListener(type, callbackName);
 		window[callbackName] = Player.bind(function(type, data) {
@@ -124,12 +124,12 @@
 		}, this, type);
 	};
 
-	$p.on = function(type, listener) {
+	prototype.on = function(type, listener) {
 		this._eventer.on(type, Player.bind(listener, this));
 		return this;
 	};
 
-	$p.trigger = function(type, originalEvent) {
+	prototype.trigger = function(type, originalEvent) {
 		var event;
 
 		if (document.createEvent) {

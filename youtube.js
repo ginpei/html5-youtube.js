@@ -21,7 +21,7 @@
 	};
 
 	// shortcut
-	var $p = Player.prototype;
+	var prototype = Player.prototype;
 
 	// ----------------------------------------------------------------
 	// Statics
@@ -135,7 +135,7 @@
 	 * Initialize the instance ownself.
 	 * @param {Object} options
 	 */
-	$p.initialize = function(options) {
+	prototype.initialize = function(options) {
 		this._currentTime = null;
 		this.paused = null;
 
@@ -148,7 +148,7 @@
 	 * It can be placed for compat.
 	 * @param {Object} options
 	 */
-	$p._buildPlayer = function(options) {
+	prototype._buildPlayer = function(options) {
 		Player.prepareYTScript(Player.bind(this._setupVideo, this, options));
 	};
 
@@ -156,7 +156,7 @@
 	 * YT.Player has add/removeEventListener methods but they doesn't work correctly
 	 * It can be placed for compat.
 	 */
-	$p._initializeEventer = function() {
+	prototype._initializeEventer = function() {
 		this._eventer = document.createElement('ytapiplayer');
 		document.body.appendChild(this._eventer);
 	};
@@ -165,7 +165,7 @@
 	 * Setup viode UI.
 	 * @param {Object} options
 	 */
-	$p._setupVideo = function(options) {
+	prototype._setupVideo = function(options) {
 		var videoOptions = this._getVideoOptions(options);
 		this.player = new YT.Player(videoOptions.el, {
 			height: videoOptions.height,
@@ -176,7 +176,7 @@
 		this.el = this.player.getIframe();
 	};
 
-	$p._getVideoOptions = function(options) {
+	prototype._getVideoOptions = function(options) {
 		var el = options.el;
 		var videoId = options.id;
 
@@ -198,7 +198,7 @@
 		};
 	};
 
-	$p._getVideoEvents = function() {
+	prototype._getVideoEvents = function() {
 		return {
 			onApiChange: Player.bind(this.onApiChange, this),
 			onError: Player.bind(this.onError, this),
@@ -209,14 +209,14 @@
 		};
 	};
 
-	$p._updateMeta = function() {
+	prototype._updateMeta = function() {
 		this._src = this.currentSrc = this.player.getVideoUrl();
 	};
 
 	/**
 	 * Start observing timeupdate's change.
 	 */
-	$p._observeTimeUpdate = function() {
+	prototype._observeTimeUpdate = function() {
 		this._tmTimeUpdate = setInterval(Player.bind(function() {
 			var time = this.player.getCurrentTime();
 			if (time !== this._currentTime) {
@@ -229,7 +229,7 @@
 	/**
 	 * Start observing volume's change.
 	 */
-	$p._observeVolume = function() {
+	prototype._observeVolume = function() {
 		this._tmVolume = setInterval(Player.bind(function() {
 			var muted = this.player.isMuted();
 			var volume = this.player.getVolume();
@@ -244,7 +244,7 @@
 	/**
 	 * Start observing playbackRate's change.
 	 */
-	$p._observePlaybackRate = function() {
+	prototype._observePlaybackRate = function() {
 		this._tmPlaybackRate = setInterval(Player.bind(function() {
 			var playbackRate = this.player.getPlaybackRate();
 			if (playbackRate !== this._playbackRate) {
@@ -257,7 +257,7 @@
 	/**
 	 * Start observing duration's change.
 	 */
-	$p._observeDuration = function() {
+	prototype._observeDuration = function() {
 		this._tmDuration = setInterval(Player.bind(function() {
 			var duration = this.player.getDuration() || 0;
 			if (duration !== this.duration) {
@@ -276,7 +276,7 @@
 	 * @param {String} type A event type like `"play"`, '"timeupdate"` or `"onReady"`.
 	 * @param {Function} listener A function to execute when the event is triggered.
 	 */
-	$p.on = function(type, listener) {
+	prototype.on = function(type, listener) {
 		this._eventer.addEventListener(type, Player.bind(listener, this));
 		return this;
 	};
@@ -286,7 +286,7 @@
 	 * It can be placed for compat.
 	 * @param {String} type A event type like `"play"`, '"timeupdate"` or `"onReady"`.
 	 */
-	$p.trigger = function(type, originalEvent) {
+	prototype.trigger = function(type, originalEvent) {
 		var event = document.createEvent('CustomEvent');
 		event.initEvent(type, false, true);
 		event.player = this;
@@ -299,7 +299,7 @@
 		this._eventer.dispatchEvent(event);
 	};
 
-	$p.onApiChange = function(event) {
+	prototype.onApiChange = function(event) {
 		this.trigger('onApiChange', event);
 	};
 
@@ -307,20 +307,20 @@
 	 * @param {Number} event.playerData The error ID.
 	 * @see https://developers.google.com/youtube/iframe_api_reference#onError
 	 */
-	$p.onError = function(event) {
+	prototype.onError = function(event) {
 		this.trigger('onError', event);
 		this.trigger('error', event);
 	};
 
-	$p.onPlaybackQualityChange = function(event) {
+	prototype.onPlaybackQualityChange = function(event) {
 		this.trigger('onPlaybackQualityChange', event);
 	};
 
-	$p.onPlaybackRateChange = function(event) {
+	prototype.onPlaybackRateChange = function(event) {
 		this.trigger('onPlaybackRateChange', event);
 	};
 
-	$p.onReady = function(event) {
+	prototype.onReady = function(event) {
 		this.trigger('onReady', event);
 		this._updateMeta();
 		this._observeTimeUpdate();
@@ -332,7 +332,7 @@
 		this.trigger('canplaythrough');
 	};
 
-	$p.onStateChange = function(event) {
+	prototype.onStateChange = function(event) {
 		this.trigger('onStateChange', event);
 
 		var state = event.data;
@@ -371,14 +371,14 @@
 	/**
 	 * Play the video.
 	 */
-	$p.play = function() {
+	prototype.play = function() {
 		this.player.playVideo();
 	};
 
 	/**
 	 * Stop the video.
 	 */
-	$p.pause = function() {
+	prototype.pause = function() {
 		this.player.pauseVideo();
 	};
 
@@ -389,7 +389,7 @@
 	 * @returns {Array}
 	 * @see https://developers.google.com/youtube/iframe_api_reference#getAvailablePlaybackRates
 	 */
-	$p.getAvailablePlaybackRates = function() {
+	prototype.getAvailablePlaybackRates = function() {
 		return this.player.getAvailablePlaybackRates();
 	};
 
