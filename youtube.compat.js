@@ -74,9 +74,9 @@
 		}
 
 		// set up ID
-		var playerId = options.el.id;
+		var playerId = videoOptions.el.id;
 		if (!playerId) {
-			playerId = options.el.id = 'youtubejs' + Date.now();
+			playerId = vieoOptions.el.id = 'youtubejs' + Date.now();
 		}
 
 		// callback
