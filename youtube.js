@@ -171,14 +171,7 @@
 			height: videoOptions.height,
 			width: videoOptions.width,
 			videoId: videoOptions.videoId,
-			events: {
-				onApiChange: Player.bind(this.onApiChange, this),
-				onError: Player.bind(this.onError, this),
-				onPlaybackQualityChange: Player.bind(this.onPlaybackQualityChange, this),
-				onPlaybackRateChange: Player.bind(this.onPlaybackRateChange, this),
-				onReady: Player.bind(this.onReady, this),
-				onStateChange: Player.bind(this.onStateChange, this)
-			}
+			events: this._getVideoEvents()
 		});
 		this.el = this.player.getIframe();
 	};
@@ -202,6 +195,17 @@
 			height: height,
 			videoId: videoId,
 			width: width
+		};
+	};
+
+	$p._getVideoEvents = function() {
+		return {
+			onApiChange: Player.bind(this.onApiChange, this),
+			onError: Player.bind(this.onError, this),
+			onPlaybackQualityChange: Player.bind(this.onPlaybackQualityChange, this),
+			onPlaybackRateChange: Player.bind(this.onPlaybackRateChange, this),
+			onReady: Player.bind(this.onReady, this),
+			onStateChange: Player.bind(this.onStateChange, this)
 		};
 	};
 
