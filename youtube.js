@@ -3,9 +3,7 @@
 	 * The interface.
 	 */
 	window.youtube = function(options) {
-		var player = new Player(options);
-		// player.play();
-		return player;
+		return new Player(options);
 	};
 
 	/**
