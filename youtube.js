@@ -1,10 +1,16 @@
 (function(window, document) {
+	/**
+	 * The interface.
+	 */
 	window.youtube = function(options) {
 		var player = new Player(options);
 		// player.play();
 		return player;
 	};
 
+	/**
+	 * The constructor.
+	 */
 	var Player = window.youtube.Player = function(options) {
 		if (Player._undefinedProperties) {
 			Player._execDefineProperties();
@@ -14,8 +20,17 @@
 		return this.initialize(options);
 	};
 
+	// shortcut
 	var $p = Player.prototype;
 
+	// ----------------------------------------------------------------
+	// Statics
+
+	/**
+	 * These values are used to detect states in onStateChange event.
+	 * They are same as YouTube API's `YT.PlayerState`.
+	 * @see https://developers.google.com/youtube/iframe_api_reference#onStateChange
+	 */
 	Player.PlayerState = { UNSTARTED:-1, ENDED:0, PLAYING:1, PAUSED:2, BUFFERING:3, CUED:5 };
 
 	/**
@@ -31,6 +46,7 @@
 
 	/**
 	 * Proxy for `Object.defineProperty`.
+	 * This function only store definitions and they will defined in `_execDefineProperties`.
 	 * @param {Array} definitions
 	 * @param {String} definitions[].name Property's name.
 	 * @param {Function} definitions[].get
@@ -42,9 +58,11 @@
 		}
 	};
 
+	/**
+	 * Execute property definig for stored values in `defineProperties`.
+	 * This method is called only once when the first instance is created.
+	 */
 	Player._execDefineProperties = function() {
-		// This method is called only once when the first instance is created.
-
 		var obj = this.prototype;
 		var properties = this._undefinedProperties;
 		for (var i=0, l=properties.length; i<l; i++) {
@@ -61,18 +79,23 @@
 		Object.defineProperty(obj, prop, descriptor);
 	};
 
+	/**
+	 * Definitions are stored here in `defineProperties`.
+	 * @type Array
+	 */
 	Player._undefinedProperties = [];
 
 	/**
 	 * Load YoutTube API script.
-	 * Status is changed as: initial->loading->ready.
-	 * * Callback will run later if initial
-	 * * Callback is queued and will run if loading
-	 * * Callback run immediately if ready
-	 *
 	 * @param {Function} callback
 	 */
 	Player.loadYTScript = function(callback) {
+		// Status is changed as: initial->loading->ready.
+		// * The callback will run later if initial
+		// * The callback is queued and will run if loading
+		// * The callback run immediately if ready
+		//
+
 		var status = this._ytStatus;
 		if (status === undefined) {  // initial; not started
 			// initialize the callback queue
@@ -105,6 +128,9 @@
 		}
 	};
 
+	// ----------------------------------------------------------------
+	// Constructing
+
 	/**
 	 * Initialize the instance ownself.
 	 * @param {Object} options
@@ -118,7 +144,9 @@
 	};
 
 	/**
+	 * Load YouTube API and setup video UI.
 	 * It can be placed for compat.
+	 * @param {Object} options
 	 */
 	$p._buildPlayer = function(options) {
 		Player.loadYTScript(Player.bind(this._setupVideo, this, options));
@@ -133,6 +161,10 @@
 		document.body.appendChild(this._eventer);
 	};
 
+	/**
+	 * Setup viode UI.
+	 * @param {Object} options
+	 */
 	$p._setupVideo = function(options) {
 		var el = options.el;
 		var videoId = options.id;
@@ -167,6 +199,9 @@
 		this._src = this.currentSrc = this.player.getVideoUrl();
 	};
 
+	/**
+	 * Start observing timeupdate's change.
+	 */
 	$p._observeTimeUpdate = function() {
 		this._tmTimeUpdate = setInterval(Player.bind(function() {
 			var time = this.player.getCurrentTime();
@@ -177,6 +212,9 @@
 		}, this), 100);
 	};
 
+	/**
+	 * Start observing volume's change.
+	 */
 	$p._observeVolume = function() {
 		this._tmVolume = setInterval(Player.bind(function() {
 			var muted = this.player.isMuted();
@@ -189,6 +227,9 @@
 		}, this), 100);
 	};
 
+	/**
+	 * Start observing playbackRate's change.
+	 */
 	$p._observePlaybackRate = function() {
 		this._tmPlaybackRate = setInterval(Player.bind(function() {
 			var playbackRate = this.player.getPlaybackRate();
@@ -199,6 +240,9 @@
 		}, this), 100);
 	};
 
+	/**
+	 * Start observing duration's change.
+	 */
 	$p._observeDuration = function() {
 		this._tmDuration = setInterval(Player.bind(function() {
 			var duration = this.player.getDuration() || 0;
