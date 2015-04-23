@@ -89,7 +89,7 @@
 	 * Load YoutTube API script.
 	 * @param {Function} callback
 	 */
-	Player.loadYTScript = function(callback) {
+	Player.prepareYTScript = function(callback) {
 		// Status is changed as: initial->loading->ready.
 		// * The callback will run later if initial
 		// * The callback is queued and will run if loading
@@ -149,7 +149,7 @@
 	 * @param {Object} options
 	 */
 	$p._buildPlayer = function(options) {
-		Player.loadYTScript(Player.bind(this._setupVideo, this, options));
+		Player.prepareYTScript(Player.bind(this._setupVideo, this, options));
 	};
 
 	/**
