@@ -115,7 +115,15 @@
 	 */
 	prototype.initialize = function(options) {
 		this._currentTime = null;
+		this._volume = null;
+		this._muted = null;
+		this._playbackRate = null;
+		this._src = null;
+		this.duration = null;
+		this.currentSrc = null;
+		this.played = null;
 		this.paused = null;
+		this.ended = null;
 
 		this._initializeEventer();
 		this._buildPlayer(options);
