@@ -60,6 +60,19 @@
 		};
 	};
 
+	Player.registerYouTubePlayerReady = function(playerId, player) {
+		if (!window.onYouTubePlayerReady) {
+			window.onYouTubePlayerReady = this.bind(this.onYouTubePlayerReady, this);
+			this._callbacksForYouTubePlayerReady = {};
+		}
+		this._callbacksForYouTubePlayerReady[playerId] = player;
+	};
+
+	Player.onYouTubePlayerReady = function(playerId) {
+		var player = this._callbacksForYouTubePlayerReady[playerId];
+		player.onYouTubePlayerReady(playerId);
+	};
+
 	var prototype = Player.prototype;
 
 	prototype._initializeEventer = function() {
@@ -80,7 +93,7 @@
 		}
 
 		// callback
-		window.onYouTubePlayerReady = Player.bind(this.onYouTubePlayerReady, this);
+		Player.registerYouTubePlayerReady(playerId, this);
 
 		// load
 		// `fs=0` is required because fullscreen button does not work (OMG)
@@ -91,7 +104,7 @@
 		swfobject.embedSWF(url, playerId, videoOptions.width, videoOptions.height, '8', null, null, params, attr);
 	};
 
-	prototype.onYouTubePlayerReady = function(playerId) {  // TODO: allow multiple callbacks
+	prototype.onYouTubePlayerReady = function(playerId) {
 		var player = this.player = document.getElementById(playerId);
 
 		var prefix = playerId.replace(/-/g, '_');
