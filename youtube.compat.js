@@ -42,6 +42,9 @@
 	};
 	// ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+	// shortcut
+	var prototype = Player.prototype;
+
 	/**
 	 * Overwrite for compat.
 	 */
@@ -91,8 +94,6 @@
 		var player = this._callbacksForYouTubePlayerReady[playerId];
 		player.onYouTubePlayerReady(playerId);
 	};
-
-	var prototype = Player.prototype;
 
 	/**
 	 * Overwrite for compat.
