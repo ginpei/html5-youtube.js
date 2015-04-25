@@ -45,6 +45,9 @@
 	// shortcut
 	var prototype = Player.prototype;
 
+	// ----------------------------------------------------------------
+	// Statics
+
 	/**
 	 * Overwrite for compat.
 	 */
@@ -94,6 +97,9 @@
 		var player = this._callbacksForYouTubePlayerReady[playerId];
 		player.onYouTubePlayerReady(playerId);
 	};
+
+	// ----------------------------------------------------------------
+	// Constructing
 
 	/**
 	 * Overwrite for compat.
@@ -179,6 +185,9 @@
 			}
 		}, this, type);
 	};
+
+	// ----------------------------------------------------------------
+	// Events
 
 	/**
 	 * Overwrite for compat.
