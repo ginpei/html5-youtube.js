@@ -1,4 +1,5 @@
 (function(window, document, Player) {
+	// vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
 	// via Osteoporosis.js
 	// https://github.com/ginpei/Osteoporosis.js/blob/ccf3380fef9f8fd850c44fa017ad863af2ddb9b7/osteoporosis.js#L32-L69
 	var S__LISTENERS = '_listeners';
@@ -39,6 +40,7 @@
 			}
 		}
 	};
+	// ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 	Player.bind = function(fn, context) {
 		var args = Array.prototype.slice.call(arguments, 2);
