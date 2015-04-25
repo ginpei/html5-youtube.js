@@ -42,6 +42,9 @@
 	};
 	// ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+	/**
+	 * Overwrite for compat.
+	 */
 	Player.bind = function(fn, context) {
 		var args = Array.prototype.slice.call(arguments, 2);
 		return function() {
@@ -50,6 +53,9 @@
 		};
 	};
 
+	/**
+	 * Overwrite for compat.
+	 */
 	Player._execDefineProperty = function(obj, prop, descriptor) {
 		obj[prop] = function(value) {
 			if (arguments.length > 0) {
@@ -62,6 +68,11 @@
 		};
 	};
 
+	/**
+	 * Register a callback for initializing.
+	 * @param {String} playerId
+	 * @param {Player} player
+	 */
 	Player.registerYouTubePlayerReady = function(playerId, player) {
 		if (!window.onYouTubePlayerReady) {
 			window.onYouTubePlayerReady = this.bind(this.onYouTubePlayerReady, this);
@@ -70,6 +81,12 @@
 		this._callbacksForYouTubePlayerReady[playerId] = player;
 	};
 
+	/**
+	 * The unified callback for YouTube API Player.
+	 * It is called by YouTube API when it is completly loaded.
+	 * @param {String} playerId
+	 * @see registerYouTubePlayerReady
+	 */
 	Player.onYouTubePlayerReady = function(playerId) {
 		var player = this._callbacksForYouTubePlayerReady[playerId];
 		player.onYouTubePlayerReady(playerId);
@@ -77,10 +94,16 @@
 
 	var prototype = Player.prototype;
 
+	/**
+	 * Overwrite for compat.
+	 */
 	prototype._initializeEventer = function() {
 		this._eventer = { on:eventPrototype.on, trigger:eventPrototype.trigger };
 	};
 
+	/**
+	 * Overwrite for compat.
+	 */
 	prototype._buildPlayer = function(options) {
 		var videoOptions = this._getVideoOptions(options);
 
@@ -106,6 +129,11 @@
 		swfobject.embedSWF(url, playerId, videoOptions.width, videoOptions.height, '8', null, null, params, attr);
 	};
 
+	/**
+	 * A callback that is called when YouTube API is ready.
+	 * @param {String} playerId
+	 * @see Player.registerYouTubePlayerReady
+	 */
 	prototype.onYouTubePlayerReady = function(playerId) {
 		var player = this.player = document.getElementById(playerId);
 
@@ -116,6 +144,12 @@
 		this.onReady(event);
 	};
 
+	/**
+	 * Register callbacks for YouTube APIs.
+	 * @param {Player} player
+	 * @param {String} prefix
+	 * @see #_registerVideoEvent
+	 */
 	prototype._registerVideoEvents = function(player, prefix) {
 		this._registerVideoEvent(player, prefix, 'onApiChang');
 		this._registerVideoEvent(player, prefix, 'onError');
@@ -125,6 +159,12 @@
 		this._registerVideoEvent(player, prefix, 'onStateChange');
 	};
 
+	/**
+	 * Register a specified callback for YouTube APIs.
+	 * @param {Player} player
+	 * @param {String} prefix
+	 * @param {String} type
+	 */
 	prototype._registerVideoEvent = function(player, prefix, type) {
 		var callbackName = prefix + type;
 		player.addEventListener(type, callbackName);
@@ -139,11 +179,17 @@
 		}, this, type);
 	};
 
+	/**
+	 * Overwrite for compat.
+	 */
 	prototype.on = function(type, listener) {
 		this._eventer.on(type, Player.bind(listener, this));
 		return this;
 	};
 
+	/**
+	 * Overwrite for compat.
+	 */
 	prototype.trigger = function(type, originalEvent) {
 		var event;
 
