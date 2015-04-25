@@ -64,7 +64,7 @@
 	};
 
 	/**
-	 * Load YoutTube API script.
+	 * Load YouTube API script.
 	 * @param {Function} callback
 	 */
 	Player.prepareYTScript = function(callback) {
@@ -80,7 +80,7 @@
 			var callbacks = this._ytCallbacks = [];
 			callbacks.push(callback);
 
-			// load YoutTube script
+			// load YouTube script
 			var url = 'https://www.youtube.com/iframe_api';
 			var elScript = document.createElement('script');
 			elScript.src = url;
