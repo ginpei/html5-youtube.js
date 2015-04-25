@@ -185,14 +185,20 @@
 	};
 
 	prototype._getVideoEvents = function() {
-		return {
-			onApiChange: Player.bind(this.onApiChange, this),
-			onError: Player.bind(this.onError, this),
-			onPlaybackQualityChange: Player.bind(this.onPlaybackQualityChange, this),
-			onPlaybackRateChange: Player.bind(this.onPlaybackRateChange, this),
-			onReady: Player.bind(this.onReady, this),
-			onStateChange: Player.bind(this.onStateChange, this)
-		};
+		var events = {};
+
+		[
+			'onApiChange',
+			'onError',
+			'onPlaybackQualityChange',
+			'onPlaybackRateChange',
+			'onReady',
+			'onStateChange',
+		].forEach(function(type, index) {
+			events[type] = Player.bind(this[type], this)
+		}.bind(this));
+
+		return events;
 	};
 
 	prototype._updateMeta = function() {
