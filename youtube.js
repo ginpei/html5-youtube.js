@@ -125,6 +125,8 @@
 		this.paused = null;
 		this.ended = null;
 
+		this._events = [];
+
 		this._initializeEventer();
 		this._buildPlayer(options);
 	};
@@ -277,9 +279,47 @@
 	 * Attach an event handler function.
 	 * @param {String} type A event type like `"play"`, '"timeupdate"` or `"onReady"`.
 	 * @param {Function} listener A function to execute when the event is triggered.
+	 * @see {#removeEventListener}
 	 */
 	prototype.addEventListener = function(type, listener) {
-		this._eventer.addEventListener(type, Player.bind(listener, this));
+		var binded = this._pushListener(type, listener);
+		this._eventer.addEventListener(type, binded);
+	};
+
+	/**
+	 * Dettach an event handler function.
+	 * @param {String} type
+	 * @param {Function} listener
+	 * @see {#addEventListener}
+	 */
+	prototype.removeEventListener = function(type, listener) {
+		var data = this._popListener(type, listener);
+		if (data) {
+			this._eventer.removeEventListener(type, data.binded);
+		}
+	};
+
+	prototype._pushListener = function(type, listener) {
+		var binded = Player.bind(listener, this);
+		this._events.push({
+			binded: binded,
+			listener: listener,
+			type: type
+		});
+
+		return binded;
+	};
+
+	prototype._popListener = function(type, listener) {
+		var events = this._events;
+		for (var i=0, l=events.length; i<l; i++) {
+			var data = events[i];
+			if (data && data.type === type && data.listener === listener) {
+				events[i] = null;
+				return data;
+			}
+		}
+		return undefined;
 	};
 
 	/**
