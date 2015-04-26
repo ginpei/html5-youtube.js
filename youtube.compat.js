@@ -1,9 +1,9 @@
 (function(window, document, Player) {
+	var f_slice = Array.prototype.slice;
 	// vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
 	// via Osteoporosis.js
 	// https://github.com/ginpei/Osteoporosis.js/blob/ccf3380fef9f8fd850c44fa017ad863af2ddb9b7/osteoporosis.js#L32-L69
 	var S__LISTENERS = '_listeners';
-	var slice = [].slice;
 	var eventPrototype = {
 		/**
 		 * Binds `listener` to this object as a callback function.
@@ -32,7 +32,7 @@
 		trigger: function(type) {
 			var allListeners = this[S__LISTENERS];
 			if (allListeners && allListeners[type]) {
-				var args = slice.call(arguments, 1);
+				var args = f_slice.call(arguments, 1);
 				var listeners = allListeners[type];
 				for (var i=0, l=listeners.length; i<l; i++) {
 					listeners[i].apply(null, args);
@@ -52,9 +52,9 @@
 	 * Overwrite for compat.
 	 */
 	Player.bind = function(fn, context) {
-		var args = Array.prototype.slice.call(arguments, 2);
+		var args = f_slice.call(arguments, 2);
 		return function() {
-			var curArgs = args.concat(Array.prototype.slice.call(arguments));
+			var curArgs = args.concat(f_slice.call(arguments));
 			return fn.apply(context, curArgs);
 		};
 	};
