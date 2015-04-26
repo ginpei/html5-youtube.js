@@ -3,7 +3,6 @@
 	// vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
 	// via Osteoporosis.js
 	// https://github.com/ginpei/Osteoporosis.js/blob/ccf3380fef9f8fd850c44fa017ad863af2ddb9b7/osteoporosis.js#L32-L69
-	var S__LISTENERS = '_listeners';
 	var eventPrototype = {
 		/**
 		 * Binds `listener` to this object as a callback function.
@@ -12,9 +11,9 @@
 		 * @param {Function} listener
 		 */
 		on: function(type, listener) {
-			var allListeners = this[S__LISTENERS];
+			var allListeners = this._listeners;
 			if (!allListeners) {
-				allListeners = this[S__LISTENERS] = {};
+				allListeners = this._listeners = {};
 			}
 
 			var listeners = allListeners[type];
@@ -30,7 +29,7 @@
 		 * @param {String} type
 		 */
 		trigger: function(type) {
-			var allListeners = this[S__LISTENERS];
+			var allListeners = this._listeners;
 			if (allListeners && allListeners[type]) {
 				var args = f_slice.call(arguments, 1);
 				var listeners = allListeners[type];
