@@ -105,7 +105,7 @@
 	 * Overwrite for compat.
 	 */
 	prototype._initializeEventer = function() {
-		this._eventer = { on:eventPrototype.on, trigger:eventPrototype.trigger };
+		this._eventer = { addEventListener:eventPrototype.on, trigger:eventPrototype.trigger };
 	};
 
 	/**
@@ -188,13 +188,6 @@
 
 	// ----------------------------------------------------------------
 	// Events
-
-	/**
-	 * Overwrite for compat.
-	 */
-	prototype.addEventListener = function(type, listener) {
-		this._eventer.on(type, Player.bind(listener, this));
-	};
 
 	/**
 	 * Overwrite for compat.

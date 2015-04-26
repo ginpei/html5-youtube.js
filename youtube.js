@@ -275,7 +275,6 @@
 
 	/**
 	 * Attach an event handler function.
-	 * It can be placed for compat.
 	 * @param {String} type A event type like `"play"`, '"timeupdate"` or `"onReady"`.
 	 * @param {Function} listener A function to execute when the event is triggered.
 	 */
