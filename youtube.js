@@ -274,6 +274,28 @@
 	};
 
 	/**
+	 * Attach an event handler function.
+	 * It can be placed for compat.
+	 * @param {String} type A event type like `"play"`, '"timeupdate"` or `"onReady"`.
+	 * @param {Function} listener A function to execute when the event is triggered.
+	 */
+	prototype.addEventListener = function(type, listener) {
+		this._eventer.addEventListener(type, Player.bind(listener, this));
+	};
+
+	/**
+	 * A shortcut for `addEventListener` and returns `this`.
+	 * You can use method chaining.
+	 * @param {String} type
+	 * @param {Function} listener
+	 * @returns {Player}
+	 */
+	prototype.on = function(type, listener) {
+		this.addEventListener(type, listener);
+		return this;
+	};
+
+	/**
 	 * Trigger an event.
 	 * It can be placed for compat.
 	 * @param {String} type A event type like `"play"`, '"timeupdate"` or `"onReady"`.
