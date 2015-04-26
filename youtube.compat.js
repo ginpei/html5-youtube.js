@@ -153,36 +153,14 @@
 	 * @see https://github.com/ginpei/Osteoporosis.js/blob/ccf3380fef9f8fd850c44fa017ad863af2ddb9b7/osteoporosis.js#L36-L54
 	 */
 	prototype.addEventListener = function(type, listener) {
-		var binded = this._pushListener(type, listener);
-
-		var allListeners = this._listeners;
-		if (!allListeners) {
-			allListeners = this._listeners = {};
-		}
-
-		var listeners = allListeners[type];
-		if (!listeners) {
-			listeners = allListeners[type] = [];
-		}
-
-		listeners.push(binded);
+		this._pushListener(type, listener);
 	};
 
 	/**
 	 * Overwrite for compat.
 	 */
 	prototype.removeEventListener = function(type, listener) {
-		var data = this._popListener(type, listener);
-		if (data) {
-			var binded = data.binded;
-			var listeners = this._listeners[type];
-			for (var i=0, l=listeners.length; i<l; i++) {
-				var listener2 = listeners[i];
-				if (listener2 === binded) {
-					listeners[i] = null;
-				}
-			}
-		}
+		this._popListener(type, listener);
 	};
 
 	/**
@@ -209,14 +187,11 @@
 		}
 
 		// execute triggering
-		var allListeners = this._listeners;
-		if (allListeners && allListeners[type]) {
-			var listeners = allListeners[type];
-			for (var i=0, l=listeners.length; i<l; i++) {
-				var listener = listeners[i];
-				if (listener) {
-					listener.call(null, event);
-				}
+		var events = this._events[type];
+		for (var i=0, l=events.length; i<l; i++) {
+			var data = events[i];
+			if (data) {
+				data.binded(event);
 			}
 		}
 
