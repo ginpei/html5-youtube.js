@@ -1,45 +1,5 @@
 (function(window, document, Player) {
 	var f_slice = Array.prototype.slice;
-	// vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
-	// via Osteoporosis.js
-	// https://github.com/ginpei/Osteoporosis.js/blob/ccf3380fef9f8fd850c44fa017ad863af2ddb9b7/osteoporosis.js#L32-L69
-	var eventPrototype = {
-		/**
-		 * Binds `listener` to this object as a callback function.
-		 * FYI: `off()` is not provided.
-		 * @param {String} type
-		 * @param {Function} listener
-		 */
-		on: function(type, listener) {
-			var allListeners = this._listeners;
-			if (!allListeners) {
-				allListeners = this._listeners = {};
-			}
-
-			var listeners = allListeners[type];
-			if (!listeners) {
-				listeners = allListeners[type] = [];
-			}
-
-			listeners.push(listener);
-		},
-
-		/**
-		 * Fires an event named `type`.
-		 * @param {String} type
-		 */
-		trigger: function(type) {
-			var allListeners = this._listeners;
-			if (allListeners && allListeners[type]) {
-				var args = f_slice.call(arguments, 1);
-				var listeners = allListeners[type];
-				for (var i=0, l=listeners.length; i<l; i++) {
-					listeners[i].apply(null, args);
-				}
-			}
-		}
-	};
-	// ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 	// shortcut
 	var prototype = Player.prototype;
@@ -104,7 +64,7 @@
 	 * Overwrite for compat.
 	 */
 	prototype._initializeEventer = function() {
-		this._eventer = { addEventListener:eventPrototype.on, trigger:eventPrototype.trigger };
+		// nothing to do
 	};
 
 	/**
@@ -190,10 +150,30 @@
 
 	/**
 	 * Overwrite for compat.
+	 * @see https://github.com/ginpei/Osteoporosis.js/blob/ccf3380fef9f8fd850c44fa017ad863af2ddb9b7/osteoporosis.js#L36-L54
+	 */
+	prototype.addEventListener = function(type, listener) {
+		var allListeners = this._listeners;
+		if (!allListeners) {
+			allListeners = this._listeners = {};
+		}
+
+		var listeners = allListeners[type];
+		if (!listeners) {
+			listeners = allListeners[type] = [];
+		}
+
+		listeners.push(listener);
+	};
+
+	/**
+	 * Overwrite for compat.
+	 * @see https://github.com/ginpei/Osteoporosis.js/blob/ccf3380fef9f8fd850c44fa017ad863af2ddb9b7/osteoporosis.js#L56-L68
 	 */
 	prototype.trigger = function(type, originalEvent) {
 		var event;
 
+		// wrap specified event object
 		if (document.createEvent) {
 			event = document.createEvent('CustomEvent');
 			event.initEvent(type, false, true);
@@ -209,7 +189,15 @@
 			event.originalEvent = originalEvent;
 		}
 
-		this._eventer.trigger(type, event);
+		// execute triggering
+		var allListeners = this._listeners;
+		if (allListeners && allListeners[type]) {
+			var listeners = allListeners[type];
+			for (var i=0, l=listeners.length; i<l; i++) {
+				listeners[i].call(null, event);
+			}
+		}
+
 		return this;
 	};
 })(window, document, window.youtube.Player);
