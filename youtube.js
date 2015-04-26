@@ -301,20 +301,25 @@
 
 	prototype._pushListener = function(type, listener) {
 		var binded = Player.bind(listener, this);
-		this._events.push({
+
+		var events = this._events[type];
+		if (!events) {
+			events = this._events[type] = [];
+		}
+
+		events.push({
 			binded: binded,
 			listener: listener,
-			type: type
 		});
 
 		return binded;
 	};
 
 	prototype._popListener = function(type, listener) {
-		var events = this._events;
+		var events = this._events[type];
 		for (var i=0, l=events.length; i<l; i++) {
 			var data = events[i];
-			if (data && data.type === type && data.listener === listener) {
+			if (data && data.listener === listener) {
 				events[i] = null;
 				return data;
 			}
