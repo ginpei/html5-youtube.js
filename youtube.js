@@ -284,11 +284,13 @@
 	 * Good bye!
 	 */
 	prototype.destroy = function() {
-		this._removeAllEventListeners();
-		this._clearEventer();
-		this._stopAllObservings();
-		this._clearProperties();
-		this._destroyPlayer();
+		if (this.player) {
+			this._removeAllEventListeners();
+			this._clearEventer();
+			this._stopAllObservings();
+			this._clearProperties();
+			this._destroyPlayer();
+		}
 	};
 
 	prototype._clearProperties = function() {
