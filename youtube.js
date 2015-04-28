@@ -124,12 +124,33 @@
 	};
 
 	/**
+	 * Good bye!
+	 */
+	prototype.destroy = function() {
+		if (this.player) {
+			this._removeAllEventListeners();
+			this._clearEventer();
+			this._stopAllObservings();
+			this._resetProperties();
+			this._destroyPlayer();
+		}
+	};
+
+	/**
 	 * Load YouTube API and setup video UI.
 	 * It can be placed for compat.
 	 * @param {Object} options
 	 */
 	prototype._buildPlayer = function(options) {
 		Player.prepareYTScript(Player.bind(this._setupVideo, this, options));
+	};
+
+	/**
+	 * @see #destroy
+	 */
+	prototype._destroyPlayer = function() {
+		this.player.destroy();
+		this.player = null;
 	};
 
 	/**
@@ -204,110 +225,6 @@
 		return events;
 	};
 
-	prototype._updateMeta = function() {
-		this._src = this.currentSrc = this.player.getVideoUrl();
-	};
-
-	/**
-	 * Start observing timeupdate's change.
-	 */
-	prototype._observeTimeUpdate = function() {
-		this._tmTimeUpdate = setInterval(Player.bind(function() {
-			var time = this.player.getCurrentTime();
-			if (time !== this._currentTime) {
-				this._currentTime = time;
-				this.trigger('timeupdate');
-			}
-		}, this), 100);
-	};
-
-	/**
-	 * Start observing volume's change.
-	 */
-	prototype._observeVolume = function() {
-		this._tmVolume = setInterval(Player.bind(function() {
-			var muted = this.player.isMuted();
-			var volume = this.player.getVolume();
-			if (muted !== this._muted || volume !== this._volume) {
-				this._muted = muted;
-				this._volume = volume;
-				this.trigger('volumechange');
-			}
-		}, this), 100);
-	};
-
-	/**
-	 * Start observing playbackRate's change.
-	 */
-	prototype._observePlaybackRate = function() {
-		this._tmPlaybackRate = setInterval(Player.bind(function() {
-			var playbackRate = this.player.getPlaybackRate();
-			if (playbackRate !== this._playbackRate) {
-				this._playbackRate = playbackRate;
-				this.trigger('ratechange');
-			}
-		}, this), 100);
-	};
-
-	/**
-	 * Start observing duration's change.
-	 */
-	prototype._observeDuration = function() {
-		this._tmDuration = setInterval(Player.bind(function() {
-			var duration = this.player.getDuration() || 0;
-			if (duration !== this.duration) {
-				this.duration = duration;
-				this.trigger('durationchange');
-			}
-		}, this), 100);
-	};
-
-	/**
-	 * @see #destroy
-	 */
-	prototype._stopAllObservings = function() {
-		clearInterval(this._tmTimeUpdate);
-		clearInterval(this._tmVolume);
-		clearInterval(this._tmPlaybackRate);
-		clearInterval(this._tmDuration);
-	};
-
-	/**
-	 * Good bye!
-	 */
-	prototype.destroy = function() {
-		if (this.player) {
-			this._removeAllEventListeners();
-			this._clearEventer();
-			this._stopAllObservings();
-			this._resetProperties();
-			this._destroyPlayer();
-		}
-	};
-
-	prototype._resetProperties = function() {
-		this._currentTime = null;
-		this._volume = null;
-		this._muted = null;
-		this._playbackRate = null;
-		this._src = null;
-		this.duration = null;
-		this.currentSrc = null;
-		this.played = null;
-		this.paused = null;
-		this.ended = null;
-
-		this.el = undefined;
-	};
-
-	/**
-	 * @see #destroy
-	 */
-	prototype._destroyPlayer = function() {
-		this.player.destroy();
-		this.player = null;
-	};
-
 	// ----------------------------------------------------------------
 	// Events
 
@@ -333,6 +250,36 @@
 		if (data) {
 			this._eventer.removeEventListener(type, data.binded);
 		}
+	};
+
+	/**
+	 * A shortcut for `addEventListener` and returns `this`.
+	 * You can use method chaining.
+	 * @param {String} type
+	 * @param {Function} listener
+	 * @returns {Player}
+	 */
+	prototype.on = function(type, listener) {
+		this.addEventListener(type, listener);
+		return this;
+	};
+
+	/**
+	 * Trigger an event.
+	 * It can be placed for compat.
+	 * @param {String} type A event type like `"play"`, '"timeupdate"` or `"onReady"`.
+	 */
+	prototype.trigger = function(type, originalEvent) {
+		var event = document.createEvent('CustomEvent');
+		event.initEvent(type, false, true);
+		event.player = this;
+
+		if (originalEvent) {
+			event.playerData = originalEvent.data;
+			event.originalEvent = originalEvent;
+		}
+
+		this._eventer.dispatchEvent(event);
 	};
 
 	/**
@@ -381,36 +328,6 @@
 			}
 		}
 		return undefined;
-	};
-
-	/**
-	 * A shortcut for `addEventListener` and returns `this`.
-	 * You can use method chaining.
-	 * @param {String} type
-	 * @param {Function} listener
-	 * @returns {Player}
-	 */
-	prototype.on = function(type, listener) {
-		this.addEventListener(type, listener);
-		return this;
-	};
-
-	/**
-	 * Trigger an event.
-	 * It can be placed for compat.
-	 * @param {String} type A event type like `"play"`, '"timeupdate"` or `"onReady"`.
-	 */
-	prototype.trigger = function(type, originalEvent) {
-		var event = document.createEvent('CustomEvent');
-		event.initEvent(type, false, true);
-		event.player = this;
-
-		if (originalEvent) {
-			event.playerData = originalEvent.data;
-			event.originalEvent = originalEvent;
-		}
-
-		this._eventer.dispatchEvent(event);
 	};
 
 	prototype.onApiChange = function(event) {
@@ -518,6 +435,89 @@
 
 	// ----------------------------------------------------------------
 	// Properties
+
+	prototype._updateMeta = function() {
+		this._src = this.currentSrc = this.player.getVideoUrl();
+	};
+
+	/**
+	 * Start observing timeupdate's change.
+	 */
+	prototype._observeTimeUpdate = function() {
+		this._tmTimeUpdate = setInterval(Player.bind(function() {
+			var time = this.player.getCurrentTime();
+			if (time !== this._currentTime) {
+				this._currentTime = time;
+				this.trigger('timeupdate');
+			}
+		}, this), 100);
+	};
+
+	/**
+	 * Start observing volume's change.
+	 */
+	prototype._observeVolume = function() {
+		this._tmVolume = setInterval(Player.bind(function() {
+			var muted = this.player.isMuted();
+			var volume = this.player.getVolume();
+			if (muted !== this._muted || volume !== this._volume) {
+				this._muted = muted;
+				this._volume = volume;
+				this.trigger('volumechange');
+			}
+		}, this), 100);
+	};
+
+	/**
+	 * Start observing playbackRate's change.
+	 */
+	prototype._observePlaybackRate = function() {
+		this._tmPlaybackRate = setInterval(Player.bind(function() {
+			var playbackRate = this.player.getPlaybackRate();
+			if (playbackRate !== this._playbackRate) {
+				this._playbackRate = playbackRate;
+				this.trigger('ratechange');
+			}
+		}, this), 100);
+	};
+
+	/**
+	 * Start observing duration's change.
+	 */
+	prototype._observeDuration = function() {
+		this._tmDuration = setInterval(Player.bind(function() {
+			var duration = this.player.getDuration() || 0;
+			if (duration !== this.duration) {
+				this.duration = duration;
+				this.trigger('durationchange');
+			}
+		}, this), 100);
+	};
+
+	/**
+	 * @see #destroy
+	 */
+	prototype._stopAllObservings = function() {
+		clearInterval(this._tmTimeUpdate);
+		clearInterval(this._tmVolume);
+		clearInterval(this._tmPlaybackRate);
+		clearInterval(this._tmDuration);
+	};
+
+	prototype._resetProperties = function() {
+		this._currentTime = null;
+		this._volume = null;
+		this._muted = null;
+		this._playbackRate = null;
+		this._src = null;
+		this.duration = null;
+		this.currentSrc = null;
+		this.played = null;
+		this.paused = null;
+		this.ended = null;
+
+		this.el = undefined;
+	};
 
 	/**
 	 * Definitions are stored here.
