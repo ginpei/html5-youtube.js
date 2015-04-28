@@ -183,7 +183,6 @@
 			videoId: videoOptions.videoId,
 			events: this._getVideoEvents()
 		});
-		this.el = this.player.getIframe();
 	};
 
 	prototype._getVideoOptions = function(options) {
@@ -515,8 +514,6 @@
 		this.played = null;
 		this.paused = null;
 		this.ended = null;
-
-		this.el = undefined;
 	};
 
 	/**
