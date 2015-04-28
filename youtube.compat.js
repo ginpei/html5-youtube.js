@@ -138,20 +138,21 @@
 		// elStyle
 		// └.sheet
 		//   └.cssRules
-		//     ├[index].selectorText
-		//     └[index].style
-		//       ├.length
-		//       ├[index] as defined property's name
-		//       └[type] as value
+		//     └[index]
+		//       ├.selectorText
+		//       └.style
+		//         ├.length
+		//         ├[index] as defined property's name
+		//         └[type] as value
 		//
-		// ex:
+		// example:
 		//   var elStyle = document.querySelector('style');
 		//   var stylesheet = elStyle.sheet;
-		//   var rule = stylesheet.cssRules[i];
+		//   var rule = stylesheet.cssRules[0];
 		//   var selector = rule.selectorText;
 		//   var style = rule.style;
-		//   var prop = style[i];
-		//   var value = style[prop];
+		//   var prop = style[0];
+		//   var value = style['color'];
 
 		var targetSelector = '#' + id;
 
