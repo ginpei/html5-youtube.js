@@ -114,16 +114,7 @@
 	 * @param {Object} options
 	 */
 	prototype.initialize = function(options) {
-		this._currentTime = null;
-		this._volume = null;
-		this._muted = null;
-		this._playbackRate = null;
-		this._src = null;
-		this.duration = null;
-		this.currentSrc = null;
-		this.played = null;
-		this.paused = null;
-		this.ended = null;
+		this._resetProperties();
 
 		this._events = [];
 
@@ -288,19 +279,23 @@
 			this._removeAllEventListeners();
 			this._clearEventer();
 			this._stopAllObservings();
-			this._clearProperties();
+			this._resetProperties();
 			this._destroyPlayer();
 		}
 	};
 
-	prototype._clearProperties = function() {
-		this._currentTime = undefined;
-		this._volume = undefined;
-		this._muted = undefined;
-		this._playbackRate = undefined;
-		this._src = undefined;
-		this.currentSrc = undefined;
-		this.duration = undefined;
+	prototype._resetProperties = function() {
+		this._currentTime = null;
+		this._volume = null;
+		this._muted = null;
+		this._playbackRate = null;
+		this._src = null;
+		this.duration = null;
+		this.currentSrc = null;
+		this.played = null;
+		this.paused = null;
+		this.ended = null;
+
 		this.el = undefined;
 	};
 
