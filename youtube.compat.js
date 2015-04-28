@@ -112,8 +112,9 @@
 		this.player = null;
 
 		var elParent = elPlayer.parentNode;
-		this._elOriginal.style.visibility = 'visible';
-		elParent.insertBefore(this._elOriginal, elPlayer);
+		var elOriginal = this._elOriginal;
+		elOriginal.style.visibility = 'visible';
+		elParent.insertBefore(elOriginal, elPlayer);
 		elParent.removeChild(elPlayer);
 	};
 
