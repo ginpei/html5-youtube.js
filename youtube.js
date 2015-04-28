@@ -150,6 +150,15 @@
 	};
 
 	/**
+	 * It can be placed for compat.
+	 * @see #destroy
+	 */
+	prototype._clearEventer = function() {
+		document.body.removeChild(this._eventer);
+		this._eventer = null;
+	};
+
+	/**
 	 * Setup viode UI.
 	 * @param {Object} options
 	 */
@@ -276,6 +285,7 @@
 	 */
 	prototype.destroy = function() {
 		this._removeAllEventListeners();
+		this._clearEventer();
 		this._stopAllObservings();
 		this._clearProperties();
 		this._destroyPlayer();

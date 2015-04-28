@@ -70,6 +70,13 @@
 	/**
 	 * Overwrite for compat.
 	 */
+	prototype._clearEventer = function() {
+		// nothing to do
+	};
+
+	/**
+	 * Overwrite for compat.
+	 */
 	prototype._buildPlayer = function(options) {
 		var videoOptions = this._getVideoOptions(options);
 
