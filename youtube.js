@@ -313,17 +313,6 @@
 
 	/**
 	 * Attach an event handler function.
-	 * It can be placed for compat.
-	 * @param {String} type A event type like `"play"`, '"timeupdate"` or `"onReady"`.
-	 * @param {Function} listener A function to execute when the event is triggered.
-	 */
-	prototype.on = function(type, listener) {
-		this._eventer.addEventListener(type, Player.bind(listener, this));
-		return this;
-	};
-
-	/**
-	 * Attach an event handler function.
 	 * @param {String} type A event type like `"play"`, '"timeupdate"` or `"onReady"`.
 	 * @param {Function} listener A function to execute when the event is triggered.
 	 * @see {#removeEventListener}
