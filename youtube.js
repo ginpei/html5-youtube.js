@@ -261,6 +261,33 @@
 		}, this), 100);
 	};
 
+	/**
+	 * @see #destroy
+	 */
+	prototype._stopAllObservings = function() {
+		clearInterval(this._tmTimeUpdate);
+		clearInterval(this._tmVolume);
+		clearInterval(this._tmPlaybackRate);
+		clearInterval(this._tmDuration);
+	};
+
+	/**
+	 * Good bye!
+	 */
+	prototype.destroy = function() {
+		this._removeAllEventListeners();
+		this._stopAllObservings();
+		this._destroyPlayer();
+	};
+
+	/**
+	 * @see #destroy
+	 */
+	prototype._destroyPlayer = function() {
+		this.player.destroy();
+		this.player = null;
+	};
+
 	// ----------------------------------------------------------------
 	// Events
 
@@ -296,6 +323,26 @@
 		var data = this._popListener(type, listener);
 		if (data) {
 			this._eventer.removeEventListener(type, data.binded);
+		}
+	};
+
+	/**
+	 * @see #destroy
+	 */
+	prototype._removeAllEventListeners = function() {
+		var allEvents = this._events;
+		for (var type in allEvents) {
+			var events = allEvents[type];
+			for (var i=0, l=events.length; i<l; i++) {
+				var data = events[i];
+				if (data) {
+					this.removeEventListener(type, data.listener);
+					delete data.listener;
+					delete data.binded;
+					events[i] = null;
+				}
+			}
+			delete allEvents[type];
 		}
 	};
 
