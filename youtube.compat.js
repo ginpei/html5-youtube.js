@@ -177,6 +177,12 @@
 	prototype.trigger = function(type, originalEvent) {
 		var event;
 
+		// pick up listeners
+		var events = this._events[type];
+		if (!events) {
+			return;
+		}
+
 		// wrap specified event object
 		if (document.createEvent) {
 			event = document.createEvent('CustomEvent');
@@ -194,7 +200,6 @@
 		}
 
 		// execute triggering
-		var events = this._events[type];
 		for (var i=0, l=events.length; i<l; i++) {
 			var data = events[i];
 			if (data) {
