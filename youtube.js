@@ -114,9 +114,8 @@
 	 * @param {Object} options
 	 */
 	prototype.initialize = function(options) {
-		this._resetProperties();
-
 		this._events = [];
+		this._resetProperties();
 
 		this._initializeEventer();
 		this._buildPlayer(options);
