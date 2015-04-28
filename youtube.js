@@ -114,11 +114,13 @@
 	 * @param {Object} options
 	 */
 	prototype.initialize = function(options) {
-		this._events = [];
-		this._resetProperties();
+		if (!this.player) {
+			this._events = [];
+			this._resetProperties();
 
-		this._initializeEventer();
-		this._buildPlayer(options);
+			this._initializeEventer();
+			this._buildPlayer(options);
+		}
 	};
 
 	/**
