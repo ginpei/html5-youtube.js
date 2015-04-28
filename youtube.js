@@ -277,7 +277,19 @@
 	prototype.destroy = function() {
 		this._removeAllEventListeners();
 		this._stopAllObservings();
+		this._clearProperties();
 		this._destroyPlayer();
+	};
+
+	prototype._clearProperties = function() {
+		this._currentTime = undefined;
+		this._volume = undefined;
+		this._muted = undefined;
+		this._playbackRate = undefined;
+		this._src = undefined;
+		this.currentSrc = undefined;
+		this.duration = undefined;
+		this.el = undefined;
 	};
 
 	/**
@@ -477,14 +489,18 @@
 	 * Play the video.
 	 */
 	prototype.play = function() {
-		this.player.playVideo();
+		if (this.player) {
+			this.player.playVideo();
+		}
 	};
 
 	/**
 	 * Stop the video.
 	 */
 	prototype.pause = function() {
-		this.player.pauseVideo();
+		if (this.player) {
+			this.player.pauseVideo();
+		}
 	};
 
 	/**
@@ -495,7 +511,12 @@
 	 * @see https://developers.google.com/youtube/iframe_api_reference#getAvailablePlaybackRates
 	 */
 	prototype.getAvailablePlaybackRates = function() {
-		return this.player.getAvailablePlaybackRates();
+		if (this.player) {
+			return this.player.getAvailablePlaybackRates();
+		}
+		else {
+			return undefined;
+		}
 	};
 
 	// ----------------------------------------------------------------
@@ -516,7 +537,9 @@
 				return this._currentTime;
 			},
 			set: function(value) {
-				this.player.seekTo(value, true);
+				if (this.player) {
+					this.player.seekTo(value, true);
+				}
 			}
 		},
 
@@ -530,7 +553,9 @@
 				return this._volume / 100;
 			},
 			set: function(value) {
-				this.player.setVolume(value * 100);
+				if (this.player) {
+					this.player.setVolume(value * 100);
+				}
 			}
 		},
 
@@ -544,7 +569,9 @@
 				return this._muted;
 			},
 			set: function(value) {
-				this.player[value?'mute':'unMute']();
+				if (this.player) {
+					this.player[value?'mute':'unMute']();
+				}
 			}
 		},
 
@@ -558,7 +585,9 @@
 				return this._playbackRate;
 			},
 			set: function(value) {
-				this.player.setPlaybackRate(value);
+				if (this.player) {
+					this.player.setPlaybackRate(value);
+				}
 			}
 		},
 
@@ -572,7 +601,9 @@
 				return this._src;
 			},
 			set: function(value) {
-				this.player.cueVideoById(value);
+				if (this.player) {
+					this.player.cueVideoById(value);
+				}
 			}
 		}
 	};
