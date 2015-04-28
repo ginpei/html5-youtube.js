@@ -90,6 +90,9 @@
 			playerId = vieoOptions.el.id = 'youtubejs' + Date.now();
 		}
 
+		// save the target element to restore when destroyed
+		this._elOriginal = videoOptions.el;
+
 		// callback
 		Player.registerYouTubePlayerReady(playerId, this);
 
@@ -100,6 +103,18 @@
 		var params = { allowScriptAccess:'always',  wmode:'transparent' };
 		var attr = { id:playerId };
 		swfobject.embedSWF(url, playerId, videoOptions.width, videoOptions.height, '8', null, null, params, attr);
+	};
+
+	prototype._destroyPlayer = function() {
+		var elPlayer = this.player;
+
+		this.player.destroy();
+		this.player = null;
+
+		var elParent = elPlayer.parentNode;
+		this._elOriginal.style.visibility = 'visible';
+		elParent.insertBefore(this._elOriginal, elPlayer);
+		elParent.removeChild(elPlayer);
 	};
 
 	/**
