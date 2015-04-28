@@ -53,6 +53,11 @@
 	 * @see registerYouTubePlayerReady
 	 */
 	Player.onYouTubePlayerReady = function(playerId) {
+		// save the CSSStylesheet object
+		if (!this._style) {
+			this._style = document.styleSheets[document.styleSheets.length-1];
+		}
+
 		var player = this._callbacksForYouTubePlayerReady[playerId];
 		player.onYouTubePlayerReady(playerId);
 	};
@@ -108,14 +113,61 @@
 	prototype._destroyPlayer = function() {
 		var elPlayer = this.player;
 
+		// API's destroying
 		this.player.destroy();
 		this.player = null;
 
+		// restore the elements
 		var elParent = elPlayer.parentNode;
 		var elOriginal = this._elOriginal;
-		elOriginal.style.visibility = 'visible';
 		elParent.insertBefore(elOriginal, elPlayer);
 		elParent.removeChild(elPlayer);
+
+		// clear style
+		this._clearYTStyle(elOriginal.id);
+
+		this._elOriginal = null;
+	};
+
+	/**
+	 * Clear style rules that were specified by YouTube API.
+	 * @param {String} id
+	 */
+	prototype._clearYTStyle = function(id) {
+		// API:
+		// elStyle
+		// └.sheet
+		//   └.cssRules
+		//     ├[index].selectorText
+		//     └[index].style
+		//       ├.length
+		//       ├[index] as defined property's name
+		//       └[type] as value
+		//
+		// ex:
+		//   var elStyle = document.querySelector('style');
+		//   var stylesheet = elStyle.sheet;
+		//   var rule = stylesheet.cssRules[i];
+		//   var selector = rule.selectorText;
+		//   var style = rule.style;
+		//   var prop = style[i];
+		//   var value = style[prop];
+
+		var targetSelector = '#' + id;
+
+		var rules = Player._style.cssRules;
+		for (var i=0, l=rules.length; i<l; i++) {
+			var rule = rules[i];
+			var selector = rule.selectorText;
+			if (selector === targetSelector) {
+				var styles = rule.style;
+				for (var j=0; j<styles.length; j++) {
+					var prop = styles[j];
+					styles[prop] = '';
+				}
+				break;
+			}
+		}
 	};
 
 	/**
