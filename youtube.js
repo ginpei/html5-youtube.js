@@ -311,7 +311,7 @@
 
 		events.push({
 			binded: binded,
-			listener: listener,
+			listener: listener
 		});
 
 		return binded;
