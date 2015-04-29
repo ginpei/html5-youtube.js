@@ -1,3 +1,4 @@
+/* global YT */
 (function(window, document) {
 	/**
 	 * The interface.
@@ -16,7 +17,7 @@
 			delete Player._undefinedProperties;
 		}
 
-		return this.initialize(options);
+		this.initialize(options);
 	};
 
 	// shortcut
@@ -218,7 +219,7 @@
 			'onReady',
 			'onStateChange',
 		].forEach(function(type, index) {
-			events[type] = Player.bind(this[type], this)
+			events[type] = Player.bind(this[type], this);
 		}.bind(this));
 
 		return events;
