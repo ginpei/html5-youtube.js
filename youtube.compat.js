@@ -92,7 +92,7 @@
 		// set up ID
 		var playerId = videoOptions.el.id;
 		if (!playerId) {
-			playerId = vieoOptions.el.id = 'youtubejs' + Date.now();
+			playerId = videoOptions.el.id = 'youtubejs' + Date.now();
 		}
 
 		// save the target element to restore when destroyed
