@@ -265,6 +265,18 @@
 	};
 
 	/**
+	 * A shortcut for `removeEventListener` and returns `this`.
+	 * You can use method chaining.
+	 * @param {String} type
+	 * @param {Function} listener
+	 * @returns {Player}
+	 */
+	prototype.off = function(type, listener) {
+		this.removeEventListener(type, listener);
+		return this;
+	};
+
+	/**
 	 * Trigger an event.
 	 * It can be placed for compat.
 	 * @param {String} type A event type like `"play"`, '"timeupdate"` or `"onReady"`.
