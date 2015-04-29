@@ -90,10 +90,8 @@
 		}
 
 		// set up ID
-		var playerId = videoOptions.el.id;
-		if (!playerId) {
-			playerId = videoOptions.el.id = 'youtubejs' + Date.now();
-		}
+		this._originalElemId = videoOptions.el.id;
+		var playerId = videoOptions.el.id = 'youtubejs' + Date.now();
 
 		// save the target element to restore when destroyed
 		this._elOriginal = videoOptions.el;
@@ -119,6 +117,14 @@
 
 		// restore the elements
 		var elOriginal = this._elOriginal;
+		if (this._originalElemId) {
+			elOriginal.id = this._originalElemId;
+		}
+		else {
+			elOriginal.removeAttribute('id');
+		}
+		this._elOriginal = null;
+
 		var elParent = elPlayer.parentNode;
 		elParent.insertBefore(elOriginal, elPlayer);
 		elParent.removeChild(elPlayer);
