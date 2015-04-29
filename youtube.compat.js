@@ -118,8 +118,8 @@
 		this.player = null;
 
 		// restore the elements
-		var elParent = elPlayer.parentNode;
 		var elOriginal = this._elOriginal;
+		var elParent = elPlayer.parentNode;
 		elParent.insertBefore(elOriginal, elPlayer);
 		elParent.removeChild(elPlayer);
 
