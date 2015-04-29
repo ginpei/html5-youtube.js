@@ -156,15 +156,17 @@
 
 		var targetSelector = '#' + id;
 
-		var rules = Player._style.cssRules;
+		var stylesheet = Player._style;
+		var rules = stylesheet.cssRules || stylesheet.rules;
 		for (var i=0, l=rules.length; i<l; i++) {
 			var rule = rules[i];
 			var selector = rule.selectorText;
 			if (selector === targetSelector) {
-				var styles = rule.style;
-				for (var j=0; j<styles.length; j++) {
-					var prop = styles[j];
-					styles[prop] = '';
+				if (stylesheet.deleteRule) {
+					stylesheet.deleteRule(i);
+				}
+				else {
+					stylesheet.removeRule(i);
 				}
 				break;
 			}
