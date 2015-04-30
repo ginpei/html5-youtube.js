@@ -5,6 +5,16 @@ Player.prepareYTScript = function(callback) {
 	callback();
 };
 
+var original_createPlayer = Player._createPlayer;
+Player.prototype._createPlayer = function(options) {
+	var instance = this;
+	return {
+		playVideo: function() {
+			instance.onStateChange({ data:1 });
+		}
+	};
+};
+
 var player;
 var elParent;
 var elPlayer;

@@ -178,7 +178,7 @@
 	 */
 	prototype._setupVideo = function(options) {
 		var videoOptions = this._getVideoOptions(options);
-		this.player = new YT.Player(videoOptions.el, {
+		this.player = this._createPlayer(videoOptions.el, {
 			height: videoOptions.height,
 			width: videoOptions.width,
 			videoId: videoOptions.videoId,
@@ -223,6 +223,10 @@
 		}.bind(this));
 
 		return events;
+	};
+
+	prototype._createPlayer = function(options) {
+		return new YT.Player(options);
 	};
 
 	// ----------------------------------------------------------------
