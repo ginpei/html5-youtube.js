@@ -1,5 +1,10 @@
 var Player = window.youtube.Player;
 
+var original_Player_prepareYTScript = Player.prepareYTScript;
+Player.prepareYTScript = function(callback) {
+	callback();
+};
+
 var player;
 var elParent;
 var elPlayer;
