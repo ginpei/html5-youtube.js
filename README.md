@@ -101,6 +101,12 @@ Shortcut for `removeEventListener()`. This method is chainable.
 * `listener` ... {Function} event listener.
 * returns ... {Player}
 
+#### `destroy()`
+
+Remove player.
+
+The target element is restored, event listeners are detached, player properties are cleared.
+
 ### Properties
 
 #### `player`
