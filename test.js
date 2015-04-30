@@ -19,6 +19,23 @@ beforeEach(function(options) {
 	player = new Player(options);
 });
 
+describe('Statics', function() {
+	describe('bind', function() {
+		it('fixes its context', function() {
+			var obj = {};
+			var fn = function() { return this; };
+			var binded = Player.bind(fn, obj);
+			expect(binded()).toBe(obj);
+		});
+		it('fixes its arguments', function() {
+			var obj = {};
+			var fn = function(arg1) { return arg1; };
+			var binded = Player.bind(fn, null, obj);
+			expect(binded()).toBe(obj);
+		});
+	});
+});
+
 describe('Constructing', function() {
 	describe('instance', function() {
 		it('is a instance', function() {
