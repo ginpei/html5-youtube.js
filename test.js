@@ -20,6 +20,13 @@ beforeEach(function(options) {
 });
 
 describe('Statics', function() {
+	describe('interface', function() {
+		it('builds new instance', function() {
+			var player = window.youtube({ el:elPlayer, id:videoId });
+			expect(player instanceof Player).toBeTruthy();
+		});
+	});
+
 	describe('bind', function() {
 		it('fixes its context', function() {
 			var obj = {};
