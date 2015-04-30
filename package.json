@@ -1,7 +1,8 @@
 {
   "private": true,
   "scripts": {
-    "test": "node_modules/testem/testem.js --port 3000"
+    "test": "node_modules/testem/testem.js --port 3000",
+    "download-video": "curl -o examples/video.mp4 http://www.html5rocks.com/en/tutorials/video/basics/Chrome_ImF.mp4"
   },
   "devDependencies": {
     "testem": "~0.8.3"
