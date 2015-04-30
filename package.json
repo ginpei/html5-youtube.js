@@ -2,6 +2,7 @@
   "private": true,
   "devDependencies": {
     "gulp": "~3.8.11",
-    "coffee-script": "~1.9.2"
+    "coffee-script": "~1.9.2",
+    "testem": "~0.8.3"
   }
 }

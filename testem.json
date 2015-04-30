@@ -1,0 +1,7 @@
+{
+	"framework": "jasmine",
+	"src_files": [
+		"youtube.js",
+		"test.js"
+	]
+}
