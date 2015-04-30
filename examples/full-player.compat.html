@@ -57,69 +57,69 @@
 		this.innerHTML = text;
 	};
 
-	window.player = youtube({ el:elPlayer, id:videoId })
-		.on('ready', function(event) {
-			elVideos.disabled = false;
-			elLoad.disabled = false;
-			elPlay.disabled = false;
-			elPause.disabled = true;
-			elCurrentTime.disabled = false;
-			elMute.disabled = false;
-			elVolume.disabled = false;
+	var player = window.player = youtube({ el:elPlayer, id:videoId });
 
-			elCurrentTime.value = player.currentTime();
-			elCurrentTimeText.setTime(player.currentTime());
-			elVolume.checked = player.muted();
-			elVolume.value = player.volume();
-		})
-		.on('play', function(event) {
-			elPlay.disabled = true;
-			elPause.disabled = false;
-		})
-		.on('timeupdate', function(event) {
-			elCurrentTime.value = player.currentTime();
-			elCurrentTimeText.setTime(player.currentTime());
-		})
-		.on('pause', function(event) {
-			elPlay.disabled = false;
-			elPause.disabled = true;
-		})
-		.on('emptied', function(event) {
-			elPlay.disabled = false;
-			elPause.disabled = true;
-		})
-		.on('durationchange', function(event) {
-			elCurrentTime.max = player.duration;
-			elDurationText.setTime(player.duration);
-		})
-		.on('volumechange', function(event) {
-			elMute.checked = player.muted();
-			elVolume.value = player.volume();
-		})
-		.on('error', function(event) {
-			console.error(event);
-		});
+	player.addEventListener('ready', function(event) {
+		elVideos.disabled = false;
+		elLoad.disabled = false;
+		elPlay.disabled = false;
+		elPause.disabled = true;
+		elCurrentTime.disabled = false;
+		elMute.disabled = false;
+		elVolume.disabled = false;
+
+		elCurrentTime.value = player.currentTime();
+		elCurrentTimeText.setTime(player.currentTime());
+		elVolume.checked = player.muted();
+		elVolume.value = player.volume();
+	});
+	player.addEventListener('play', function(event) {
+		elPlay.disabled = true;
+		elPause.disabled = false;
+	});
+	player.addEventListener('timeupdate', function(event) {
+		elCurrentTime.value = player.currentTime();
+		elCurrentTimeText.setTime(player.currentTime());
+	});
+	player.addEventListener('pause', function(event) {
+		elPlay.disabled = false;
+		elPause.disabled = true;
+	});
+	player.addEventListener('emptied', function(event) {
+		elPlay.disabled = false;
+		elPause.disabled = true;
+	});
+	player.addEventListener('durationchange', function(event) {
+		elCurrentTime.max = player.duration;
+		elDurationText.setTime(player.duration);
+	});
+	player.addEventListener('volumechange', function(event) {
+		elMute.checked = player.muted();
+		elVolume.value = player.volume();
+	});
+	player.addEventListener('error', function(event) {
+		console.error(event);
+	});
 
 	var typeListener = function(event) { elLogging.checked && console.log(':'+event.type); };
-	player
-		.on('onApiChange', typeListener)
-		.on('onError', typeListener)
-		.on('onPlaybackQualityChange', typeListener)
-		.on('onPlaybackRateChange', typeListener)
-		.on('onReady', typeListener)
-		.on('onStateChange', typeListener)
-		.on('error', typeListener)
-		.on('emptied', typeListener)
-		.on('canplay', typeListener)
-		.on('canplaythrough', typeListener)
-		.on('playing', typeListener)
-		.on('ended', typeListener)
-		.on('durationchange', typeListener)
-		.on('timeupdate', typeListener)
-		.on('play', typeListener)
-		.on('pause', typeListener)
-		.on('ratechange', typeListener)
-		.on('volumechange', typeListener);
+	player.addEventListener('onApiChange', typeListener);
+	player.addEventListener('onError', typeListener);
+	player.addEventListener('onPlaybackQualityChange', typeListener);
+	player.addEventListener('onPlaybackRateChange', typeListener);
+	player.addEventListener('onReady', typeListener);
+	player.addEventListener('onStateChange', typeListener);
+	player.addEventListener('error', typeListener);
+	player.addEventListener('emptied', typeListener);
+	player.addEventListener('canplay', typeListener);
+	player.addEventListener('canplaythrough', typeListener);
+	player.addEventListener('playing', typeListener);
+	player.addEventListener('ended', typeListener);
+	player.addEventListener('durationchange', typeListener);
+	player.addEventListener('timeupdate', typeListener);
+	player.addEventListener('play', typeListener);
+	player.addEventListener('pause', typeListener);
+	player.addEventListener('ratechange', typeListener);
+	player.addEventListener('volumechange', typeListener);
 
 	var listen;
 	if (document.body.addEventListener) {
