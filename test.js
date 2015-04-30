@@ -60,7 +60,7 @@ describe('Statics', function() {
 
 describe('Constructing', function() {
 	describe('instance', function() {
-		it('is a instance', function() {
+		it('is an instance', function() {
 			expect(player instanceof Player).toBeTruthy();
 		});
 	});
