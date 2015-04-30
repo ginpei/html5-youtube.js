@@ -65,3 +65,41 @@ describe('Constructing', function() {
 		});
 	});
 });
+
+describe('Events', function() {
+	describe('on()', function() {
+		it('adds a listener', function() {
+			var called = 0;
+			player.on('play', function() {
+				called++;
+			});
+			player.play();
+			expect(called).toBe(1);
+		});
+
+		it('returns its own', function() {
+			expect(player.on('', function(){})).toBe(player);
+		});
+	});
+
+	describe('off()', function() {
+		var called, listener;
+		beforeEach(function() {
+			called = 0;
+			listener = function() {
+				called++;
+			};
+			player.on('play', listener);
+		});
+
+		it('removes a listener', function() {
+			player.off('play', listener);
+			player.play();
+			expect(called).toBe(0);
+		});
+
+		it('returns its own', function() {
+			expect(player.off('play', listener)).toBe(player);
+		});
+	});
+});
