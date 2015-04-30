@@ -61,65 +61,150 @@ youtube({ el:elPlayer, id:videoId });
 
 ## References
 
-### player
+### Methods
 
-The original YouTube Player object.
-
-* `YT.Player`
-
-See: [YouTube Player API Reference for iframe Embeds](https://developers.google.com/youtube/iframe_api_reference).
-
-### el
-
-The element that owned by the original YouTube Player object.
-
-* `HTMLIFrameElement`
-
-It is equal to the result of `player.getIframe()`.
-
-### paused
-
-Playing or not.
-
-* `boolean`
-
-### duration
-
-* `number`
-
-### currentTime
-
-* `number`
-
-Updated with progress.
-
-### volume
-
-* `number`
-
-### play()
+#### `play()`
 
 Start playing a video.
 
-* returns ... {undefined}
-
-### pause()
+#### `pause()`
 
 Stop playing a video.
 
-* returns ... {undefined}
-
-### on(type, listener)
+#### `addEventListener(type, listener)`
 
 Set an event listener.
 
 * `type` ... {string} event name.
 * `listener` ... {Function} event listener.
-* returns ... {undefined}
 
-### trigger(type)
+#### `removeEventListener(type, listener)`
 
-Fire the event.
+Remove an event listener.
 
 * `type` ... {string} event name.
-* returns ... {undefined}
+* `listener` ... {Function} event listener.
+
+#### `on(type, listener)`
+
+Shortcut for `addEventListener()`. This method is chainable.
+
+* `type` ... {string} event name.
+* `listener` ... {Function} event listener.
+* returns ... {Player}
+
+#### `off(type, listener)`
+
+Shortcut for `removeEventListener()`. This method is chainable.
+
+* `type` ... {string} event name.
+* `listener` ... {Function} event listener.
+* returns ... {Player}
+
+### Properties
+
+#### `player`
+
+Original YouTube Player object.
+
+* type ... YT.Player
+
+#### `duration`
+
+How long time in seconds of the currently playing video.
+
+* type ... Number
+
+#### `currentSrc`
+
+YouTube.com URL for the currently loaded/playing video.
+
+* type ... String
+
+#### `paused`
+
+True if playback is paused; false otherwise.
+
+* type ... Boolean
+
+#### `ended`
+
+True if playback has reached the end
+
+* type ... Boolean
+
+### Functional Properties
+
+Properties are implemented as getter and setter functions.
+
+```js
+var currentTime = player.currentTime;  // getter
+player.currentTime = 123;  // setter
+```
+
+If you use `youtube.compat.js`, these getter and setter are changed to just functions.
+
+```js
+var currentTime = player.currentTime();  // getter
+player.currentTime(123);  // setter
+```
+
+#### `currentTime`
+
+* type ... Number
+
+Returns the current playback position, in seconds, as a position between zero time and the current duration.
+
+Can be set, to seek to the given time.
+
+Updated with progress.
+
+#### `volume`
+
+* type ... Number
+
+Returns the current playback volume multiplier, as a number in the range 0.0 to 1.0, where 0.0 is the quietest and 1.0 the loudest.
+
+Can be set, to change the volume multiplier.
+
+#### `muted`
+
+* type ... Boolean
+
+Returns true if all audio is muted (regardless of other attributes either on the controller or on any media elements slaved to this controller), and false otherwise.
+
+Can be set, to change whether the audio is muted or not.
+
+#### `playbackRate`
+
+* type ... Number
+
+Returns the current rate of playback.
+
+Can be set, to change the rate of playback.
+
+#### `src`
+
+YouTube.com URL for the loaded/playing video.
+
+Can be set, to change the video.
+
+* type ... String
+
+### Events
+
+Type            |When
+----------------|------------------------------------
+`ready`         |The player is ready to use.
+`error`         |Any error is occurred.
+`emptied`       |The video is refreshed.
+`canplay`       |The video is ready to play.
+`canplaythrough`|The video is ready to play.
+`playing`       |Started playing.
+`ended`         |Finished playing.
+`durationchange`|Duration is changed.
+`timeupdate`    |Current playback time is changed.
+`play`          |Started playing.
+`pause`         |Stopped playing.
+`ratechange`    |Playback rate is changed.
+`volumechange`  |Volume is changed, muted or unmuted.
