@@ -225,8 +225,8 @@
 		return events;
 	};
 
-	prototype._createPlayer = function(options) {
-		return new YT.Player(options);
+	prototype._createPlayer = function(el, options) {
+		return new YT.Player(el, options);
 	};
 
 	// ----------------------------------------------------------------
