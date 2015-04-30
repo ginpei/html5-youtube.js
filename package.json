@@ -4,8 +4,6 @@
     "test": "node_modules/testem/testem.js --port 3000"
   },
   "devDependencies": {
-    "gulp": "~3.8.11",
-    "coffee-script": "~1.9.2",
     "testem": "~0.8.3"
   }
 }
