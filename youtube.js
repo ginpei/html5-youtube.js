@@ -336,11 +336,13 @@
 
 	prototype._popListener = function(type, listener) {
 		var events = this._events[type];
-		for (var i=0, l=events.length; i<l; i++) {
-			var data = events[i];
-			if (data && data.listener === listener) {
-				events[i] = null;
-				return data;
+		if (events) {
+			for (var i=0, l=events.length; i<l; i++) {
+				var data = events[i];
+				if (data && data.listener === listener) {
+					events[i] = null;
+					return data;
+				}
 			}
 		}
 		return undefined;
