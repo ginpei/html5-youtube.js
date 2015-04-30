@@ -10,7 +10,7 @@ Player.prototype._createPlayer = function(options) {
 	var instance = this;
 	return {
 		playVideo: function() {
-			instance.onStateChange({ data:1 });
+			instance.onStateChange({ data:Player.PlayerState.PLAYING });
 		}
 	};
 };
