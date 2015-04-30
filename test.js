@@ -1,5 +1,10 @@
 var Player = window.youtube.Player;
 
+var player;
+var elParent;
+var elPlayer;
+var videoId;
+
 var original_Player_prepareYTScript = Player.prepareYTScript;
 Player.prepareYTScript = function(callback) {
 	callback();
@@ -14,11 +19,6 @@ Player.prototype._createPlayer = function(options) {
 		}
 	};
 };
-
-var player;
-var elParent;
-var elPlayer;
-var videoId;
 
 beforeEach(function(options) {
 	elParent = document.createElement('div');
