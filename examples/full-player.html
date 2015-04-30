@@ -57,7 +57,7 @@
 
 	var player = window.player = youtube({ el:elPlayer, id:videoId });
 
-	player.addEventListener('ready', function(event) {
+	player.addEventListener('canplay', function(event) {
 		elVideos.disabled = false;
 		elLoad.disabled = false;
 		elPlay.disabled = false;
