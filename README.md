@@ -234,6 +234,10 @@ Type            |When
 `ratechange`    |Playback rate is changed.
 `volumechange`  |Volume is changed, muted or unmuted.
 
+## License
+
+* MIT License
+
 ## Contact
 
 * by Ginpei
