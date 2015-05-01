@@ -6,6 +6,8 @@ YouTube Player API wrapper.
 
 ### Basic
 
+See `examples/basic.html`.
+
 ```html
 <div id="my-youtube-player"></div>
 ```
@@ -18,6 +20,8 @@ youtube({ el:elPlayer, id:videoId });
 ```
 
 ### Player
+
+See `examples/player.html`.
 
 ```html
 <div class="js-player" data-youtube-videoid="2EEsa_pqGAs"></div>
@@ -241,7 +245,7 @@ Type            |When
 
 ### Support IE 7, 8
 
-Use with `youtube.compat.js`.
+Use with `youtube.compat.js`. See `examples/full-player.compat.html`.
 
 ```html
 <script src="youtube.js"></script>
