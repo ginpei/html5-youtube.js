@@ -4,6 +4,7 @@ var player;
 var elParent;
 var elPlayer;
 var videoId;
+var originalStatics = {};
 
 var original_Player_prepareYTScript = Player.prepareYTScript;
 Player.prepareYTScript = function(callback) {
@@ -20,7 +21,19 @@ Player.prototype._createPlayer = function(options) {
 	};
 };
 
+for (var name in Player) {
+	originalStatics[name] = Player[name];
+}
+
 beforeEach(function(options) {
+	// restore statics
+	for (var name in Player) {
+		delete Player[name];
+	}
+	for (var name in originalStatics) {
+		Player[name] = originalStatics[name];
+	}
+
 	// create materials
 	elParent = document.createElement('div');
 	elPlayer = document.createElement('div');
