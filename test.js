@@ -21,12 +21,14 @@ Player.prototype._createPlayer = function(options) {
 };
 
 beforeEach(function(options) {
+	// create materials
 	elParent = document.createElement('div');
 	elPlayer = document.createElement('div');
 	videoId = '123';
 
 	elParent.appendChild(elPlayer);
 
+	// build an instance
 	options = options || {};
 	options.el = options.el || elPlayer;
 	options.id = options.id || videoId;
