@@ -233,3 +233,9 @@ Type            |When
 `pause`         |Stopped playing.
 `ratechange`    |Playback rate is changed.
 `volumechange`  |Volume is changed, muted or unmuted.
+
+## Contact
+
+* by Ginpei
+* GitHub: [ginpei/youtube.js](https://github.com/ginpei/youtube.js)
+* Twitter: [@ginpei\_en &#x1F1E8;&#x1F1E6;](https://twitter.com/ginpei_en) or [@ginpei\_jp &#x1F1EF;&#x1F1F5;](https://twitter.com/ginpei_jp)
