@@ -46,7 +46,7 @@ youtube({ el:elPlayer, id:videoId });
             elPlay.disabled = false;
             elPause.disabled = true;
         })
-        .on('end', function(event) {
+        .on('ended', function(event) {
             player.play();
         });
 
