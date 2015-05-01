@@ -79,6 +79,23 @@ describe('Constructing', function() {
 			expect(player instanceof Player).toBeTruthy();
 		});
 	});
+
+	describe('src', function() {
+		var videoId;
+		beforeEach(function() {
+			videoId = 'videoId' + Date.now();
+		});
+
+		it('loads the video by specified ID from the beginning', function() {
+			var result;
+			player._createPlayer = function(el, options) {
+				result = options.videoId;
+			};
+			player.player = null;
+			player.initialize({ el:elPlayer, id:videoId });
+			expect(result).toBe(videoId);
+		});
+	});
 });
 
 describe('Events', function() {
