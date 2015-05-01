@@ -1,6 +1,8 @@
 # youtube.js
 
-YouTube Player API wrapper.
+YouTube Player API wrapper like HTML5 video API.
+
+* [YouTube Player API Reference for iframe Embeds - YouTube — Google Developers](https://developers.google.com/youtube/iframe_api_reference)
 
 ## Usage
 
