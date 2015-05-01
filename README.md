@@ -234,6 +234,29 @@ Type            |When
 `ratechange`    |Playback rate is changed.
 `volumechange`  |Volume is changed, muted or unmuted.
 
+## Browsers
+
+* IE 9+
+* Modern PC Browsers
+
+### Support IE 7, 8
+
+Use with `youtube.compat.js`.
+
+```html
+<script src="youtube.js"></script>
+<script src="youtube.compat.js"></script>
+<script>
+var player = youtube({ ... });
+</script>
+```
+
+Compatible mode forces some rules.
+
+* `options.autoplay` is not available in [initializing](#youtubeoptions).
+* `options.controls` is not available in [initializing](#youtubeoptions).
+* Functional properties have another interfaces. See [its section](#functional-properties).
+
 ## License
 
 * MIT License
