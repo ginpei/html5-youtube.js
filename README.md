@@ -61,6 +61,25 @@ youtube({ el:elPlayer, id:videoId });
 
 ## References
 
+### Interface
+
+#### `youtube(options)`
+
+* `options.el` ... {Element} element that will be replaced with YouTube Player.
+* `options.id` ... {String} video ID like `"2EEsa_pqGAs"`.
+* `options.autoplay` ... {Boolean} start playing automatically if true. Optional. Default is `false`.
+* `options.controls` ... {Boolean} show controll UIs if true. Optional. Default is `true`.
+* returns ... {Player}
+
+```js
+var el = document.querySelector('#the-player');
+var videoId = '2EEsa_pqGAs';
+var player = youtube({ el:el, id:videoId });
+player.addEventListener('ready', function(event) {
+    this.play();
+});
+```
+
 ### Methods
 
 #### `play()`
