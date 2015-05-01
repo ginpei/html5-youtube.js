@@ -18,7 +18,7 @@
 			<code>$ npm run download-video</code>
 		</p>
 		<div>
-			<video class="player js-player" src="video.mp4" controls></video>
+			<video class="player js-player" data-videoid="video.mp4" controls></video>
 		</div>
 		<div>
 			<select class="js-videos" disabled>
@@ -42,7 +42,7 @@
 		<script>
 (function() {
 	var elPlayer = document.querySelector('.js-player');
-	var videoId = elPlayer.getAttribute('data-youtube-videoid');
+	var videoId = elPlayer.getAttribute('data-videoid');
 	var elVideos = document.querySelector('.js-videos');
 	var elLoad = document.querySelector('.js-load');
 	var elPlay = document.querySelector('.js-play');
@@ -144,6 +144,8 @@
 	elVolume.addEventListener('change', function(event) {
 		player.volume = this.value;
 	});
+
+	player.src = videoId;
 })();
 		</script>
 	</body>
