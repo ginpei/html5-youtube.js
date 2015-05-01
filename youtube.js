@@ -179,10 +179,10 @@
 	prototype._setupVideo = function(options) {
 		var videoOptions = this._getVideoOptions(options);
 		this.player = this._createPlayer(videoOptions.el, {
+			events: this._getVideoEvents(),
 			height: videoOptions.height,
-			width: videoOptions.width,
 			videoId: videoOptions.videoId,
-			events: this._getVideoEvents()
+			width: videoOptions.width
 		});
 	};
 
