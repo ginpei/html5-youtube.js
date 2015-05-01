@@ -57,7 +57,7 @@
 		this.innerHTML = text;
 	};
 
-	var player = window.player = youtube({ el:elPlayer, id:videoId });
+	var player = window.player = youtube({ el:elPlayer });
 
 	player.addEventListener('canplay', function(event) {
 		elVideos.disabled = false;
@@ -152,6 +152,8 @@
 	listen(elVolume, 'change', function(event) {
 		player.volume(elVolume.value);
 	});
+
+	player.src(videoId);
 })();
 		</script>
 	</body>

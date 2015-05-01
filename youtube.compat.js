@@ -85,6 +85,10 @@
 	prototype._buildPlayer = function(options) {
 		var videoOptions = this._getVideoOptions(options);
 
+		if (!videoOptions.videoId) {
+			videoOptions.videoId = 'xxxxxxxxxxx';  // load dummy video
+		}
+
 		if (!window.swfobject) {
 			throw new Error('swfobject is required. Use this code:\n<script src="//cdnjs.cloudflare.com/ajax/libs/swfobject/2.2/swfobject.js"></script>');
 		}

@@ -371,6 +371,12 @@
 
 	prototype.onReady = function(event) {
 		this.trigger('onReady', event);
+
+		if (this._unsetVideoId) {
+			this.player.cueVideoById(this._unsetVideoId);
+			delete this._unsetVideoId;
+		}
+
 		this._updateMeta();
 		this._observeTimeUpdate();
 		this._observeVolume();
@@ -616,6 +622,9 @@
 			set: function(value) {
 				if (this.player) {
 					this.player.cueVideoById(value);
+				}
+				else {
+					this._unsetVideoId = value;
 				}
 			}
 		}

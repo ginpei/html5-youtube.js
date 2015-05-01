@@ -101,6 +101,24 @@ describe('Constructing', function() {
 			player.initialize({ el:elPlayer, id:videoId });
 			expect(result).toBe(videoId);
 		});
+
+		it('loads the video by ID that is set as `src` after ready event', function() {
+			var ytPlayer = player.player;
+			ytPlayer.cueVideoById = function(value) {
+				player._src = value;
+			};
+			ytPlayer.getVideoUrl = function(value) {
+				return player._src;
+			};
+
+			player.player = null;
+			player.src = videoId;
+
+			player.player = ytPlayer;
+			player.onReady();
+
+			expect(player.src).toBe(videoId);
+		});
 	});
 });
 
