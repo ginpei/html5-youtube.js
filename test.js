@@ -17,6 +17,8 @@ Player.prototype._createPlayer = function(options) {
 	return {
 		playVideo: function() {
 			instance.onStateChange({ data:Player.PlayerState.PLAYING });
+		},
+		destroy: function() {
 		}
 	};
 };
@@ -47,6 +49,10 @@ beforeEach(function(options) {
 	options.id = options.id || videoId;
 
 	player = new Player(options);
+});
+
+afterEach(function() {
+	player.destroy();
 });
 
 describe('Statics', function() {
