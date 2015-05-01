@@ -181,6 +181,7 @@
 		this.player = this._createPlayer(videoOptions.el, {
 			events: this._getVideoEvents(),
 			height: videoOptions.height,
+			playerVars: videoOptions.playerVars,
 			videoId: videoOptions.videoId,
 			width: videoOptions.width
 		});
@@ -189,6 +190,8 @@
 	prototype._getVideoOptions = function(options) {
 		var el = options.el;
 		var videoId = options.id;
+		var autoplay = options.autoplay;
+		var controls = options.controls;
 
 		var width;
 		var height = el.clientHeight;
@@ -203,6 +206,10 @@
 		return {
 			el: el,
 			height: height,
+			playerVars: {
+				autoplay: autoplay,
+				controls: controls
+			},
 			videoId: videoId,
 			width: width
 		};
