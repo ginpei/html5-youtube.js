@@ -197,23 +197,7 @@
 		var videoId = options.id || el.getAttribute('data-youtube-videoid');
 		var autoplay = options.autoplay;
 
-		var controls;
-		if (options.controls == undefined) {  // or null
-			controls = el.getAttribute('data-youtube-controls');
-		}
-		else {
-			controls = options.controls;
-		}
-
-		if (typeof controls == 'boolean') {
-			// OK, nothing to do
-		}
-		else if (controls == undefined) {  // or null
-			controls = true;
-		}
-		else {
-			controls = !!parseInt(controls, 10);
-		}
+		var controls = this._getBooleanOption(options, 'controls', true);
 
 		var width;
 		var height = el.clientHeight;
@@ -235,6 +219,29 @@
 			videoId: videoId,
 			width: width
 		};
+	};
+
+	prototype._getBooleanOption = function(options, name, defaultValue) {
+		var value;
+
+		if (options[name] == undefined) {  // or null
+			value = options.el.getAttribute('data-youtube-' + name);
+		}
+		else {
+			value = options[name];
+		}
+
+		if (typeof value == 'boolean') {
+			// OK, nothing to do
+		}
+		else if (value == undefined) {  // or null
+			value = defaultValue;
+		}
+		else {
+			value = !!parseInt(value, 10);
+		}
+
+		return value;
 	};
 
 	prototype._getVideoEvents = function() {
