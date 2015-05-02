@@ -36,7 +36,6 @@
 		<script>
 (function() {
 	var elPlayer = document.querySelector('.js-player');
-	var videoId = elPlayer.getAttribute('data-youtube-videoid');
 	var elVideos = document.querySelector('.js-videos');
 	var elLoad = document.querySelector('.js-load');
 	var elPlay = document.querySelector('.js-play');
@@ -138,8 +137,6 @@
 	elVolume.addEventListener('change', function(event) {
 		player.volume = this.value;
 	});
-
-	player.src = videoId;
 })();
 		</script>
 	</body>

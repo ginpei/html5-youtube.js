@@ -191,7 +191,7 @@
 
 	prototype._getVideoOptions = function(options) {
 		var el = options.el;
-		var videoId = options.id;
+		var videoId = options.id || el.getAttribute('data-youtube-videoid');
 		var autoplay = options.autoplay;
 		var controls = options.controls;
 

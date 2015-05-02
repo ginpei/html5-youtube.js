@@ -86,6 +86,14 @@ describe('Constructing', function() {
 		});
 	});
 
+	describe('video options', function() {
+		it('has videoId if ID is specified as a data attribute on the element', function() {
+			elPlayer.setAttribute('data-youtube-videoid', videoId);
+			var videoOptions = player._getVideoOptions({ el:elPlayer });
+			expect(videoOptions.videoId).toBe(videoId);
+		});
+	});
+
 	describe('src', function() {
 		var videoId;
 		beforeEach(function() {
