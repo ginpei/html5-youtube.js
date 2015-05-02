@@ -87,6 +87,18 @@ describe('Constructing', function() {
 	});
 
 	describe('video options', function() {
+		it('throws an error if the target element is not specified', function() {
+			expect(function() {
+				player._getVideoOptions({ el:null });
+			}).toThrow('`options.el` is require.');
+		});
+
+		it('throws an error if the target element is an element', function() {
+			expect(function() {
+				player._getVideoOptions({ el:{} });
+			}).toThrow('`options.el` is require.');
+		});
+
 		it('has videoId if ID is specified as a data attribute on the element', function() {
 			elPlayer.setAttribute('data-youtube-videoid', videoId);
 			var videoOptions = player._getVideoOptions({ el:elPlayer });
