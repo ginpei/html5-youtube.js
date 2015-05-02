@@ -87,6 +87,12 @@ describe('Constructing', function() {
 	});
 
 	describe('video options', function() {
+		it('throws an error if the options is not specified', function() {
+			expect(function() {
+				player._getVideoOptions();
+			}).toThrow('`options.el` is require.');
+		});
+
 		it('throws an error if the target element is not specified', function() {
 			expect(function() {
 				player._getVideoOptions({ el:null });

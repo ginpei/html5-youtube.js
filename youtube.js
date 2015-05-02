@@ -190,7 +190,7 @@
 	};
 
 	prototype._getVideoOptions = function(options) {
-		var el = options.el;
+		var el = options && options.el;
 		if (!el || !el.getAttribute) {
 			throw new Error('`options.el` is require.');
 		}
