@@ -110,6 +110,42 @@ describe('Constructing', function() {
 			var videoOptions = player._getVideoOptions({ el:elPlayer });
 			expect(videoOptions.videoId).toBe(videoId);
 		});
+
+		it('uses the value specified in options if specified on the element', function() {
+			elPlayer.setAttribute('data-youtube-controls', '0');
+			var videoOptions = player._getVideoOptions({ el:elPlayer, controls:true });
+			expect(videoOptions.playerVars.controls).toBe(true);
+		});
+
+		it('turns controls on if not specified', function() {
+			elPlayer.removeAttribute('data-youtube-controls');
+			var videoOptions = player._getVideoOptions({ el:elPlayer });
+			expect(videoOptions.playerVars.controls).toBe(true);
+		});
+
+		it('turns controls on if "1" is specified', function() {
+			elPlayer.setAttribute('data-youtube-controls', '1');
+			var videoOptions = player._getVideoOptions({ el:elPlayer });
+			expect(videoOptions.playerVars.controls).toBe(true);
+		});
+
+		it('turns controls on if invalid number like "-1" is specified', function() {
+			elPlayer.setAttribute('data-youtube-controls', '-1');
+			var videoOptions = player._getVideoOptions({ el:elPlayer });
+			expect(videoOptions.playerVars.controls).toBe(true);
+		});
+
+		it('turns controls off if "0" is specified', function() {
+			elPlayer.setAttribute('data-youtube-controls', '0');
+			var videoOptions = player._getVideoOptions({ el:elPlayer });
+			expect(videoOptions.playerVars.controls).toBe(false);
+		});
+
+		it('turns controls off if invalid string like "on" is specified', function() {
+			elPlayer.setAttribute('data-youtube-controls', 'on');
+			var videoOptions = player._getVideoOptions({ el:elPlayer });
+			expect(videoOptions.playerVars.controls).toBe(false);
+		});
 	});
 
 	describe('src', function() {

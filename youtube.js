@@ -196,7 +196,24 @@
 		}
 		var videoId = options.id || el.getAttribute('data-youtube-videoid');
 		var autoplay = options.autoplay;
-		var controls = options.controls;
+
+		var controls;
+		if (options.controls == undefined) {  // or null
+			controls = el.getAttribute('data-youtube-controls');
+		}
+		else {
+			controls = options.controls;
+		}
+
+		if (typeof controls == 'boolean') {
+			// OK, nothing to do
+		}
+		else if (controls == undefined) {  // or null
+			controls = true;
+		}
+		else {
+			controls = !!parseInt(controls, 10);
+		}
 
 		var width;
 		var height = el.clientHeight;
