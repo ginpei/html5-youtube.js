@@ -195,8 +195,7 @@
 			throw new Error('`options.el` is require.');
 		}
 		var videoId = options.id || el.getAttribute('data-youtube-videoid');
-		var autoplay = options.autoplay;
-
+		var autoplay = this._getBooleanOption(options, 'autoplay', false);
 		var controls = this._getBooleanOption(options, 'controls', true);
 
 		var width;
