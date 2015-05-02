@@ -11,7 +11,7 @@ Player.prepareYTScript = function(callback) {
 	callback();
 };
 
-var original_createPlayer = Player._createPlayer;
+var original_createPlayer = Player.prototype._createPlayer;
 Player.prototype._createPlayer = function(options) {
 	var instance = this;
 	return {
