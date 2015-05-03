@@ -12,7 +12,7 @@
 	</head>
 	<body>
 		<h1>youtube.js</h1>
-		<div class="player js-player" data-youtube-videoid="2EEsa_pqGAs"></div>
+		<div class="player js-player"></div>
 		<div>
 			<button class="js-play" disabled>Play</button>
 			<button class="js-pause" disabled>Pause</button>
@@ -21,9 +21,9 @@
 		<script>
 (function() {
 	var elPlayer = document.querySelector('.js-player');
-	var videoId = elPlayer.getAttribute('data-youtube-videoid');
 	var elPlay = document.querySelector('.js-play');
 	var elPause = document.querySelector('.js-pause');
+	var videoId = '2EEsa_pqGAs';
 
 	var player = youtube({ el:elPlayer, id:videoId })
 		.on('ready', function(event) {

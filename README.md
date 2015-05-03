@@ -11,14 +11,13 @@ YouTube Player API wrapper like HTML5 video API.
 See `examples/basic.html`.
 
 ```html
-<div id="my-youtube-player"></div>
+<div id="my-youtube-player" data-youtube-videoid="2EEsa_pqGAs"></div>
 ```
 
 ```js
 var elPlayer = document.getElementById('my-youtube-player');
-var videoId = '2EEsa_pqGAs';
 
-youtube({ el:elPlayer, id:videoId });
+youtube({ el:elPlayer });
 ```
 
 ### Player
@@ -26,7 +25,7 @@ youtube({ el:elPlayer, id:videoId });
 See `examples/player.html`.
 
 ```html
-<div class="js-player" data-youtube-videoid="2EEsa_pqGAs"></div>
+<div class="js-player"></div>
 <div>
     <button class="js-play" disabled>Play</button>
     <button class="js-pause" disabled>Pause</button>
@@ -36,9 +35,9 @@ See `examples/player.html`.
 ```js
 (function() {
     var elPlayer = document.querySelector('.js-player');
-    var videoId = elPlayer.getAttribute('data-youtube-videoid');
     var elPlay = document.querySelector('.js-play');
     var elPause = document.querySelector('.js-pause');
+    var videoId = '2EEsa_pqGAs';
 
     var player = youtube({ el:elPlayer, id:videoId })
         .on('ready', function(event) {
