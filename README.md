@@ -239,6 +239,39 @@ Type            |When
 `ratechange`    |Playback rate is changed.
 `volumechange`  |Volume is changed, muted or unmuted.
 
+### Compatibility
+
+* ✔ = Compatible (or almost)
+* ✘ = Similer (but not compatible)
+* - = Not supported
+* ☆ = Original feature
+* ? = I don't know
+
+Function               |Status       |Description
+-----------------------|-------------|-----------
+`play()`               | ✔     |
+`pause()`              | ✔     |
+`addEventListener()`   |?|
+`removeEventListener()`|?|
+`on()`                 |☆|
+`off()`                |☆|
+`destroy()`            |☆|
+`player`               |☆|
+`duration`             |?|
+`currentSrc`           |?|
+`paused`               |?|
+`ended`                |?|
+`currentTime`          |?|
+`volume`               |?|
+`muted`                |?|
+`playbackRate`         |?|
+`src`                  |?|
+`currentTime` event    |?|
+`volume` event         |?|
+`muted` event          |?|
+`playbackRate` event   |?|
+`src` event            |?|
+
 ## Browsers
 
 * IE 9+
