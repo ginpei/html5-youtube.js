@@ -239,38 +239,50 @@ Type            |When
 `ratechange`    |Playback rate is changed.
 `volumechange`  |Volume is changed, muted or unmuted.
 
-### Compatibility
+### Compatibility With HTML5 Video API
 
 * ✔ = Compatible (or almost)
-* ✘ = Similer (but not compatible)
-* - = Not supported
+* △ = Similer (but not compatible)
+* ✘ = Not supported
 * ☆ = Original feature
-* ? = I don't know
+* ? = Ah, let me see...
 
-Function               |Status       |Description
------------------------|-------------|-----------
-`play()`               | ✔     |
-`pause()`              | ✔     |
-`addEventListener()`   |?|
-`removeEventListener()`|?|
-`on()`                 |☆|
-`off()`                |☆|
+Function               |Status|Description
+-----------------------|------|-----------
+`addEventListener()`   |✔|
 `destroy()`            |☆|
+`off()`                |☆|Simple shortcut for `removeEventListener()`
+`on()`                 |☆|Simple shortcut for `addEventListener()`
+`pause()`              |✔|
+`play()`               |✔|
+`removeEventListener()`|✔|
+`currentSrc`           |✔|
+`currentTime`          |✔|
+`duration`             |✔|
+`ended`                |✔|
+`muted`                |✔|
+`paused`               |✔|
+`playbackRate`         |△|Only `0.25`, `0.5`, `1`, `1.5`, or `2` ([Check YouTube API](https://developers.google.com/youtube/js_api_reference#Playback_rate))
 `player`               |☆|
-`duration`             |?|
-`currentSrc`           |?|
-`paused`               |?|
-`ended`                |?|
-`currentTime`          |?|
-`volume`               |?|
-`muted`                |?|
-`playbackRate`         |?|
-`src`                  |?|
-`currentTime` event    |?|
-`volume` event         |?|
-`muted` event          |?|
-`playbackRate` event   |?|
-`src` event            |?|
+`src`                  |✔|
+`volume`               |✔|
+`canplay` event        |△|Same as YouTube `onReady` event
+`canplaythrough` event |△|Same as YouTube `onReady` event
+`durationchange` event |✔|
+`emptied` event        |?|
+`error` event          |✔|Same as YouTube `onError` event
+`muted` event          |✔|
+`pause` event          |✔|
+`play` event           |✔|
+`playing` event        |?|
+`progress` event       |✘|
+`ratechange` event     |✔|
+`ready` event          |☆|
+`seeked` event         |✘|
+`seeking` event        |✘|
+`src` event            |✔|
+`timeupdate` event     |✔|
+`volumechange` event   |✔|
 
 ## Browsers
 
