@@ -270,6 +270,7 @@ Function               |Status|Description
 `canplaythrough` event |△|Same as YouTube `onReady` event
 `durationchange` event |✔|
 `emptied` event        |?|
+`ended` event          |✔|
 `error` event          |✔|Same as YouTube `onError` event
 `muted` event          |✔|
 `pause` event          |✔|
