@@ -1,5 +1,4 @@
 {
-  "private": true,
   "scripts": {
     "minify": "node_modules/uglify-js/bin/uglifyjs -c -m --comments '/@license/' -- html5-youtube.js > html5-youtube.min.js; node_modules/uglify-js/bin/uglifyjs -c -m --comments '/@license/' -- html5-youtube.compat.js > html5-youtube.compat.min.js",
     "test": "node_modules/testem/testem.js --port 3000",
@@ -8,5 +7,26 @@
   "devDependencies": {
     "testem": "~0.8.3",
     "uglify-js": "~2.4.20"
-  }
+  },
+  "name": "html5-youtube",
+  "description": "YouTube Player API wrapper like HTML5 video API.",
+  "version": "1.0.1",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ginpei/html5-youtube.js.git"
+  },
+  "keywords": [
+    "youtube",
+    "html5",
+    "video",
+    "multimedia",
+    "player",
+    "controller"
+  ],
+  "author": "Ginpei",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/ginpei/html5-youtube.js/issues"
+  },
+  "homepage": "https://github.com/ginpei/html5-youtube.js#readme"
 }
