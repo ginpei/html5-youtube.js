@@ -1,3 +1,5 @@
+Note: "youtube.js" has been renamed "html5-youtube.js".
+
 # html5-youtube.js
 
 YouTube Player API wrapper like HTML5 video API.
