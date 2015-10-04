@@ -1,4 +1,4 @@
-# youtube.js
+# html5-youtube.js
 
 YouTube Player API wrapper like HTML5 video API.
 
@@ -295,8 +295,8 @@ Function               |Status|Description
 Use with `youtube.compat.js`. See `examples/full-player.compat.html`.
 
 ```html
-<script src="youtube.js"></script>
-<script src="youtube.compat.js"></script>
+<script src="html5-youtube.js"></script>
+<script src="html5-youtube.compat.js"></script>
 <script>
 var player = youtube({ ... });
 </script>
@@ -315,5 +315,5 @@ Compatible mode forces some rules.
 ## Contact
 
 * by Ginpei
-* GitHub: [ginpei/youtube.js](https://github.com/ginpei/youtube.js)
+* GitHub: [ginpei/html5-youtube.js](https://github.com/ginpei/html5-youtube.js)
 * Twitter: [@ginpei\_en &#x1F1E8;&#x1F1E6;](https://twitter.com/ginpei_en) or [@ginpei\_jp &#x1F1EF;&#x1F1F5;](https://twitter.com/ginpei_jp)
