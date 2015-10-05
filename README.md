@@ -310,6 +310,14 @@ Compatible mode forces some rules.
 * `options.controls` is not available in [initializing](#youtubeoptions).
 * Functional properties have another interfaces. See [its section](#functional-properties).
 
+## History
+
+* 2015-10-04: v1.0.1
+    * Update minified files (OMG)
+    * Rename from "youtube.js" to "html5-youtube.js"
+* 2015-09-29: v1.0.0
+    * First Release
+
 ## License
 
 * MIT License
