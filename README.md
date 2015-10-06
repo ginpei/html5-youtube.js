@@ -244,7 +244,7 @@ Type            |When
 ### Compatibility With HTML5 Video API
 
 * ✔ = Compatible (or almost)
-* △ = Similer (but not compatible)
+* △ = Similar (but not compatible)
 * ✘ = Not supported
 * ☆ = Original feature
 * ? = Ah, let me see...
