@@ -104,14 +104,7 @@
 	});
 	player.addEventListener('ratechange', function(event) {
 		var rate = player.playbackRate;
-		var availableRates = youtube.availablePlaybackRates;
-		var rateIndex;
-		for (var i=0, l=availableRates.length; i<l; i++) {
-			if (rate === availableRates[i]) {
-				rateIndex = i;
-				break;
-			}
-		}
+		var rateIndex = youtube.availablePlaybackRates.indexOf(rate);
 		elPlaybackRate.value = rateIndex;
 		elPlaybackRateText.innerHTML = rate;
 	});
