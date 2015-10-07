@@ -75,7 +75,7 @@
 		elCurrentTimeText.setTime(player.currentTime);
 		elVolume.checked = player.muted;
 		elVolume.value = player.volume;
-		elPlaybackRate.value = player.playbackRate;
+		elPlaybackRate.value = youtube.availablePlaybackRates.indexOf(player.playbackRate);
 		elPlaybackRateText.innerHTML = player.playbackRate;
 	});
 	player.addEventListener('play', function(event) {
