@@ -103,10 +103,8 @@
 		elVolume.value = player.volume;
 	});
 	player.addEventListener('ratechange', function(event) {
-		var rate = player.playbackRate;
-		var rateIndex = youtube.availablePlaybackRates.indexOf(rate);
-		elPlaybackRate.value = rateIndex;
-		elPlaybackRateText.innerHTML = rate;
+		elPlaybackRate.value = youtube.availablePlaybackRates.indexOf(player.playbackRate);
+		elPlaybackRateText.innerHTML = player.playbackRate;
 	});
 	player.addEventListener('error', function(event) {
 		console.error(event);
