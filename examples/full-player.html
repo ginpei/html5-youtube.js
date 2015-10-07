@@ -104,13 +104,15 @@
 	});
 	player.addEventListener('ratechange', function(event) {
 		var rate = player.playbackRate;
-		elPlaybackRate.value = (function() {
-			if (rate === 0.25) { return 0; }
-			if (rate === 0.5 ) { return 1; }
-			if (rate === 1   ) { return 2; }
-			if (rate === 1.5 ) { return 3; }
-			if (rate === 2   ) { return 4; }
-		})();
+		var availableRates = youtube.availablePlaybackRates;
+		var rateIndex;
+		for (var i=0, l=availableRates.length; i<l; i++) {
+			if (rate === availableRates[i]) {
+				rateIndex = i;
+				break;
+			}
+		}
+		elPlaybackRate.value = rateIndex;
 		elPlaybackRateText.innerHTML = rate;
 	});
 	player.addEventListener('error', function(event) {
@@ -157,7 +159,7 @@
 		player.volume = this.value;
 	});
 	elPlaybackRate.addEventListener('change', function(event) {
-		player.playbackRate = [0.25, 0.5, 1, 1.5, 2][this.value];
+		player.playbackRate = youtube.availablePlaybackRates[this.value];
 	});
 })();
 		</script>
