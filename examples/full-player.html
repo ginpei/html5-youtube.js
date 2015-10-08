@@ -30,6 +30,9 @@
 			<label><input class="js-mute" type="checkbox" disabled>Mute</label>
 			<input class="js-volume" type="range" min="0" max="1" step="0.01" value="0" disabled />
 			<br />
+			<input class="js-playbackRate" type="range" min="0" max="4" step="1" value="2" disabled />
+			x<span class="js-playbackRateText">0</span>
+			<br />
 			<label><input class="js-logging" type="checkbox" checked />Log all events in console</label>
 		</div>
 		<script src="../html5-youtube.js"></script>
@@ -45,6 +48,8 @@
 	var elDurationText = document.querySelector('.js-durationText');
 	var elMute = document.querySelector('.js-mute');
 	var elVolume = document.querySelector('.js-volume');
+	var elPlaybackRate = document.querySelector('.js-playbackRate');
+	var elPlaybackRateText = document.querySelector('.js-playbackRateText');
 	var elLogging = document.querySelector('.js-logging');
 
 	elCurrentTimeText.setTime = elDurationText.setTime = function(time) {
@@ -64,11 +69,14 @@
 		elCurrentTime.disabled = false;
 		elMute.disabled = false;
 		elVolume.disabled = false;
+		elPlaybackRate.disabled = false;
 
 		elCurrentTime.value = player.currentTime;
 		elCurrentTimeText.setTime(player.currentTime);
 		elVolume.checked = player.muted;
 		elVolume.value = player.volume;
+		elPlaybackRate.value = youtube.availablePlaybackRates.indexOf(player.playbackRate);
+		elPlaybackRateText.innerHTML = player.playbackRate;
 	});
 	player.addEventListener('play', function(event) {
 		elPlay.disabled = true;
@@ -93,6 +101,10 @@
 	player.addEventListener('volumechange', function(event) {
 		elMute.checked = player.muted;
 		elVolume.value = player.volume;
+	});
+	player.addEventListener('ratechange', function(event) {
+		elPlaybackRate.value = youtube.availablePlaybackRates.indexOf(player.playbackRate);
+		elPlaybackRateText.innerHTML = player.playbackRate;
 	});
 	player.addEventListener('error', function(event) {
 		console.error(event);
@@ -136,6 +148,9 @@
 	});
 	elVolume.addEventListener('change', function(event) {
 		player.volume = this.value;
+	});
+	elPlaybackRate.addEventListener('change', function(event) {
+		player.playbackRate = youtube.availablePlaybackRates[this.value];
 	});
 })();
 		</script>

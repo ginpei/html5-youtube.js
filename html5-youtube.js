@@ -22,6 +22,12 @@
 		this.initialize(options);
 	};
 
+	/**
+	 * The definition of available playbackRate values on YouTube API.
+	 * @see https://developers.google.com/youtube/js_api_reference#Playback_rate
+	 */
+	window.youtube.availablePlaybackRates = [0.25, 0.5, 1, 1.5, 2];
+
 	// shortcut
 	var prototype = Player.prototype;
 
