@@ -215,6 +215,8 @@ Returns the current rate of playback.
 
 Can be set, to change the rate of playback.
 
+This value is NOT available in compat mode. (Always `1`)
+
 #### `src`
 
 YouTube.com URL for the loaded/playing video.
