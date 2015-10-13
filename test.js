@@ -89,19 +89,19 @@ describe('Constructing', function() {
 		it('throws an error if the options is not specified', function() {
 			expect(function() {
 				player._getVideoOptions();
-			}).toThrow('`options.el` is require.');
+			}).toThrow(new Error('`options.el` is require.'));
 		});
 
 		it('throws an error if the target element is not specified', function() {
 			expect(function() {
 				player._getVideoOptions({ el:null });
-			}).toThrow('`options.el` is require.');
+			}).toThrow(new Error('`options.el` is require.'));
 		});
 
 		it('throws an error if the target element is an element', function() {
 			expect(function() {
 				player._getVideoOptions({ el:{} });
-			}).toThrow('`options.el` is require.');
+			}).toThrow(new Error('`options.el` is require.'));
 		});
 
 		it('has videoId if ID is specified as a data attribute on the element', function() {
