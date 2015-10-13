@@ -5,7 +5,7 @@
     "download-video": "curl -o examples/video.mp4 http://www.html5rocks.com/en/tutorials/video/basics/Chrome_ImF.mp4"
   },
   "devDependencies": {
-    "testem": "^0.8.5",
+    "testem": "^0.9.7",
     "uglify-js": "~2.4.20"
   },
   "name": "html5-youtube",
