@@ -27,7 +27,7 @@ for (var name in Player) {
 	originalStatics[name] = Player[name];
 }
 
-beforeEach(function(options) {
+beforeEach(function() {
 	// restore statics
 	for (var name in Player) {
 		delete Player[name];
@@ -44,11 +44,10 @@ beforeEach(function(options) {
 	elParent.appendChild(elPlayer);
 
 	// build an instance
-	options = options || {};
-	options.el = options.el || elPlayer;
-	options.id = options.id || videoId;
-
-	player = new Player(options);
+	player = new Player({
+		el: elPlayer,
+		id: videoId
+	});
 });
 
 afterEach(function() {

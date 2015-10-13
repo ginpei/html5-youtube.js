@@ -1,5 +1,5 @@
 {
-	"framework": "jasmine",
+	"framework": "jasmine2",
 	"src_files": [
 		"html5-youtube.js",
 		"test.js"
