@@ -90,6 +90,35 @@
 	}
 
 	/**
+	 * Parse data attributes to number or string
+	 * Examples:
+	 * Player._parseDataAttribute('true') // 1
+	 * Player._parseDataAttribute('0') // 0
+	 * Player._parseDataAttribute('2EEsa_pqGAs') // '2EEsa_pqGAs'
+	 * @param {String} the data-attribute content
+	 * @returns {Number or String}
+	 */
+	Player._parseDataAttribute = function(string) {
+		var isNaN = function(val){
+			// NaN is the only value to return false when compared to itself
+			return val !== val;
+		}
+
+		if (typeof(string) === 'string'){
+			var toNum = Number(string);
+			if (!isNaN(toNum) && typeof toNum === 'number'){
+				return Number(string);
+			} else if (string === 'true') {
+				return true;
+			} else if (string === 'false') {
+				return false;
+			} else {
+				return string;
+			}
+		}
+	}
+
+	/**
 	 * Load YouTube API script.
 	 * @param {Function} callback
 	 */
@@ -247,7 +276,8 @@
 		var value;
 
 		if (options[name] == undefined) {  // or null
-			value = options.el.getAttribute('data-youtube-' + name);
+			var attribute = options.el.getAttribute('data-youtube-' + name);
+			value = Player._parseDataAttribute(attribute);
 		}
 		else {
 			value = options[name];
