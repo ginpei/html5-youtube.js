@@ -73,6 +73,23 @@
 	};
 
 	/**
+	 * Determine if an input will be accepted by the youtube iframe API
+	 * @param {Number} a number to be pass in the playerVars object to the API
+	 * @returns {Boolean}
+	 * @see https://developers.google.com/youtube/player_parameters
+	 */
+	Player._isValidPlayerVars = function(num) {
+		// The Youtube API only accepts 0, 1, and 2 as valid option values in
+		// the playerVars object
+		var validInputs = [0, 1, 2];
+		if (typeof num === "number") {
+			return validInputs.indexOf(num) > -1;
+		} else {
+			return false;
+		}
+	}
+
+	/**
 	 * Load YouTube API script.
 	 * @param {Function} callback
 	 */
@@ -201,8 +218,8 @@
 			throw new Error('`options.el` is require.');
 		}
 		var videoId = options.id || el.getAttribute('data-youtube-videoid');
-		var autoplay = this._getBooleanOption(options, 'autoplay', false);
-		var controls = this._getBooleanOption(options, 'controls', true);
+		var autoplay = this._getPlayerVarsOption(options, 'autoplay', 0);
+		var controls = this._getPlayerVarsOption(options, 'controls', 1);
 
 		var width;
 		var height = el.clientHeight;
@@ -226,7 +243,7 @@
 		};
 	};
 
-	prototype._getBooleanOption = function(options, name, defaultValue) {
+	prototype._getPlayerVarsOption = function(options, name, defaultValue) {
 		var value;
 
 		if (options[name] == undefined) {  // or null
@@ -236,14 +253,19 @@
 			value = options[name];
 		}
 
-		if (typeof value == 'boolean') {
+		if (typeof value == 'number' && Player._isValidPlayerVars(value)) {
 			// OK, nothing to do
+		}
+		else if (typeof value == 'boolean') {
+			// Convert booleans to number
+			value = Number(value);
 		}
 		else if (value == undefined) {  // or null
 			value = defaultValue;
 		}
 		else {
-			value = !!parseInt(value, 10);
+			// Let's set the value to nothing and let the youtube player fallback to defaults
+			value = undefined;
 		}
 
 		return value;
