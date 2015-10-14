@@ -110,41 +110,41 @@ describe('Constructing', function() {
 			expect(videoOptions.videoId).toBe(videoId);
 		});
 
-		describe('boolean setting', function() {
+		describe('playerVars settings', function() {
 			it('uses the value specified in options if specified on the element', function() {
-				elPlayer.setAttribute('data-youtube-controls', '0');
-				var videoOptions = player._getVideoOptions({ el:elPlayer, controls:true });
-				expect(videoOptions.playerVars.controls).toBe(true);
+				elPlayer.setAttribute('data-youtube-controls', '1');
+				var videoOptions = player._getVideoOptions({ el:elPlayer, controls:0 });
+				expect(videoOptions.playerVars.controls).toBe(0);
 			});
 
-			it('turns setting on if not specified', function() {
+			it('falls back to default if not specified', function() {
 				elPlayer.removeAttribute('data-youtube-controls');
 				var videoOptions = player._getVideoOptions({ el:elPlayer });
-				expect(videoOptions.playerVars.controls).toBe(true);
+				expect(videoOptions.playerVars.controls).toBe(1);
 			});
 
-			it('turns setting on if "1" is specified', function() {
-				elPlayer.setAttribute('data-youtube-controls', '1');
+			it('turns setting on if "true" is specified', function() {
+				elPlayer.setAttribute('data-youtube-controls', 'true');
 				var videoOptions = player._getVideoOptions({ el:elPlayer });
-				expect(videoOptions.playerVars.controls).toBe(true);
+				expect(videoOptions.playerVars.controls).toBe(1);
 			});
 
-			it('turns setting on if invalid number like "-1" is specified', function() {
+			it('let youtube fallback to default settings if invalid number like "-1" is specified', function() {
 				elPlayer.setAttribute('data-youtube-controls', '-1');
 				var videoOptions = player._getVideoOptions({ el:elPlayer });
-				expect(videoOptions.playerVars.controls).toBe(true);
+				expect(videoOptions.playerVars.controls).toBe(undefined);
 			});
 
-			it('turns setting off if "0" is specified', function() {
-				elPlayer.setAttribute('data-youtube-controls', '0');
+			it('turns setting off if "false" is specified', function() {
+				elPlayer.setAttribute('data-youtube-controls', 'false');
 				var videoOptions = player._getVideoOptions({ el:elPlayer });
-				expect(videoOptions.playerVars.controls).toBe(false);
+				expect(videoOptions.playerVars.controls).toBe(0);
 			});
 
-			it('turns setting off if invalid string like "on" is specified', function() {
+			it('let youtube fallback to default settings if invalid string like "on" is specified', function() {
 				elPlayer.setAttribute('data-youtube-controls', 'on');
 				var videoOptions = player._getVideoOptions({ el:elPlayer });
-				expect(videoOptions.playerVars.controls).toBe(false);
+				expect(videoOptions.playerVars.controls).toBe(undefined);
 			});
 		});
 	});
