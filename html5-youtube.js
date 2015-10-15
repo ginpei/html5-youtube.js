@@ -253,7 +253,6 @@
 			'cc_load_policy',
 			'color',
 			'controls',
-			'disabledkb',
 			'enablejsapi',
 			'end',
 			'fs',
