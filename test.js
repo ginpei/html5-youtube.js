@@ -114,37 +114,37 @@ describe('Constructing', function() {
 			it('uses the value specified in options if specified on the element', function() {
 				elPlayer.setAttribute('data-youtube-controls', '0');
 				var videoOptions = player._getVideoOptions({ el:elPlayer, controls:true });
-				expect(videoOptions.playerVars.controls).toBe(true);
+				expect(videoOptions.playerVars.controls).toBe(1);
 			});
 
 			it('turns setting on if not specified', function() {
 				elPlayer.removeAttribute('data-youtube-controls');
 				var videoOptions = player._getVideoOptions({ el:elPlayer });
-				expect(videoOptions.playerVars.controls).toBe(true);
+				expect(videoOptions.playerVars.controls).toBe(1);
 			});
 
 			it('turns setting on if "1" is specified', function() {
 				elPlayer.setAttribute('data-youtube-controls', '1');
 				var videoOptions = player._getVideoOptions({ el:elPlayer });
-				expect(videoOptions.playerVars.controls).toBe(true);
+				expect(videoOptions.playerVars.controls).toBe(1);
 			});
 
 			it('turns setting on if invalid number like "-1" is specified', function() {
 				elPlayer.setAttribute('data-youtube-controls', '-1');
 				var videoOptions = player._getVideoOptions({ el:elPlayer });
-				expect(videoOptions.playerVars.controls).toBe(true);
+				expect(videoOptions.playerVars.controls).toBe(1);
 			});
 
 			it('turns setting off if "0" is specified', function() {
 				elPlayer.setAttribute('data-youtube-controls', '0');
 				var videoOptions = player._getVideoOptions({ el:elPlayer });
-				expect(videoOptions.playerVars.controls).toBe(false);
+				expect(videoOptions.playerVars.controls).toBe(0);
 			});
 
 			it('turns setting off if invalid string like "on" is specified', function() {
 				elPlayer.setAttribute('data-youtube-controls', 'on');
 				var videoOptions = player._getVideoOptions({ el:elPlayer });
-				expect(videoOptions.playerVars.controls).toBe(false);
+				expect(videoOptions.playerVars.controls).toBe(0);
 			});
 		});
 	});
