@@ -117,10 +117,10 @@ describe('Constructing', function() {
 				expect(videoOptions.playerVars.controls).toBe(0);
 			});
 
-			it('falls back to default if not specified', function() {
+			it('let youtube fallback to default settings if not specified', function() {
 				elPlayer.removeAttribute('data-youtube-controls');
 				var videoOptions = player._getVideoOptions({ el:elPlayer });
-				expect(videoOptions.playerVars.controls).toBe(1);
+				expect(videoOptions.playerVars.controls).toBe(undefined);
 			});
 
 			it('turns setting on if "true" is specified', function() {

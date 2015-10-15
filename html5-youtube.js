@@ -298,7 +298,7 @@
 		};
 	};
 
-	prototype._getPlayerVarsOption = function(options, name, defaultValue) {
+	prototype._getPlayerVarsOption = function(options, name) {
 		var value;
 
 		if (options[name] == undefined) {  // or null
@@ -315,9 +315,6 @@
 		else if (typeof value == 'boolean') {
 			// Convert booleans to number
 			value = Number(value);
-		}
-		else if (value == undefined) {  // or null
-			value = defaultValue;
 		}
 		else {
 			// Let's set the value to nothing and let the youtube player fallback to defaults
