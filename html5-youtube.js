@@ -246,9 +246,38 @@
 		if (!el || !el.getAttribute) {
 			throw new Error('`options.el` is require.');
 		}
+
+		var ytPlayerVars = [
+			'autohide',
+			'autoplay',
+			'cc_load_policy',
+			'color',
+			'controls',
+			'disabledkb',
+			'enablejsapi',
+			'end',
+			'fs',
+			'hl',
+			'iv_load_policy',
+			'list',
+			'listType',
+			'loop',
+			'modestbranding',
+			'origin',
+			'playerapiid',
+			'playlist',
+			'playsinline',
+			'rel',
+			'showinfo',
+			'start',
+			'theme'
+		];
+
 		var videoId = options.id || el.getAttribute('data-youtube-videoid');
-		var autoplay = this._getPlayerVarsOption(options, 'autoplay', 0);
-		var controls = this._getPlayerVarsOption(options, 'controls', 1);
+		var playerVars = {};
+		ytPlayerVars.forEach(function(propName){
+			playerVars[propName] = this._getPlayerVarsOption(options, propName)
+		}.bind(this))
 
 		var width;
 		var height = el.clientHeight;
@@ -263,10 +292,7 @@
 		return {
 			el: el,
 			height: height,
-			playerVars: {
-				autoplay: autoplay,
-				controls: controls
-			},
+			playerVars: playerVars,
 			videoId: videoId,
 			width: width
 		};
