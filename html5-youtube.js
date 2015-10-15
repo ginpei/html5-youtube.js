@@ -201,8 +201,8 @@
 			throw new Error('`options.el` is require.');
 		}
 		var videoId = options.id || el.getAttribute('data-youtube-videoid');
-		var autoplay = this._getBooleanOption(options, 'autoplay', false);
-		var controls = this._getBooleanOption(options, 'controls', true);
+		var autoplay = this._getBooleanOption(options, 'autoplay', 0);
+		var controls = this._getBooleanOption(options, 'controls', 1);
 
 		var width;
 		var height = el.clientHeight;
@@ -245,6 +245,8 @@
 		else {
 			value = !!parseInt(value, 10);
 		}
+
+		value = (value ? 1 : 0);
 
 		return value;
 	};
