@@ -73,23 +73,6 @@
 	};
 
 	/**
-	 * Determine if an input will be accepted by the youtube iframe API
-	 * @param {Number} a number to be pass in the playerVars object to the API
-	 * @returns {Boolean}
-	 * @see https://developers.google.com/youtube/player_parameters
-	 */
-	Player._isValidPlayerVars = function(num) {
-		// The Youtube API only accepts 0, 1, and 2 as valid option values in
-		// the playerVars object
-		var validInputs = [0, 1, 2];
-		if (typeof num === "number") {
-			return validInputs.indexOf(num) > -1;
-		} else {
-			return false;
-		}
-	}
-
-	/**
 	 * Parse data attributes to number or string
 	 * Examples:
 	 * Player._parseDataAttribute('true') // 1
@@ -253,6 +236,7 @@
 			'cc_load_policy',
 			'color',
 			'controls',
+			'disablekb',
 			'enablejsapi',
 			'end',
 			'fs',
@@ -308,7 +292,7 @@
 			value = options[name];
 		}
 
-		if (typeof value == 'number' && Player._isValidPlayerVars(value)) {
+		if (typeof value == 'number' && value >= 0) {
 			// OK, nothing to do
 		}
 		else if (typeof value == 'boolean') {
