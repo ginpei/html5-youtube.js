@@ -292,7 +292,7 @@
 			value = options[name];
 		}
 
-		if (typeof value == 'number' && value >= 0) {
+		if ((typeof value == 'number' && value >= 0) || typeof value == 'string') {
 			// OK, nothing to do
 		}
 		else if (typeof value == 'boolean') {
