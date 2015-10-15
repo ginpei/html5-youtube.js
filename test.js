@@ -141,10 +141,119 @@ describe('Constructing', function() {
 				expect(videoOptions.playerVars.controls).toBe(0);
 			});
 
-			it('let youtube fallback to default settings if invalid string like "on" is specified', function() {
-				elPlayer.setAttribute('data-youtube-controls', 'on');
+			it('accepts strings like "playlist" as valid values', function() {
+				elPlayer.setAttribute('data-youtube-listType', 'playlist');
 				var videoOptions = player._getVideoOptions({ el:elPlayer });
-				expect(videoOptions.playerVars.controls).toBe(undefined);
+				expect(videoOptions.playerVars.listType).toBe('playlist');
+			});
+
+			it('allows youtube playerVars settings as booleans', function() {
+				elPlayer.removeAttribute('data-youtube-controls');
+				var videoOptions = player._getVideoOptions({
+					el:elPlayer,
+					autohide: false,
+					autoplay: true,
+					cc_load_policy: true,
+					color: 'white',
+					controls: false,
+					disablekb: false,
+					enablejsapi: true,
+					end: 23,
+					fs: false,
+					hl: 'en',
+					iv_load_policy: 3,
+					list: 'PLC77007E23FF423C6',
+					listType: 'playlist',
+					loop: false,
+					modestbranding: true,
+					origin: 'localhost',
+					playerapiid: '1234abcd',
+					playlist: '2EEsa_pqGAs,KFstP0C9sVk',
+					playsinline: true,
+					rel: false,
+					showinfo: false
+				});
+
+				expect(videoOptions.playerVars).toEqual({
+					autohide: 0,
+					autoplay: 1,
+					cc_load_policy: 1,
+					color: 'white',
+					controls: 0,
+					disablekb: 0,
+					enablejsapi: 1,
+					end: 23,
+					fs: 0,
+					hl: 'en',
+					iv_load_policy: 3,
+					list: 'PLC77007E23FF423C6',
+					listType: 'playlist',
+					loop: 0,
+					modestbranding: 1,
+					origin: 'localhost',
+					playerapiid: '1234abcd',
+					playlist: '2EEsa_pqGAs,KFstP0C9sVk',
+					playsinline: 1,
+					rel: 0,
+					showinfo: 0,
+					start: undefined,
+					theme: undefined
+				});
+			});
+
+			it('allows youtube playerVars settings as numbers', function() {
+				var videoOptions = player._getVideoOptions({
+					el:elPlayer,
+					autohide: 0,
+					autoplay: 1,
+					cc_load_policy: 1,
+					color: 'white',
+					controls: 0,
+					disablekb: 0,
+					enablejsapi: 1,
+					end: 23,
+					fs: 0,
+					hl: 'en',
+					iv_load_policy: 3,
+					list: 'PLC77007E23FF423C6',
+					listType: 'playlist',
+					loop: 0,
+					modestbranding: 1,
+					origin: 'localhost',
+					playerapiid: '1234abcd',
+					playlist: '2EEsa_pqGAs,KFstP0C9sVk',
+					playsinline: 1,
+					rel: 0,
+					showinfo: 0,
+					start: 10,
+					theme: 'light'
+				});
+
+				expect(videoOptions.playerVars).toEqual({
+					autohide: 0,
+					autoplay: 1,
+					cc_load_policy: 1,
+					color: 'white',
+					controls: 0,
+					disablekb: 0,
+					enablejsapi: 1,
+					end: 23,
+					fs: 0,
+					hl: 'en',
+					iv_load_policy: 3,
+					list: 'PLC77007E23FF423C6',
+					listType: 'playlist',
+					loop: 0,
+					modestbranding: 1,
+					origin: 'localhost',
+					playerapiid: '1234abcd',
+					playlist: '2EEsa_pqGAs,KFstP0C9sVk',
+					playsinline: 1,
+					rel: 0,
+					showinfo: 0,
+					start: 10,
+					theme: 'light'
+				});
 			});
 		});
 	});
