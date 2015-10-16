@@ -73,6 +73,35 @@
 	};
 
 	/**
+	 * Parse data attributes to number or string
+	 * Examples:
+	 * Player._parseDataAttribute('true') // 1
+	 * Player._parseDataAttribute('0') // 0
+	 * Player._parseDataAttribute('2EEsa_pqGAs') // '2EEsa_pqGAs'
+	 * @param {String} the data-attribute content
+	 * @returns {Number or String}
+	 */
+	Player._parseDataAttribute = function(string) {
+		var isNaN = function(val){
+			// NaN is the only value to return false when compared to itself
+			return val !== val;
+		}
+
+		if (typeof(string) === 'string'){
+			var toNum = Number(string);
+			if (!isNaN(toNum) && typeof toNum === 'number'){
+				return Number(string);
+			} else if (string === 'true') {
+				return true;
+			} else if (string === 'false') {
+				return false;
+			} else {
+				return string;
+			}
+		}
+	}
+
+	/**
 	 * Load YouTube API script.
 	 * @param {Function} callback
 	 */
@@ -200,9 +229,38 @@
 		if (!el || !el.getAttribute) {
 			throw new Error('`options.el` is require.');
 		}
+
+		var ytPlayerVars = [
+			'autohide',
+			'autoplay',
+			'cc_load_policy',
+			'color',
+			'controls',
+			'disablekb',
+			'enablejsapi',
+			'end',
+			'fs',
+			'hl',
+			'iv_load_policy',
+			'list',
+			'listType',
+			'loop',
+			'modestbranding',
+			'origin',
+			'playerapiid',
+			'playlist',
+			'playsinline',
+			'rel',
+			'showinfo',
+			'start',
+			'theme'
+		];
+
 		var videoId = options.id || el.getAttribute('data-youtube-videoid');
-		var autoplay = this._getBooleanOption(options, 'autoplay', false);
-		var controls = this._getBooleanOption(options, 'controls', true);
+		var playerVars = {};
+		ytPlayerVars.forEach(function(propName){
+			playerVars[propName] = this._getPlayerVarsOption(options, propName)
+		}.bind(this))
 
 		var width;
 		var height = el.clientHeight;
@@ -217,33 +275,33 @@
 		return {
 			el: el,
 			height: height,
-			playerVars: {
-				autoplay: autoplay,
-				controls: controls
-			},
+			playerVars: playerVars,
 			videoId: videoId,
 			width: width
 		};
 	};
 
-	prototype._getBooleanOption = function(options, name, defaultValue) {
+	prototype._getPlayerVarsOption = function(options, name) {
 		var value;
 
 		if (options[name] == undefined) {  // or null
-			value = options.el.getAttribute('data-youtube-' + name);
+			var attribute = options.el.getAttribute('data-youtube-' + name);
+			value = Player._parseDataAttribute(attribute);
 		}
 		else {
 			value = options[name];
 		}
 
-		if (typeof value == 'boolean') {
+		if ((typeof value == 'number' && value >= 0) || typeof value == 'string') {
 			// OK, nothing to do
 		}
-		else if (value == undefined) {  // or null
-			value = defaultValue;
+		else if (typeof value == 'boolean') {
+			// Convert booleans to number
+			value = Number(value);
 		}
 		else {
-			value = !!parseInt(value, 10);
+			// Let's set the value to nothing and let the youtube player fallback to defaults
+			value = undefined;
 		}
 
 		return value;

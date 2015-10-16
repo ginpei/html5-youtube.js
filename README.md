@@ -74,8 +74,18 @@ See `examples/player.html`.
 
 * `options.el` ... {Element} element that will be replaced with YouTube Player.
 * `options.id` ... {String} video ID like `"2EEsa_pqGAs"`.
-* `options.autoplay` ... {Boolean} start playing automatically if true. Optional. Default is `false`.
-* `options.controls` ... {Boolean} show controll UIs if true. Optional. Default is `true`.
+
+**Additionally, every Youtube Player Parameters can be passed as options.**
+[Check the Youtube documentation for the full list](https://developers.google.com/youtube/player_parameters#Parameters)
+
+Those options accepts the values stated in the youtube documentation, but can also accept booleans in place of `1 (true)` and `0 (false)`.
+Some player parameters exemples :
+* `options.autoplay` ... {Boolean | 0 or 1} start playing automatically if true or 0. Optional. Default is `0`.
+* `options.controls` ... {Boolean | 0 or 1} show controll UIs if true. Optional. Default is `1`.
+* `options.disabledkb` ... {Boolean | 0 or 1} enable or disabled keyboard control. Optional. Default is `0`.
+* `options.start` ... {Number} specify a start time for the video. Optional. Default is `undefined`.
+* `options.end` ... {Number} specify a start time for the video. Optional. Default is `undefined`.
+* `options.showInfo` ... {Boolean | 0 or 1} show video info (title, author...). Optional. Default is `1`.
 * returns ... {Player}
 
 ```js

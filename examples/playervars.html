@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<title>youtube.js</title>
+	</head>
+	<body>
+		<h1>youtube.js playerVars settings</h1>
+		<p><a href="https://developers.google.com/youtube/player_parameters">https://developers.google.com/youtube/player_parameters</a></p>
+
+		<h2>Player with autoplay, hidden controls, minimal branding, custom start/end point, etc.</h2>
+		<div id="my-youtube-player" data-youtube-videoid="2XkV6IpV2Y0"></div>
+		<br><br>
+		<h2>Player with playlists, white loadbar</h2>
+		<div id="my-youtube-player2"></div>
+
+		<script src="../html5-youtube.js"></script>
+		<script>
+			var elPlayer = document.getElementById('my-youtube-player');
+			var elPlayer2 = document.getElementById('my-youtube-player2');
+			youtube({
+				el:elPlayer,
+				autoplay:true,
+				controls:false,
+				disablekb:false,
+				end: 23,
+				iv_load_policy: 3,
+				modestbranding: true,
+				playsinline: true,
+				rel: false,
+				showinfo: false,
+				start: 10
+			});
+
+			youtube({
+				el:elPlayer2,
+				showInfo: false,
+				color: 'white',
+				fs: false,
+				listType: 'playlist',
+				list: 'PLFs4vir_WsTzcfD7ZE8uO3yX-GCKUk9xZ'
+			});
+		</script>
+	</body>
+</html>
