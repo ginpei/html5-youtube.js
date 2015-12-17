@@ -13,7 +13,7 @@ YouTube Player API wrapper like HTML5 video API.
 See `examples/basic.html`.
 
 ```html
-<div id="my-youtube-player" data-youtube-videoid="2EEsa_pqGAs"></div>
+<div id="my-youtube-player" data-youtube-videoid="KFstP0C9sVk"></div>
 ```
 
 ```js
@@ -39,7 +39,7 @@ See `examples/player.html`.
     var elPlayer = document.querySelector('.js-player');
     var elPlay = document.querySelector('.js-play');
     var elPause = document.querySelector('.js-pause');
-    var videoId = '2EEsa_pqGAs';
+    var videoId = 'KFstP0C9sVk';
 
     var player = youtube({ el:elPlayer, id:videoId })
         .on('ready', function(event) {
@@ -73,7 +73,7 @@ See `examples/player.html`.
 #### `youtube(options)`
 
 * `options.el` ... {Element} element that will be replaced with YouTube Player.
-* `options.id` ... {String} video ID like `"2EEsa_pqGAs"`.
+* `options.id` ... {String} video ID like `"KFstP0C9sVk"`.
 
 **Additionally, every Youtube Player Parameters can be passed as options.**
 [Check the Youtube documentation for the full list](https://developers.google.com/youtube/player_parameters#Parameters)
@@ -90,7 +90,7 @@ Some player parameters exemples :
 
 ```js
 var el = document.querySelector('#the-player');
-var videoId = '2EEsa_pqGAs';
+var videoId = 'KFstP0C9sVk';
 var player = youtube({ el:el, id:videoId });
 player.addEventListener('ready', function(event) {
     this.play();
