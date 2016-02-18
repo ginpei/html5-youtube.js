@@ -1,4 +1,4 @@
-/*! @license youtube.js by Ginpei https://github.com/ginpei/youtube.js MIT License */
+/*! @license html5-youtube.js by Ginpei https://github.com/ginpei/html5-youtube.js MIT License */
 
 (function(window, document, Player) {
 	var f_slice = Array.prototype.slice;

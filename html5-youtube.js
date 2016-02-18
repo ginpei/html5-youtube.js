@@ -1,4 +1,4 @@
-/*! @license youtube.js by Ginpei https://github.com/ginpei/youtube.js MIT License */
+/*! @license html5-youtube.js by Ginpei https://github.com/ginpei/html5-youtube.js MIT License */
 
 /* global YT */
 (function(window, document) {
