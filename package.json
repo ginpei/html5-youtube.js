@@ -1,7 +1,7 @@
 {
   "scripts": {
-    "minify": "node_modules/uglify-js/bin/uglifyjs -c -m --comments '/@license/' -- html5-youtube.js > html5-youtube.min.js; node_modules/uglify-js/bin/uglifyjs -c -m --comments '/@license/' -- html5-youtube.compat.js > html5-youtube.compat.min.js",
-    "test": "node_modules/testem/testem.js --port 3000",
+    "minify": "uglifyjs -c -m --comments '/@license/' -- html5-youtube.js > html5-youtube.min.js; uglifyjs -c -m --comments '/@license/' -- html5-youtube.compat.js > html5-youtube.compat.min.js",
+    "test": "testem --port 3000",
     "download-video": "curl -o examples/video.mp4 http://www.html5rocks.com/en/tutorials/video/basics/Chrome_ImF.mp4"
   },
   "devDependencies": {
