@@ -6,7 +6,7 @@
   },
   "devDependencies": {
     "testem": "~1.15.0",
-    "uglify-js": "~2.8.4"
+    "uglify-js": "~2.8.12"
   },
   "name": "html5-youtube",
   "description": "YouTube Player API wrapper like HTML5 video API.",
