@@ -5,8 +5,10 @@
     "download-video": "curl -o examples/video.mp4 http://www.html5rocks.com/en/tutorials/video/basics/Chrome_ImF.mp4"
   },
   "devDependencies": {
-    "testem": "~1.16.1",
-    "uglify-js": "~2.8.22"
+    "@types/youtube": "0.0.35",
+    "testem": "^2.14.0",
+    "tslint": "^5.12.0",
+    "typescript": "^3.2.2"
   },
   "name": "html5-youtube",
   "description": "YouTube Player API wrapper like HTML5 video API.",
