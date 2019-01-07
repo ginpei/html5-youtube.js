@@ -51,6 +51,13 @@ interface IYTEvent extends CustomEvent {
 }
 
 export default class Html5YouTube {
+  /**
+   * The definition of available playbackRate values on YouTube API.
+   * @see https://developers.google.com/youtube/js_api_reference#Playback_rate
+   */
+  // TODO maybe 1.25 and 1.75 available
+  public static availablePlaybackRates = [0.25, 0.5, 1, 1.5, 2];
+
   private static ytStatus = 0;
   private static ytCallbacks: Array<() => void> = [];
 
@@ -66,7 +73,7 @@ export default class Html5YouTube {
     //
 
     const status = this.ytStatus;
-    if (status === undefined) {  // initial; not started
+    if (status === 0) {  // initial; not started
       // initialize the callback queue
       const callbacks = this.ytCallbacks;
       callbacks.push(callback);
@@ -372,18 +379,14 @@ export default class Html5YouTube {
   }
 
   public _getVideoEvents () {
-    const events: { [key: string]: any } = {}; // TODO
-
-    ([
-      'onApiChange',
-      'onError',
-      'onPlaybackQualityChange',
-      'onPlaybackRateChange',
-      'onReady',
-      'onStateChange',
-    ] as Array<keyof(Html5YouTube)>).forEach((type) => {
-      events[type] = this[type];
-    });
+    const events: { [key: string]: (event: Event) => void } = {
+      onApiChange: (event) => this.onApiChange(event),
+      onError: (event) => this.onError(event),
+      onPlaybackQualityChange: (event) => this.onPlaybackQualityChange(event),
+      onPlaybackRateChange: (event) => this.onPlaybackRateChange(event),
+      onReady: (event) => this.onReady(event),
+      onStateChange: (event) => this.onStateChange(event),
+    };
 
     return events;
   }

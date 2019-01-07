@@ -35,7 +35,7 @@
 			<br />
 			<label><input class="js-logging" type="checkbox" checked />Log all events in console</label>
 		</div>
-		<script src="../html5-youtube.js"></script>
+		<script src="../out/Html5YouTube.js"></script>
 		<script>
 (function() {
 	var elPlayer = document.querySelector('.js-player');
@@ -75,7 +75,7 @@
 		elCurrentTimeText.setTime(player.currentTime);
 		elVolume.checked = player.muted;
 		elVolume.value = player.volume;
-		elPlaybackRate.value = youtube.availablePlaybackRates.indexOf(player.playbackRate);
+		elPlaybackRate.value = Html5YouTube.availablePlaybackRates.indexOf(player.playbackRate);
 		elPlaybackRateText.innerHTML = player.playbackRate;
 	});
 	player.addEventListener('play', function(event) {
@@ -103,7 +103,7 @@
 		elVolume.value = player.volume;
 	});
 	player.addEventListener('ratechange', function(event) {
-		elPlaybackRate.value = youtube.availablePlaybackRates.indexOf(player.playbackRate);
+		elPlaybackRate.value = Html5YouTube.availablePlaybackRates.indexOf(player.playbackRate);
 		elPlaybackRateText.innerHTML = player.playbackRate;
 	});
 	player.addEventListener('error', function(event) {
@@ -150,7 +150,7 @@
 		player.volume = this.value;
 	});
 	elPlaybackRate.addEventListener('change', function(event) {
-		player.playbackRate = youtube.availablePlaybackRates[this.value];
+		player.playbackRate = Html5YouTube.availablePlaybackRates[this.value];
 	});
 })();
 		</script>
