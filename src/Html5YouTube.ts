@@ -3,7 +3,7 @@
  * They are same as YouTube API's `YT.PlayerState`.
  * @see https://developers.google.com/youtube/iframe_api_reference#onStateChange
  */
-enum PlayerState {
+export enum PlayerState {
   UNSTARTED = -1,
   ENDED = 0,
   PLAYING = 1,

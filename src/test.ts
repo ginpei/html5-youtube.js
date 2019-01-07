@@ -1,3 +1,5 @@
+// tslint:disable
+
 var Player = window.Html5YouTube;
 
 var player;
@@ -17,14 +19,20 @@ Player.prototype._createPlayer = function(options) {
 	return {
 		playVideo: function() {
 			instance.onStateChange({ data:Player.PlayerState.PLAYING });
-		},
+    },
+    seekTo: function() {},
+    setVolume: function() {},
+    mute: function() {},
+    unMute: function() {},
+    setPlaybackRate: function() {},
+    cueVideoById: function() {},
 		destroy: function() {
 		}
 	};
 };
 
-for (var name in Player) {
-	originalStatics[name] = Player[name];
+for (var key in Player) {
+	originalStatics[key] = Player[key];
 }
 
 beforeEach(function() {
@@ -57,13 +65,27 @@ afterEach(function() {
 describe('Statics', function() {
 	describe('interface', function() {
 		it('builds new instance', function() {
-			var player = new Html5YouTube({ el:elPlayer, id:videoId });
+			var player = new Player({ el:elPlayer, id:videoId });
 			expect(player instanceof Player).toBeTruthy();
 		});
 	});
 });
 
 describe('Constructing', function() {
+  it('loads the video by specified ID from the beginning', function() {
+    player.destroy();
+
+    var result;
+    const _createPlayer = Player.prototype._createPlayer;
+  	Player.prototype._createPlayer = function(el, options) {
+  		result = options.videoId;
+  	};
+    player = new Player({ el:elPlayer, id:videoId });
+    Player.prototype._createPlayer = _createPlayer;
+
+  	expect(result).toBe(videoId);
+  });
+
 	describe('instance', function() {
 		it('is an instance', function() {
 			expect(player instanceof Player).toBeTruthy();
@@ -247,16 +269,6 @@ describe('Constructing', function() {
 		var videoId;
 		beforeEach(function() {
 			videoId = 'videoId' + Date.now();
-		});
-
-		it('loads the video by specified ID from the beginning', function() {
-			var result;
-			player._createPlayer = function(el, options) {
-				result = options.videoId;
-			};
-			player.player = null;
-			player.initialize({ el:elPlayer, id:videoId });
-			expect(result).toBe(videoId);
 		});
 
 		it('loads the video by ID that is set as `src` after ready event', function() {

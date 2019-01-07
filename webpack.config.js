@@ -2,9 +2,12 @@ const path = require('path');
 
 module.exports = {
   mode: 'development',
-  entry: './src/index.ts',
+  entry: {
+    Html5YouTube: './src/index.ts',
+    test: './src/test.ts',
+  },
   output: {
-    filename: 'Html5YouTube.js',
+    filename: '[name].js',
     path: path.resolve(__dirname, 'out')
   },
   module: {

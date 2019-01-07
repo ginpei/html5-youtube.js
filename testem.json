@@ -2,6 +2,6 @@
 	"framework": "jasmine2",
 	"src_files": [
 		"out/Html5YouTube.js",
-		"test.js"
+		"out/test.js"
 	]
 }
