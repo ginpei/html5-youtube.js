@@ -1,11 +1,12 @@
 {
-  "scripts": {
-    "start": "npm test",
-    "build": "webpack",
-    "minify": "uglifyjs -c -m --comments \"/@license/\" -- html5-youtube.js > html5-youtube.min.js && uglifyjs -c -m --comments \"/@license/\" -- html5-youtube.compat.js > html5-youtube.compat.min.js",
-    "test": "testem --port 3000",
-    "download-video": "curl -o examples/video.mp4 http://www.html5rocks.com/en/tutorials/video/basics/Chrome_ImF.mp4"
+  "name": "html5-youtube",
+  "version": "1.1.0",
+  "description": "YouTube Player API wrapper like HTML5 video API.",
+  "main": "html5-youtube.js",
+  "directories": {
+    "example": "examples"
   },
+  "dependencies": {},
   "devDependencies": {
     "@types/jasmine": "^3.3.5",
     "@types/youtube": "0.0.35",
@@ -19,9 +20,13 @@
     "webpack-cli": "^3.2.0",
     "webpack-dev-server": "^3.1.14"
   },
-  "name": "html5-youtube",
-  "description": "YouTube Player API wrapper like HTML5 video API.",
-  "version": "1.1.0",
+  "scripts": {
+    "start": "npm test",
+    "build": "webpack",
+    "minify": "uglifyjs -c -m --comments \"/@license/\" -- html5-youtube.js > html5-youtube.min.js && uglifyjs -c -m --comments \"/@license/\" -- html5-youtube.compat.js > html5-youtube.compat.min.js",
+    "test": "testem --port 3000",
+    "download-video": "curl -o examples/video.mp4 http://www.html5rocks.com/en/tutorials/video/basics/Chrome_ImF.mp4"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/ginpei/html5-youtube.js.git"
