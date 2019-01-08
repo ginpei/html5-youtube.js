@@ -1,35 +1,35 @@
 // tslint:disable
+import Html5YouTubeOriginal, { PlayerState, IOptions } from './Html5YouTube';
 
-var Player = window.Html5YouTube;
+class Player extends Html5YouTubeOriginal {
+  public _buildPlayer (options: IOptions) {
+    this._setupVideo(options);
+  }
 
-var player;
-var elParent;
-var elPlayer;
-var videoId;
-var originalStatics = {};
+  public _createPlayer (el: HTMLElement, options: YT.PlayerOptions) {
+    var instance = this;
+    const ytPlayer: any = {
+      playVideo: function() {
+        instance.onStateChange({ data: PlayerState.PLAYING });
+      },
+      seekTo: function() {},
+      setVolume: function() {},
+      mute: function() {},
+      unMute: function() {},
+      setPlaybackRate: function() {},
+      cueVideoById: function() {},
+      destroy: function() {
+      }
+    };
+    return ytPlayer;
+  }
+}
 
-var original_Player_prepareYTScript = Player.prepareYTScript;
-Player.prepareYTScript = function(callback) {
-	callback();
-};
-
-var original_createPlayer = Player.prototype._createPlayer;
-Player.prototype._createPlayer = function(options) {
-	var instance = this;
-	return {
-		playVideo: function() {
-			instance.onStateChange({ data:Player.PlayerState.PLAYING });
-    },
-    seekTo: function() {},
-    setVolume: function() {},
-    mute: function() {},
-    unMute: function() {},
-    setPlaybackRate: function() {},
-    cueVideoById: function() {},
-		destroy: function() {
-		}
-	};
-};
+let player: Player;
+let elParent: HTMLElement;
+let elPlayer: HTMLElement;
+let videoId: string;
+const originalStatics: { [key: string]: any } = {};
 
 for (var key in Player) {
 	originalStatics[key] = Player[key];
@@ -51,11 +51,11 @@ beforeEach(function() {
 
 	elParent.appendChild(elPlayer);
 
-	// build an instance
+  // build an instance
 	player = new Player({
 		el: elPlayer,
 		id: videoId
-	});
+  });
 });
 
 afterEach(function() {
@@ -93,24 +93,6 @@ describe('Constructing', function() {
 	});
 
 	describe('video options', function() {
-		it('throws an error if the options is not specified', function() {
-			expect(function() {
-				player._getVideoOptions();
-			}).toThrow(new Error('`options.el` is require.'));
-		});
-
-		it('throws an error if the target element is not specified', function() {
-			expect(function() {
-				player._getVideoOptions({ el:null });
-			}).toThrow(new Error('`options.el` is require.'));
-		});
-
-		it('throws an error if the target element is an element', function() {
-			expect(function() {
-				player._getVideoOptions({ el:{} });
-			}).toThrow(new Error('`options.el` is require.'));
-		});
-
 		it('has videoId if ID is specified as a data attribute on the element', function() {
 			elPlayer.setAttribute('data-youtube-videoid', videoId);
 			var videoOptions = player._getVideoOptions({ el:elPlayer });
@@ -274,17 +256,17 @@ describe('Constructing', function() {
 		it('loads the video by ID that is set as `src` after ready event', function() {
 			var ytPlayer = player.player;
 			ytPlayer.cueVideoById = function(value) {
-				player._src = value;
+				this._src = value;
 			};
-			ytPlayer.getVideoUrl = function(value) {
-				return player._src;
+			ytPlayer.getVideoUrl = function() {
+				return this._src;
 			};
 
 			player.player = null;
 			player.src = videoId;
 
 			player.player = ytPlayer;
-			player.onReady();
+			player.onReady(null);
 
 			expect(player.src).toBe(videoId);
 		});
@@ -297,7 +279,7 @@ describe('Events', function() {
 			var called = 0;
 			player.on('play', function() {
 				called++;
-			});
+      });
 			player.play();
 			expect(called).toBe(1);
 		});

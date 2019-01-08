@@ -41,7 +41,7 @@ const ytPlayerVars = [
 export interface IOptions {
   [key: string]: any; // TODO maybe ytPlayerVars
   el: HTMLElement;
-  id: string;
+  id?: string;
 }
 
 interface IYTEvent extends CustomEvent {
