@@ -58,14 +58,14 @@ export default class Html5YouTube {
   // TODO maybe 1.25 and 1.75 available
   public static availablePlaybackRates = [0.25, 0.5, 1, 1.5, 2];
 
-  private static ytStatus = 0;
-  private static ytCallbacks: Array<() => void> = [];
+  protected static ytStatus = 0;
+  protected static ytCallbacks: Array<() => void> = [];
 
   /**
    * Load YouTube API script.
    * @param {Function} callback
    */
-  private static prepareYTScript (callback: () => void) {
+  protected static prepareYTScript (callback: () => void) {
     // Status is changed as: initial->loading->ready.
     // * The callback will run later if initial
     // * The callback is queued and will run if loading
@@ -108,17 +108,17 @@ export default class Html5YouTube {
   public paused = false;
   public ended = false;
 
-  private eventer = document.createElement('ytapiplayer');
-  private events: { [key: string]: Array<{
+  protected eventer = document.createElement('ytapiplayer');
+  protected events: { [key: string]: Array<{
     binded: (event: Event) => void, // TODO correct
     listener: (event: Event) => void,
   } | undefined> } = {};
 
-  private unsetVideoId = '';
-  private tmTimeUpdate = 0;
-  private tmVolume = 0;
-  private tmPlaybackRate = 0;
-  private tmDuration = 0;
+  protected unsetVideoId = '';
+  protected tmTimeUpdate = 0;
+  protected tmVolume = 0;
+  protected tmPlaybackRate = 0;
+  protected tmDuration = 0;
 
   /**
    * Returns the current playback position, in seconds,
@@ -133,7 +133,7 @@ export default class Html5YouTube {
       this.player.seekTo(value, true);
     }
   }
-  private vCurrentTime = 0;
+  protected vCurrentTime = 0;
 
   /**
    * Returns the current playback volume multiplier,
@@ -149,7 +149,7 @@ export default class Html5YouTube {
       this.player.setVolume(value * 100);
     }
   }
-  private vVolume = 0;
+  protected vVolume = 0;
 
   /**
    * Returns true if all audio is muted
@@ -166,7 +166,7 @@ export default class Html5YouTube {
       this.player[value ? 'mute' :'unMute']();
     }
   }
-  private vMuted = false;
+  protected vMuted = false;
 
   /**
    * Returns the default rate of playback,
@@ -182,7 +182,7 @@ export default class Html5YouTube {
       this.player.setPlaybackRate(value);
     }
   }
-  private vPlaybackRate = 1;
+  protected vPlaybackRate = 1;
 
   /**
    * Returns the address of the current media resource.
@@ -200,7 +200,7 @@ export default class Html5YouTube {
       this.unsetVideoId = value;
     }
   }
-  private vSrc = '';
+  protected vSrc = '';
 
   // ----------------------------------------------------------------
   // Constructing
@@ -356,7 +356,7 @@ export default class Html5YouTube {
    * this._parseDataAttribute('0') // 0
    * this._parseDataAttribute('2EEsa_pqGAs') // '2EEsa_pqGAs'
    */
-  // TODO private
+  // TODO protected
   public _parseDataAttribute (value: string | any) {
     // TODO replace with original isNaN
     // NaN is the only value to return false when compared to itself
