@@ -1,7 +1,7 @@
 // tslint:disable
 import Html5YouTubeOriginal, { PlayerState, IOptions } from './Html5YouTube';
 
-class Player extends Html5YouTubeOriginal {
+class Html5YouTube extends Html5YouTubeOriginal {
   public _buildPlayer (options: IOptions) {
     this._setupVideo(options);
   }
@@ -25,23 +25,23 @@ class Player extends Html5YouTubeOriginal {
   }
 }
 
-let player: Player;
+let player: Html5YouTube;
 let elParent: HTMLElement;
 let elPlayer: HTMLElement;
 let videoId: string;
 const originalStatics: { [key: string]: any } = {};
 
-for (var key in Player) {
-	originalStatics[key] = Player[key];
+for (var key in Html5YouTube) {
+	originalStatics[key] = Html5YouTube[key];
 }
 
 beforeEach(function() {
 	// restore statics
-	for (var name in Player) {
-		delete Player[name];
+	for (var name in Html5YouTube) {
+		delete Html5YouTube[name];
 	}
 	for (var name in originalStatics) {
-		Player[name] = originalStatics[name];
+		Html5YouTube[name] = originalStatics[name];
 	}
 
 	// create materials
@@ -52,7 +52,7 @@ beforeEach(function() {
 	elParent.appendChild(elPlayer);
 
   // build an instance
-	player = new Player({
+	player = new Html5YouTube({
 		el: elPlayer,
 		id: videoId
   });
@@ -65,8 +65,8 @@ afterEach(function() {
 describe('Statics', function() {
 	describe('interface', function() {
 		it('builds new instance', function() {
-			var player = new Player({ el:elPlayer, id:videoId });
-			expect(player instanceof Player).toBeTruthy();
+			var player = new Html5YouTube({ el:elPlayer, id:videoId });
+			expect(player instanceof Html5YouTube).toBeTruthy();
 		});
 	});
 });
@@ -76,19 +76,19 @@ describe('Constructing', function() {
     player.destroy();
 
     var result;
-    const _createPlayer = Player.prototype._createPlayer;
-  	Player.prototype._createPlayer = function(el, options) {
+    const _createPlayer = Html5YouTube.prototype._createPlayer;
+  	Html5YouTube.prototype._createPlayer = function(el, options) {
   		result = options.videoId;
   	};
-    player = new Player({ el:elPlayer, id:videoId });
-    Player.prototype._createPlayer = _createPlayer;
+    player = new Html5YouTube({ el:elPlayer, id:videoId });
+    Html5YouTube.prototype._createPlayer = _createPlayer;
 
   	expect(result).toBe(videoId);
   });
 
 	describe('instance', function() {
 		it('is an instance', function() {
-			expect(player instanceof Player).toBeTruthy();
+			expect(player instanceof Html5YouTube).toBeTruthy();
 		});
 	});
 
