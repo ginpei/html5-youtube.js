@@ -1,5 +1,6 @@
 {
   "scripts": {
+    "start": "npm test",
     "build": "webpack",
     "minify": "uglifyjs -c -m --comments \"/@license/\" -- html5-youtube.js > html5-youtube.min.js && uglifyjs -c -m --comments \"/@license/\" -- html5-youtube.compat.js > html5-youtube.compat.min.js",
     "test": "testem --port 3000",

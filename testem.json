@@ -1,7 +1,12 @@
 {
 	"framework": "jasmine2",
 	"src_files": [
+		"src/Html5YouTube.ts",
+		"src/test.ts"
+  ],
+	"serve_files": [
 		"out/Html5YouTube.js",
 		"out/test.js"
-	]
+  ],
+  "before_tests": "npm run build"
 }
