@@ -1,15 +1,14 @@
 const path = require('path');
-const CleanWebpackPlugin = require('clean-webpack-plugin');
 
 module.exports = {
   mode: 'development',
   entry: {
-    Html5YouTube: './src/index.ts',
-    test: './src/test.ts',
+    'html5-youtube': './src/web.ts',
+    'test': './src/test.ts',
   },
   output: {
     filename: '[name].js',
-    path: path.resolve(__dirname, 'out')
+    path: path.resolve(__dirname, 'out/web')
   },
   module: {
     rules: [
@@ -23,7 +22,4 @@ module.exports = {
   resolve: {
     extensions: [ '.tsx', '.ts', '.js' ]
   },
-  plugins: [
-    new CleanWebpackPlugin(['out']),
-  ],
 };

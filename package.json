@@ -2,7 +2,8 @@
   "name": "html5-youtube",
   "version": "1.1.0",
   "description": "YouTube Player API wrapper like HTML5 video API.",
-  "main": "html5-youtube.js",
+  "main": "out/Html5YouTube.js",
+  "types": "out/Html5YouTube.d.ts",
   "directories": {
     "example": "examples"
   },
@@ -22,7 +23,7 @@
   },
   "scripts": {
     "start": "npm test",
-    "build": "webpack",
+    "build": "rm -rf out && tsc && webpack",
     "minify": "uglifyjs -c -m --comments \"/@license/\" -- html5-youtube.js > html5-youtube.min.js && uglifyjs -c -m --comments \"/@license/\" -- html5-youtube.compat.js > html5-youtube.compat.min.js",
     "test": "testem --port 3000",
     "download-video": "curl -o examples/video.mp4 http://www.html5rocks.com/en/tutorials/video/basics/Chrome_ImF.mp4"
