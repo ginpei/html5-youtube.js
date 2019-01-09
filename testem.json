@@ -5,8 +5,7 @@
 		"src/test.ts"
   ],
 	"serve_files": [
-		"out/Html5YouTube.js",
-		"out/test.js"
+		"out/web/test.js"
   ],
   "before_tests": "npm run build"
 }
