@@ -21,6 +21,8 @@
   "exclude": [
     "**/*.test.*",
     "node_modules",
-    "out"
+    "out",
+    "**/test.ts",
+    "**/web.ts"
   ]
 }
