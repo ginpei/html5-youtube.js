@@ -629,7 +629,7 @@ export default class Html5YouTube {
    * Start observing timeupdate's change.
    */
   public _observeTimeUpdate () {
-    this.tmTimeUpdate = setInterval(() => {
+    this.tmTimeUpdate = window.setInterval(() => {
       const time = this.player!.getCurrentTime();
       if (time !== this.vCurrentTime) {
         this.vCurrentTime = time;
@@ -642,7 +642,7 @@ export default class Html5YouTube {
    * Start observing volume's change.
    */
   public _observeVolume () {
-    this.tmVolume = setInterval(() => {
+    this.tmVolume = window.setInterval(() => {
       const muted = this.player!.isMuted();
       const volume = this.player!.getVolume();
       if (muted !== this.vMuted || volume !== this.vVolume) {
@@ -657,7 +657,7 @@ export default class Html5YouTube {
    * Start observing playbackRate's change.
    */
   public _observePlaybackRate () {
-    this.tmPlaybackRate = setInterval(() => {
+    this.tmPlaybackRate = window.setInterval(() => {
       const playbackRate = this.player!.getPlaybackRate();
       if (playbackRate !== this.vPlaybackRate) {
         this.vPlaybackRate = playbackRate;
@@ -670,7 +670,7 @@ export default class Html5YouTube {
    * Start observing duration's change.
    */
   public _observeDuration () {
-    this.tmDuration = setInterval(() => {
+    this.tmDuration = window.setInterval(() => {
       const duration = this.player!.getDuration() || 0;
       if (duration !== this.duration) {
         this.duration = duration;
