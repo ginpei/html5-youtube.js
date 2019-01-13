@@ -125,10 +125,10 @@ export default class Html5YouTube {
    * as a position between zero time and the current duration.
    * Can be set, to seek to the given time.
    */
-  get currentTime () {
+  public get currentTime () {
     return this.vCurrentTime;
   }
-  set currentTime (value) {
+  public set currentTime (value) {
     if (this.player) {
       this.player.seekTo(value, true);
     }
@@ -141,10 +141,10 @@ export default class Html5YouTube {
    * where 0.0 is the quietest and 1.0 the loudest.
    * Can be set, to change the volume multiplier.
    */
-  get volume () {
+  public get volume () {
     return this.vVolume / 100;
   }
-  set volume (value) {
+  public set volume (value) {
     if (this.player) {
       this.player.setVolume(value * 100);
     }
@@ -158,10 +158,10 @@ export default class Html5YouTube {
    * and false otherwise.
    * Can be set, to change whether the audio is muted or not.
    */
-  get muted () {
+  public get muted () {
     return this.vMuted;
   }
-  set muted (value) {
+  public set muted (value) {
     if (this.player) {
       this.player[value ? 'mute' :'unMute']();
     }
@@ -174,10 +174,10 @@ export default class Html5YouTube {
    * or reversing through the media resource.
    * Can be set, to change the default rate of playback.
    */
-  get playbackRate () {
+  public get playbackRate () {
     return this.vPlaybackRate;
   }
-  set playbackRate (value) {
+  public set playbackRate (value) {
     if (this.player) {
       this.player.setPlaybackRate(value);
     }
@@ -189,10 +189,10 @@ export default class Html5YouTube {
    * Can be set, to change the video URL.
    * @type number
    */
-  get src () {
+  public get src () {
     return this.vSrc;
   }
-  set src (value) {
+  public set src (value) {
     if (this.player) {
       this.player.cueVideoById(value);
     } else {
