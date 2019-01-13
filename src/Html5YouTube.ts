@@ -513,7 +513,8 @@ export default class Html5YouTube {
       const attribute = options.el.getAttribute('data-youtube-' + name);
       value = this.parseDataAttribute(attribute);
     }
-    if (options[name] === undefined) {  // or null
+    if (options[name] === undefined || options[name] === null) {
+      // do nothing
     } else {
       value = options[name];
     }
