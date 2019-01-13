@@ -108,9 +108,9 @@ export default class Html5YouTube {
   public paused = false;
   public ended = false;
 
-  protected eventer = document.createElement('ytapiplayer');
+  protected eventer = document.createElement('yt-api-player');
   protected events: { [key: string]: Array<{
-    binded: (event: Event) => void, // TODO correct
+    bound: (event: Event) => void,
     listener: (event: Event) => void,
   } | undefined> } = {};
 
@@ -225,7 +225,7 @@ export default class Html5YouTube {
     if (this.player) {
       this._removeAllEventListeners();
       this._clearEventer();
-      this._stopAllObservings();
+      this._stopAllObservers();
       this._resetProperties();
       this._destroyPlayer();
     }
@@ -256,7 +256,7 @@ export default class Html5YouTube {
    * It can be placed for compat.
    */
   public _initializeEventer () {
-    this.eventer = document.createElement('ytapiplayer');
+    this.eventer = document.createElement('yt-api-player');
     document.body.appendChild(this.eventer);
   }
 
@@ -269,7 +269,7 @@ export default class Html5YouTube {
   }
 
   /**
-   * Setup viode UI.
+   * Setup video UI.
    */
   public _setupVideo (options: IOptions) {
     const videoOptions = this._getVideoOptions(options);
@@ -417,7 +417,7 @@ export default class Html5YouTube {
   public removeEventListener (type: string, listener: (event: Event) => void) {
     const data = this._popListener(type, listener);
     if (data) {
-      this.eventer.removeEventListener(type, data.binded);
+      this.eventer.removeEventListener(type, data.bound);
     }
   }
 
@@ -472,7 +472,7 @@ export default class Html5YouTube {
         if (data) {
           this.removeEventListener(type, data.listener);
           delete data.listener;
-          delete data.binded;
+          delete data.bound;
           events[i] = undefined;
         }
       }
@@ -481,7 +481,7 @@ export default class Html5YouTube {
   }
 
   public _pushListener (type: string, listener: (event: Event) => void) {
-    const binded = listener.bind(this);
+    const bound = listener.bind(this);
 
     let events = this.events[type];
     if (!events) {
@@ -489,11 +489,11 @@ export default class Html5YouTube {
     }
 
     events.push({
-      binded,
+      bound,
       listener,
     });
 
-    return binded;
+    return bound;
   }
 
   public _popListener (type: string, listener: (event: Event) => void) {
@@ -578,7 +578,7 @@ export default class Html5YouTube {
   }
 
   // ----------------------------------------------------------------
-  // Manip
+  // Manipulations
 
   /**
    * Play the video.
@@ -626,7 +626,7 @@ export default class Html5YouTube {
   }
 
   /**
-   * Start observing timeupdate's change.
+   * Start observing currentTime's change.
    */
   public _observeTimeUpdate () {
     this.tmTimeUpdate = window.setInterval(() => {
@@ -682,7 +682,7 @@ export default class Html5YouTube {
   /**
    * @see #destroy
    */
-  public _stopAllObservings () {
+  public _stopAllObservers () {
     clearInterval(this.tmTimeUpdate);
     clearInterval(this.tmVolume);
     clearInterval(this.tmPlaybackRate);
