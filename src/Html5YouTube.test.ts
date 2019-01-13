@@ -1,12 +1,12 @@
-import Html5YouTubeOriginal, { IOptions, PlayerState } from './Html5YouTube';
+import Html5YouTubeOriginal, { PlayerState } from './Html5YouTube';
 
 describe('Html5YouTube', () => {
   class Html5YouTube extends Html5YouTubeOriginal {
-    public buildPlayer (options: IOptions) {
+    public buildPlayer (options: YT.PlayerOptions) {
       this.setupVideo(options);
     }
 
-    public createPlayer (el: HTMLElement, options: YT.PlayerOptions) {
+    public createPlayer (options: YT.PlayerOptions) {
       const ytPlayer: any = {
         cueVideoById: () => undefined,
         destroy: () => undefined,
@@ -20,7 +20,7 @@ describe('Html5YouTube', () => {
       return ytPlayer;
     }
 
-    public getVideoOptions (options: IOptions) {
+    public getVideoOptions (options: YT.PlayerOptions) {
       return super.getVideoOptions(options);
     }
   }
@@ -39,10 +39,7 @@ describe('Html5YouTube', () => {
     elParent.appendChild(elPlayer);
 
     // build an instance
-    player = new Html5YouTube({
-      el: elPlayer,
-      id: videoId,
-    });
+    player = new Html5YouTube(elPlayer, { videoId });
   });
 
   afterEach(() => {
@@ -52,7 +49,7 @@ describe('Html5YouTube', () => {
   describe('Statics', () => {
     describe('interface', () => {
       it('builds new instance', () => {
-        const instance = new Html5YouTube({ el: elPlayer, id: videoId });
+        const instance = new Html5YouTube(elPlayer, { videoId });
         expect(instance instanceof Html5YouTube).toBeTruthy();
       });
     });
@@ -64,10 +61,10 @@ describe('Html5YouTube', () => {
 
       let result;
       const createPlayer = Html5YouTube.prototype.createPlayer;
-      Html5YouTube.prototype.createPlayer = (el, options) => {
+      Html5YouTube.prototype.createPlayer = (options) => {
         result = options.videoId;
       };
-      player = new Html5YouTube({ el: elPlayer, id: videoId });
+      player = new Html5YouTube(elPlayer, { videoId });
       Html5YouTube.prototype.createPlayer = createPlayer;
 
       expect(result).toBe(videoId);
@@ -82,7 +79,7 @@ describe('Html5YouTube', () => {
     describe('video options', () => {
       it('has videoId if ID is specified as a data attribute on the element', () => {
         elPlayer.setAttribute('data-youtube-videoid', videoId);
-        const videoOptions = player.getVideoOptions({ el: elPlayer });
+        const videoOptions = player.getVideoOptions({});
         expect(videoOptions.videoId).toBe(videoId);
       });
 
@@ -90,149 +87,41 @@ describe('Html5YouTube', () => {
         it('uses the value specified in options if specified on the element', () => {
           elPlayer.setAttribute('data-youtube-controls', '1');
           const videoOptions = player.getVideoOptions({
-            controls: 0,
-            el: elPlayer,
+            playerVars: {
+              controls: 0,
+            },
           });
           expect(videoOptions.playerVars.controls).toBe(0);
         });
 
         it('let youtube fallback to default settings if not specified', () => {
           elPlayer.removeAttribute('data-youtube-controls');
-          const videoOptions = player.getVideoOptions({ el: elPlayer });
+          const videoOptions = player.getVideoOptions({});
           expect(videoOptions.playerVars.controls).toBe(undefined);
         });
 
         it('turns setting on if "true" is specified', () => {
           elPlayer.setAttribute('data-youtube-controls', 'true');
-          const videoOptions = player.getVideoOptions({ el: elPlayer });
+          const videoOptions = player.getVideoOptions({});
           expect(videoOptions.playerVars.controls).toBe(1);
         });
 
         it('let youtube fallback to default settings if invalid number like "-1" is specified', () => {
           elPlayer.setAttribute('data-youtube-controls', '-1');
-          const videoOptions = player.getVideoOptions({ el: elPlayer });
+          const videoOptions = player.getVideoOptions({});
           expect(videoOptions.playerVars.controls).toBe(undefined);
         });
 
         it('turns setting off if "false" is specified', () => {
           elPlayer.setAttribute('data-youtube-controls', 'false');
-          const videoOptions = player.getVideoOptions({ el: elPlayer });
+          const videoOptions = player.getVideoOptions({});
           expect(videoOptions.playerVars.controls).toBe(0);
         });
 
         it('accepts strings like "playlist" as valid values', () => {
           elPlayer.setAttribute('data-youtube-listType', 'playlist');
-          const videoOptions = player.getVideoOptions({ el: elPlayer });
+          const videoOptions = player.getVideoOptions({});
           expect(videoOptions.playerVars.listType).toBe('playlist');
-        });
-
-        it('allows youtube playerVars settings as booleans', () => {
-          elPlayer.removeAttribute('data-youtube-controls');
-          const videoOptions = player.getVideoOptions({
-            autohide: false,
-            autoplay: true,
-            cc_load_policy: true,
-            color: 'white',
-            controls: false,
-            disablekb: false,
-            el: elPlayer,
-            enablejsapi: true,
-            end: 23,
-            fs: false,
-            hl: 'en',
-            iv_load_policy: 3,
-            list: 'PLC77007E23FF423C6',
-            listType: 'playlist',
-            loop: false,
-            modestbranding: true,
-            origin: 'localhost',
-            playerapiid: '1234abcd',
-            playlist: '2EEsa_pqGAs,KFstP0C9sVk',
-            playsinline: true,
-            rel: false,
-            showinfo: false,
-          });
-
-          expect(videoOptions.playerVars).toEqual({
-            autohide: 0,
-            autoplay: 1,
-            cc_load_policy: 1,
-            color: 'white',
-            controls: 0,
-            disablekb: 0,
-            enablejsapi: 1,
-            end: 23,
-            fs: 0,
-            hl: 'en',
-            iv_load_policy: 3,
-            list: 'PLC77007E23FF423C6',
-            listType: 'playlist',
-            loop: 0,
-            modestbranding: 1,
-            origin: 'localhost',
-            playerapiid: '1234abcd',
-            playlist: '2EEsa_pqGAs,KFstP0C9sVk',
-            playsinline: 1,
-            rel: 0,
-            showinfo: 0,
-            start: undefined,
-            theme: undefined,
-          });
-        });
-
-        it('allows youtube playerVars settings as numbers', () => {
-          const videoOptions = player.getVideoOptions({
-            autohide: 0,
-            autoplay: 1,
-            cc_load_policy: 1,
-            color: 'white',
-            controls: 0,
-            disablekb: 0,
-            el: elPlayer,
-            enablejsapi: 1,
-            end: 23,
-            fs: 0,
-            hl: 'en',
-            iv_load_policy: 3,
-            list: 'PLC77007E23FF423C6',
-            listType: 'playlist',
-            loop: 0,
-            modestbranding: 1,
-            origin: 'localhost',
-            playerapiid: '1234abcd',
-            playlist: '2EEsa_pqGAs,KFstP0C9sVk',
-            playsinline: 1,
-            rel: 0,
-            showinfo: 0,
-            start: 10,
-            theme: 'light',
-          });
-
-          expect(videoOptions.playerVars).toEqual({
-            autohide: 0,
-            autoplay: 1,
-            cc_load_policy: 1,
-            color: 'white',
-            controls: 0,
-            disablekb: 0,
-            enablejsapi: 1,
-            end: 23,
-            fs: 0,
-            hl: 'en',
-            iv_load_policy: 3,
-            list: 'PLC77007E23FF423C6',
-            listType: 'playlist',
-            loop: 0,
-            modestbranding: 1,
-            origin: 'localhost',
-            playerapiid: '1234abcd',
-            playlist: '2EEsa_pqGAs,KFstP0C9sVk',
-            playsinline: 1,
-            rel: 0,
-            showinfo: 0,
-            start: 10,
-            theme: 'light',
-          });
         });
       });
     });

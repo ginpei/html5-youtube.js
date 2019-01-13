@@ -38,12 +38,6 @@ const ytPlayerVars = [
   'theme',
 ];
 
-export interface IOptions {
-  [key: string]: any; // TODO maybe ytPlayerVars
-  el: HTMLElement;
-  id?: string;
-}
-
 interface IYTEvent extends CustomEvent {
   originalEvent?: any;
   player?: Html5YouTube;
@@ -217,7 +211,11 @@ export default class Html5YouTube {
   /**
    * Initialize the instance own self.
    */
-  public constructor (options: IOptions) {
+  public constructor (protected el: HTMLElement, options: YT.PlayerOptions = {}) {
+    if (!el || !el.getAttribute) {
+      throw new Error('`el` is require.');
+    }
+
     if (!this.player) {
       this.events = {};
       this.resetProperties();
@@ -423,7 +421,7 @@ export default class Html5YouTube {
    * It can be placed for compat.
    * @param {Object} options
    */
-  protected buildPlayer (options: IOptions) {
+  protected buildPlayer (options: YT.PlayerOptions) {
     Html5YouTube.prepareYTScript(() => this.setupVideo(options));
   }
 
@@ -458,9 +456,9 @@ export default class Html5YouTube {
   /**
    * Setup video UI.
    */
-  protected setupVideo (options: IOptions) {
+  protected setupVideo (options: YT.PlayerOptions) {
     const videoOptions = this.getVideoOptions(options);
-    this.player = this.createPlayer(videoOptions.el, {
+    this.player = this.createPlayer({
       events: this.getVideoEvents(),
       height: videoOptions.height,
       playerVars: videoOptions.playerVars,
@@ -470,30 +468,24 @@ export default class Html5YouTube {
   }
 
   // TODO specify return type
-  protected getVideoOptions (options: IOptions) {
-    const el = options && options.el;
-    if (!el || !el.getAttribute) {
-      throw new Error('`options.el` is require.');
-    }
-
+  protected getVideoOptions (options: YT.PlayerOptions) {
     const videoId =
-      options.id || el.getAttribute('data-youtube-videoid') || undefined;
+      options.videoId || this.el.getAttribute('data-youtube-videoid') || undefined;
     const playerVars: { [key: string]: any } = {}; // TODO
     ytPlayerVars.forEach((propName) => {
-      playerVars[propName] = this.getPlayerVarsOption(options, propName);
+      playerVars[propName] = this.getPlayerVarsOption(options.playerVars, propName);
     });
 
     let width;
-    let height = el.clientHeight;
+    let height = this.el.clientHeight;
     if (height) {
-      width = el.clientWidth;
+      width = this.el.clientWidth;
     } else {
       height = 390;
       width = 640;
     }
 
     return {
-      el,
       height,
       playerVars,
       videoId,
@@ -501,7 +493,7 @@ export default class Html5YouTube {
     };
   }
 
-  protected getPlayerVarsOption (options: IOptions, name: string) {
+  protected getPlayerVarsOption (options: YT.PlayerVars = {}, name: string) {
     let value: any;
 
     if (
@@ -510,7 +502,7 @@ export default class Html5YouTube {
     ) {
       value = options[name];
     } else {
-      const attribute = options.el.getAttribute('data-youtube-' + name);
+      const attribute = this.el.getAttribute('data-youtube-' + name);
       value = this.parseDataAttribute(attribute);
     }
     if (options[name] === undefined || options[name] === null) {
@@ -577,8 +569,8 @@ export default class Html5YouTube {
     return events;
   }
 
-  protected createPlayer (el: HTMLElement, options: YT.PlayerOptions) {
-    return new YT.Player(el, options);
+  protected createPlayer (options: YT.PlayerOptions) {
+    return new YT.Player(this.el, options);
   }
 
   // ----------------------------------------------------------------
