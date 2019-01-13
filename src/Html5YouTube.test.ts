@@ -52,7 +52,7 @@ describe('Html5YouTube', () => {
   describe('Statics', () => {
     describe('interface', () => {
       it('builds new instance', () => {
-        const instance = new Html5YouTube({ el:elPlayer, id:videoId });
+        const instance = new Html5YouTube({ el: elPlayer, id: videoId });
         expect(instance instanceof Html5YouTube).toBeTruthy();
       });
     });
@@ -67,7 +67,7 @@ describe('Html5YouTube', () => {
       Html5YouTube.prototype.createPlayer = (el, options) => {
         result = options.videoId;
       };
-      player = new Html5YouTube({ el:elPlayer, id:videoId });
+      player = new Html5YouTube({ el: elPlayer, id: videoId });
       Html5YouTube.prototype.createPlayer = createPlayer;
 
       expect(result).toBe(videoId);
@@ -82,44 +82,47 @@ describe('Html5YouTube', () => {
     describe('video options', () => {
       it('has videoId if ID is specified as a data attribute on the element', () => {
         elPlayer.setAttribute('data-youtube-videoid', videoId);
-        const videoOptions = player.getVideoOptions({ el:elPlayer });
+        const videoOptions = player.getVideoOptions({ el: elPlayer });
         expect(videoOptions.videoId).toBe(videoId);
       });
 
       describe('playerVars settings', () => {
         it('uses the value specified in options if specified on the element', () => {
           elPlayer.setAttribute('data-youtube-controls', '1');
-          const videoOptions = player.getVideoOptions({ el:elPlayer, controls:0 });
+          const videoOptions = player.getVideoOptions({
+            controls: 0,
+            el: elPlayer,
+          });
           expect(videoOptions.playerVars.controls).toBe(0);
         });
 
         it('let youtube fallback to default settings if not specified', () => {
           elPlayer.removeAttribute('data-youtube-controls');
-          const videoOptions = player.getVideoOptions({ el:elPlayer });
+          const videoOptions = player.getVideoOptions({ el: elPlayer });
           expect(videoOptions.playerVars.controls).toBe(undefined);
         });
 
         it('turns setting on if "true" is specified', () => {
           elPlayer.setAttribute('data-youtube-controls', 'true');
-          const videoOptions = player.getVideoOptions({ el:elPlayer });
+          const videoOptions = player.getVideoOptions({ el: elPlayer });
           expect(videoOptions.playerVars.controls).toBe(1);
         });
 
         it('let youtube fallback to default settings if invalid number like "-1" is specified', () => {
           elPlayer.setAttribute('data-youtube-controls', '-1');
-          const videoOptions = player.getVideoOptions({ el:elPlayer });
+          const videoOptions = player.getVideoOptions({ el: elPlayer });
           expect(videoOptions.playerVars.controls).toBe(undefined);
         });
 
         it('turns setting off if "false" is specified', () => {
           elPlayer.setAttribute('data-youtube-controls', 'false');
-          const videoOptions = player.getVideoOptions({ el:elPlayer });
+          const videoOptions = player.getVideoOptions({ el: elPlayer });
           expect(videoOptions.playerVars.controls).toBe(0);
         });
 
         it('accepts strings like "playlist" as valid values', () => {
           elPlayer.setAttribute('data-youtube-listType', 'playlist');
-          const videoOptions = player.getVideoOptions({ el:elPlayer });
+          const videoOptions = player.getVideoOptions({ el: elPlayer });
           expect(videoOptions.playerVars.listType).toBe('playlist');
         });
 
@@ -132,7 +135,7 @@ describe('Html5YouTube', () => {
             color: 'white',
             controls: false,
             disablekb: false,
-            el:elPlayer,
+            el: elPlayer,
             enablejsapi: true,
             end: 23,
             fs: false,
@@ -185,7 +188,7 @@ describe('Html5YouTube', () => {
             color: 'white',
             controls: 0,
             disablekb: 0,
-            el:elPlayer,
+            el: elPlayer,
             enablejsapi: 1,
             end: 23,
             fs: 0,

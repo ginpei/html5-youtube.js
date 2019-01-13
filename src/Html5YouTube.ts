@@ -73,7 +73,9 @@ export default class Html5YouTube {
     //
 
     const status = this.ytStatus;
-    if (status === 0) {  // initial; not started
+    if (status === 0) {
+      // initial; not started
+
       // initialize the callback queue
       const callbacks = this.ytCallbacks;
       callbacks.push(callback);
@@ -93,9 +95,11 @@ export default class Html5YouTube {
 
       // update status
       this.ytStatus = 1;
-    } else if (status === 1) {  // loading; started but not loaded yet
+    } else if (status === 1) {
+      // loading; started but not loaded yet
       this.ytCallbacks.push(callback);
-    } else if (status === 2) {  // ready; script is completely loaded
+    } else if (status === 2) {
+      // ready; script is completely loaded
       callback();
     }
   }
@@ -109,10 +113,15 @@ export default class Html5YouTube {
   public ended = false;
 
   protected eventer = document.createElement('yt-api-player');
-  protected events: { [key: string]: Array<{
-    bound: (event: Event) => void,
-    listener: (event: Event) => void,
-  } | undefined> } = {};
+  protected events: {
+    [key: string]: Array<
+      | {
+          bound: (event: Event) => void;
+          listener: (event: Event) => void;
+        }
+      | undefined
+    >;
+  } = {};
 
   protected unsetVideoId = '';
   protected tmTimeUpdate = 0;
@@ -163,7 +172,7 @@ export default class Html5YouTube {
   }
   public set muted (value) {
     if (this.player) {
-      this.player[value ? 'mute' :'unMute']();
+      this.player[value ? 'mute' : 'unMute']();
     }
   }
   protected vMuted = false;
@@ -467,9 +476,8 @@ export default class Html5YouTube {
       throw new Error('`options.el` is require.');
     }
 
-    const videoId = options.id ||
-      el.getAttribute('data-youtube-videoid') ||
-      undefined;
+    const videoId =
+      options.id || el.getAttribute('data-youtube-videoid') || undefined;
     const playerVars: { [key: string]: any } = {}; // TODO
     ytPlayerVars.forEach((propName) => {
       playerVars[propName] = this.getPlayerVarsOption(options, propName);
@@ -478,7 +486,7 @@ export default class Html5YouTube {
     let width;
     let height = el.clientHeight;
     if (height) {
-      width  = el.clientWidth;
+      width = el.clientWidth;
     } else {
       height = 390;
       width = 640;
@@ -539,7 +547,7 @@ export default class Html5YouTube {
     // NaN is the only value to return false when compared to itself
     const isNaN = (v: any) => v !== v;
 
-    if (typeof(value) === 'string') {
+    if (typeof value === 'string') {
       const toNum = Number(value);
       if (!isNaN(toNum) && typeof toNum === 'number') {
         return Number(value);
