@@ -231,170 +231,6 @@ export default class Html5YouTube {
     }
   }
 
-  /**
-   * Load YouTube API and setup video UI.
-   * It can be placed for compat.
-   * @param {Object} options
-   */
-  public _buildPlayer (options: IOptions) {
-    Html5YouTube.prepareYTScript(() => this._setupVideo(options));
-  }
-
-  /**
-   * @see #destroy
-   */
-  public _destroyPlayer () {
-    if (this.player) {
-      this.player.destroy();
-    }
-    this.player = undefined;
-  }
-
-  /**
-   * YT.Player has add/removeEventListener methods
-   * but they doesn't work correctly
-   * It can be placed for compat.
-   */
-  public _initializeEventer () {
-    this.eventer = document.createElement('yt-api-player');
-    document.body.appendChild(this.eventer);
-  }
-
-  /**
-   * It can be placed for compat.
-   * @see #destroy
-   */
-  public _clearEventer () {
-    document.body.removeChild(this.eventer);
-  }
-
-  /**
-   * Setup video UI.
-   */
-  public _setupVideo (options: IOptions) {
-    const videoOptions = this._getVideoOptions(options);
-    this.player = this._createPlayer(videoOptions.el, {
-      events: this._getVideoEvents(),
-      height: videoOptions.height,
-      playerVars: videoOptions.playerVars,
-      videoId: videoOptions.videoId,
-      width: videoOptions.width,
-    });
-  }
-
-  // TODO specify return type
-  public _getVideoOptions (options: IOptions) {
-    const el = options && options.el;
-    if (!el || !el.getAttribute) {
-      throw new Error('`options.el` is require.');
-    }
-
-    const videoId = options.id ||
-      el.getAttribute('data-youtube-videoid') ||
-      undefined;
-    const playerVars: { [key: string]: any } = {}; // TODO
-    ytPlayerVars.forEach((propName) => {
-      playerVars[propName] = this._getPlayerVarsOption(options, propName);
-    });
-
-    let width;
-    let height = el.clientHeight;
-    if (height) {
-      width  = el.clientWidth;
-    } else {
-      height = 390;
-      width = 640;
-    }
-
-    return {
-      el,
-      height,
-      playerVars,
-      videoId,
-      width,
-    };
-  }
-
-  public _getPlayerVarsOption (options: IOptions, name: string) {
-    let value: any;
-
-    if (
-      name in options &&
-      (options[name] !== undefined || options[name] !== null)
-    ) {
-      value = options[name];
-    } else {
-      const attribute = options.el.getAttribute('data-youtube-' + name);
-      value = this._parseDataAttribute(attribute);
-    }
-    if (options[name] === undefined) {  // or null
-    } else {
-      value = options[name];
-    }
-
-    if (
-      (typeof value === 'number' && value >= 0) ||
-      typeof value === 'string'
-    ) {
-      // OK, nothing to do
-    } else if (typeof value === 'boolean') {
-      // Convert booleans to number
-      value = Number(value);
-    } else {
-      // Let's set the value to nothing
-      // and let the youtube player fallback to defaults
-      value = undefined;
-    }
-
-    return value;
-  }
-
-  /**
-   * Parse data attributes to number or string
-   * @example
-   * this._parseDataAttribute('true') // 1
-   * this._parseDataAttribute('0') // 0
-   * this._parseDataAttribute('2EEsa_pqGAs') // '2EEsa_pqGAs'
-   */
-  // TODO protected
-  public _parseDataAttribute (value: string | any) {
-    // TODO replace with original isNaN
-    // NaN is the only value to return false when compared to itself
-    const isNaN = (v: any) => v !== v;
-
-    if (typeof(value) === 'string') {
-      const toNum = Number(value);
-      if (!isNaN(toNum) && typeof toNum === 'number') {
-        return Number(value);
-      } else if (value === 'true') {
-        return true;
-      } else if (value === 'false') {
-        return false;
-      } else {
-        return value;
-      }
-    }
-
-    // TODO return value always
-  }
-
-  public _getVideoEvents () {
-    const events: { [key: string]: (event: Event) => void } = {
-      onApiChange: (event) => this.onApiChange(event),
-      onError: (event) => this.onError(event),
-      onPlaybackQualityChange: (event) => this.onPlaybackQualityChange(event),
-      onPlaybackRateChange: (event) => this.onPlaybackRateChange(event),
-      onReady: (event) => this.onReady(event),
-      onStateChange: (event) => this.onStateChange(event),
-    };
-
-    return events;
-  }
-
-  public _createPlayer (el: HTMLElement, options: YT.PlayerOptions) {
-    return new YT.Player(el, options);
-  }
-
   // ----------------------------------------------------------------
   // Events
 
@@ -456,58 +292,6 @@ export default class Html5YouTube {
     }
 
     this.eventer.dispatchEvent(event);
-  }
-
-  /**
-   * @see #destroy
-   */
-  public _removeAllEventListeners () {
-    // TODO replace for-in
-    const allEvents = this.events;
-    // tslint:disable-next-line:forin
-    for (const type in allEvents) {
-      const events = allEvents[type];
-      for (let i = 0, l = events.length; i < l; i++) {
-        const data = events[i];
-        if (data) {
-          this.removeEventListener(type, data.listener);
-          delete data.listener;
-          delete data.bound;
-          events[i] = undefined;
-        }
-      }
-      delete allEvents[type];
-    }
-  }
-
-  public _pushListener (type: string, listener: (event: Event) => void) {
-    const bound = listener.bind(this);
-
-    let events = this.events[type];
-    if (!events) {
-      events = this.events[type] = [];
-    }
-
-    events.push({
-      bound,
-      listener,
-    });
-
-    return bound;
-  }
-
-  public _popListener (type: string, listener: (event: Event) => void) {
-    const events = this.events[type];
-    if (events) {
-      for (let i = 0, l = events.length; i < l; i++) {
-        const data = events[i];
-        if (data && data.listener === listener) {
-          events[i] = undefined;
-          return data;
-        }
-      }
-    }
-    return undefined;
   }
 
   public onApiChange (event: Event) {
@@ -619,16 +403,237 @@ export default class Html5YouTube {
   }
 
   // ----------------------------------------------------------------
+
+  /**
+   * Load YouTube API and setup video UI.
+   * It can be placed for compat.
+   * @param {Object} options
+   */
+  protected _buildPlayer (options: IOptions) {
+    Html5YouTube.prepareYTScript(() => this._setupVideo(options));
+  }
+
+  /**
+   * @see #destroy
+   */
+  protected _destroyPlayer () {
+    if (this.player) {
+      this.player.destroy();
+    }
+    this.player = undefined;
+  }
+
+  /**
+   * YT.Player has add/removeEventListener methods
+   * but they doesn't work correctly
+   * It can be placed for compat.
+   */
+  protected _initializeEventer () {
+    this.eventer = document.createElement('yt-api-player');
+    document.body.appendChild(this.eventer);
+  }
+
+  /**
+   * It can be placed for compat.
+   * @see #destroy
+   */
+  protected _clearEventer () {
+    document.body.removeChild(this.eventer);
+  }
+
+  /**
+   * Setup video UI.
+   */
+  protected _setupVideo (options: IOptions) {
+    const videoOptions = this._getVideoOptions(options);
+    this.player = this._createPlayer(videoOptions.el, {
+      events: this._getVideoEvents(),
+      height: videoOptions.height,
+      playerVars: videoOptions.playerVars,
+      videoId: videoOptions.videoId,
+      width: videoOptions.width,
+    });
+  }
+
+  // TODO specify return type
+  protected _getVideoOptions (options: IOptions) {
+    const el = options && options.el;
+    if (!el || !el.getAttribute) {
+      throw new Error('`options.el` is require.');
+    }
+
+    const videoId = options.id ||
+      el.getAttribute('data-youtube-videoid') ||
+      undefined;
+    const playerVars: { [key: string]: any } = {}; // TODO
+    ytPlayerVars.forEach((propName) => {
+      playerVars[propName] = this._getPlayerVarsOption(options, propName);
+    });
+
+    let width;
+    let height = el.clientHeight;
+    if (height) {
+      width  = el.clientWidth;
+    } else {
+      height = 390;
+      width = 640;
+    }
+
+    return {
+      el,
+      height,
+      playerVars,
+      videoId,
+      width,
+    };
+  }
+
+  protected _getPlayerVarsOption (options: IOptions, name: string) {
+    let value: any;
+
+    if (
+      name in options &&
+      (options[name] !== undefined || options[name] !== null)
+    ) {
+      value = options[name];
+    } else {
+      const attribute = options.el.getAttribute('data-youtube-' + name);
+      value = this._parseDataAttribute(attribute);
+    }
+    if (options[name] === undefined) {  // or null
+    } else {
+      value = options[name];
+    }
+
+    if (
+      (typeof value === 'number' && value >= 0) ||
+      typeof value === 'string'
+    ) {
+      // OK, nothing to do
+    } else if (typeof value === 'boolean') {
+      // Convert booleans to number
+      value = Number(value);
+    } else {
+      // Let's set the value to nothing
+      // and let the youtube player fallback to defaults
+      value = undefined;
+    }
+
+    return value;
+  }
+
+  /**
+   * Parse data attributes to number or string
+   * @example
+   * this._parseDataAttribute('true') // 1
+   * this._parseDataAttribute('0') // 0
+   * this._parseDataAttribute('2EEsa_pqGAs') // '2EEsa_pqGAs'
+   */
+  // TODO protected
+  protected _parseDataAttribute (value: string | any) {
+    // TODO replace with original isNaN
+    // NaN is the only value to return false when compared to itself
+    const isNaN = (v: any) => v !== v;
+
+    if (typeof(value) === 'string') {
+      const toNum = Number(value);
+      if (!isNaN(toNum) && typeof toNum === 'number') {
+        return Number(value);
+      } else if (value === 'true') {
+        return true;
+      } else if (value === 'false') {
+        return false;
+      } else {
+        return value;
+      }
+    }
+
+    // TODO return value always
+  }
+
+  protected _getVideoEvents () {
+    const events: { [key: string]: (event: Event) => void } = {
+      onApiChange: (event) => this.onApiChange(event),
+      onError: (event) => this.onError(event),
+      onPlaybackQualityChange: (event) => this.onPlaybackQualityChange(event),
+      onPlaybackRateChange: (event) => this.onPlaybackRateChange(event),
+      onReady: (event) => this.onReady(event),
+      onStateChange: (event) => this.onStateChange(event),
+    };
+
+    return events;
+  }
+
+  protected _createPlayer (el: HTMLElement, options: YT.PlayerOptions) {
+    return new YT.Player(el, options);
+  }
+
+  // ----------------------------------------------------------------
+  // Events
+
+  /**
+   * @see #destroy
+   */
+  protected _removeAllEventListeners () {
+    // TODO replace for-in
+    const allEvents = this.events;
+    // tslint:disable-next-line:forin
+    for (const type in allEvents) {
+      const events = allEvents[type];
+      for (let i = 0, l = events.length; i < l; i++) {
+        const data = events[i];
+        if (data) {
+          this.removeEventListener(type, data.listener);
+          delete data.listener;
+          delete data.bound;
+          events[i] = undefined;
+        }
+      }
+      delete allEvents[type];
+    }
+  }
+
+  protected _pushListener (type: string, listener: (event: Event) => void) {
+    const bound = listener.bind(this);
+
+    let events = this.events[type];
+    if (!events) {
+      events = this.events[type] = [];
+    }
+
+    events.push({
+      bound,
+      listener,
+    });
+
+    return bound;
+  }
+
+  protected _popListener (type: string, listener: (event: Event) => void) {
+    const events = this.events[type];
+    if (events) {
+      for (let i = 0, l = events.length; i < l; i++) {
+        const data = events[i];
+        if (data && data.listener === listener) {
+          events[i] = undefined;
+          return data;
+        }
+      }
+    }
+    return undefined;
+  }
+
+  // ----------------------------------------------------------------
   // Properties
 
-  public _updateMeta () {
+  protected _updateMeta () {
     this.vSrc = this.currentSrc = this.player!.getVideoUrl();
   }
 
   /**
    * Start observing currentTime's change.
    */
-  public _observeTimeUpdate () {
+  protected _observeTimeUpdate () {
     this.tmTimeUpdate = window.setInterval(() => {
       const time = this.player!.getCurrentTime();
       if (time !== this.vCurrentTime) {
@@ -641,7 +646,7 @@ export default class Html5YouTube {
   /**
    * Start observing volume's change.
    */
-  public _observeVolume () {
+  protected _observeVolume () {
     this.tmVolume = window.setInterval(() => {
       const muted = this.player!.isMuted();
       const volume = this.player!.getVolume();
@@ -656,7 +661,7 @@ export default class Html5YouTube {
   /**
    * Start observing playbackRate's change.
    */
-  public _observePlaybackRate () {
+  protected _observePlaybackRate () {
     this.tmPlaybackRate = window.setInterval(() => {
       const playbackRate = this.player!.getPlaybackRate();
       if (playbackRate !== this.vPlaybackRate) {
@@ -669,7 +674,7 @@ export default class Html5YouTube {
   /**
    * Start observing duration's change.
    */
-  public _observeDuration () {
+  protected _observeDuration () {
     this.tmDuration = window.setInterval(() => {
       const duration = this.player!.getDuration() || 0;
       if (duration !== this.duration) {
@@ -682,14 +687,14 @@ export default class Html5YouTube {
   /**
    * @see #destroy
    */
-  public _stopAllObservers () {
+  protected _stopAllObservers () {
     clearInterval(this.tmTimeUpdate);
     clearInterval(this.tmVolume);
     clearInterval(this.tmPlaybackRate);
     clearInterval(this.tmDuration);
   }
 
-  public _resetProperties () {
+  protected _resetProperties () {
     this.currentTime = 0;
     this.volume = 0;
     this.muted = false;

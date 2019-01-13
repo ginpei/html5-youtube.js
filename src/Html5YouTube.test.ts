@@ -19,6 +19,10 @@ describe('Html5YouTube', () => {
       };
       return ytPlayer;
     }
+
+    public _getVideoOptions (options: IOptions) {
+      return super._getVideoOptions(options);
+    }
   }
 
   let player: Html5YouTube;
