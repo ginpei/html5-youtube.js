@@ -2,11 +2,11 @@ import Html5YouTubeOriginal, { IOptions, PlayerState } from './Html5YouTube';
 
 describe('Html5YouTube', () => {
   class Html5YouTube extends Html5YouTubeOriginal {
-    public _buildPlayer (options: IOptions) {
-      this._setupVideo(options);
+    public buildPlayer (options: IOptions) {
+      this.setupVideo(options);
     }
 
-    public _createPlayer (el: HTMLElement, options: YT.PlayerOptions) {
+    public createPlayer (el: HTMLElement, options: YT.PlayerOptions) {
       const ytPlayer: any = {
         cueVideoById: () => undefined,
         destroy: () => undefined,
@@ -20,8 +20,8 @@ describe('Html5YouTube', () => {
       return ytPlayer;
     }
 
-    public _getVideoOptions (options: IOptions) {
-      return super._getVideoOptions(options);
+    public getVideoOptions (options: IOptions) {
+      return super.getVideoOptions(options);
     }
   }
 
@@ -63,12 +63,12 @@ describe('Html5YouTube', () => {
       player.destroy();
 
       let result;
-      const _createPlayer = Html5YouTube.prototype._createPlayer;
-      Html5YouTube.prototype._createPlayer = (el, options) => {
+      const createPlayer = Html5YouTube.prototype.createPlayer;
+      Html5YouTube.prototype.createPlayer = (el, options) => {
         result = options.videoId;
       };
       player = new Html5YouTube({ el:elPlayer, id:videoId });
-      Html5YouTube.prototype._createPlayer = _createPlayer;
+      Html5YouTube.prototype.createPlayer = createPlayer;
 
       expect(result).toBe(videoId);
     });
@@ -82,50 +82,50 @@ describe('Html5YouTube', () => {
     describe('video options', () => {
       it('has videoId if ID is specified as a data attribute on the element', () => {
         elPlayer.setAttribute('data-youtube-videoid', videoId);
-        const videoOptions = player._getVideoOptions({ el:elPlayer });
+        const videoOptions = player.getVideoOptions({ el:elPlayer });
         expect(videoOptions.videoId).toBe(videoId);
       });
 
       describe('playerVars settings', () => {
         it('uses the value specified in options if specified on the element', () => {
           elPlayer.setAttribute('data-youtube-controls', '1');
-          const videoOptions = player._getVideoOptions({ el:elPlayer, controls:0 });
+          const videoOptions = player.getVideoOptions({ el:elPlayer, controls:0 });
           expect(videoOptions.playerVars.controls).toBe(0);
         });
 
         it('let youtube fallback to default settings if not specified', () => {
           elPlayer.removeAttribute('data-youtube-controls');
-          const videoOptions = player._getVideoOptions({ el:elPlayer });
+          const videoOptions = player.getVideoOptions({ el:elPlayer });
           expect(videoOptions.playerVars.controls).toBe(undefined);
         });
 
         it('turns setting on if "true" is specified', () => {
           elPlayer.setAttribute('data-youtube-controls', 'true');
-          const videoOptions = player._getVideoOptions({ el:elPlayer });
+          const videoOptions = player.getVideoOptions({ el:elPlayer });
           expect(videoOptions.playerVars.controls).toBe(1);
         });
 
         it('let youtube fallback to default settings if invalid number like "-1" is specified', () => {
           elPlayer.setAttribute('data-youtube-controls', '-1');
-          const videoOptions = player._getVideoOptions({ el:elPlayer });
+          const videoOptions = player.getVideoOptions({ el:elPlayer });
           expect(videoOptions.playerVars.controls).toBe(undefined);
         });
 
         it('turns setting off if "false" is specified', () => {
           elPlayer.setAttribute('data-youtube-controls', 'false');
-          const videoOptions = player._getVideoOptions({ el:elPlayer });
+          const videoOptions = player.getVideoOptions({ el:elPlayer });
           expect(videoOptions.playerVars.controls).toBe(0);
         });
 
         it('accepts strings like "playlist" as valid values', () => {
           elPlayer.setAttribute('data-youtube-listType', 'playlist');
-          const videoOptions = player._getVideoOptions({ el:elPlayer });
+          const videoOptions = player.getVideoOptions({ el:elPlayer });
           expect(videoOptions.playerVars.listType).toBe('playlist');
         });
 
         it('allows youtube playerVars settings as booleans', () => {
           elPlayer.removeAttribute('data-youtube-controls');
-          const videoOptions = player._getVideoOptions({
+          const videoOptions = player.getVideoOptions({
             autohide: false,
             autoplay: true,
             cc_load_policy: true,
@@ -178,7 +178,7 @@ describe('Html5YouTube', () => {
         });
 
         it('allows youtube playerVars settings as numbers', () => {
-          const videoOptions = player._getVideoOptions({
+          const videoOptions = player.getVideoOptions({
             autohide: 0,
             autoplay: 1,
             cc_load_policy: 1,

@@ -211,10 +211,10 @@ export default class Html5YouTube {
   public constructor (options: IOptions) {
     if (!this.player) {
       this.events = {};
-      this._resetProperties();
+      this.resetProperties();
 
-      this._initializeEventer();
-      this._buildPlayer(options);
+      this.initializeEventer();
+      this.buildPlayer(options);
     }
   }
 
@@ -223,11 +223,11 @@ export default class Html5YouTube {
    */
   public destroy () {
     if (this.player) {
-      this._removeAllEventListeners();
-      this._clearEventer();
-      this._stopAllObservers();
-      this._resetProperties();
-      this._destroyPlayer();
+      this.removeAllEventListeners();
+      this.clearEventer();
+      this.stopAllObservers();
+      this.resetProperties();
+      this.destroyPlayer();
     }
   }
 
@@ -242,7 +242,7 @@ export default class Html5YouTube {
    */
   public addEventListener (type: string, listener: (event: Event) => void) {
     // TODO replace with arrow function
-    const bound = this._pushListener(type, listener);
+    const bound = this.pushListener(type, listener);
     this.eventer.addEventListener(type, bound);
   }
 
@@ -251,7 +251,7 @@ export default class Html5YouTube {
    * @see #addEventListener
    */
   public removeEventListener (type: string, listener: (event: Event) => void) {
-    const data = this._popListener(type, listener);
+    const data = this.popListener(type, listener);
     if (data) {
       this.eventer.removeEventListener(type, data.bound);
     }
@@ -323,11 +323,11 @@ export default class Html5YouTube {
       delete this.unsetVideoId;
     }
 
-    this._updateMeta();
-    this._observeTimeUpdate();
-    this._observeVolume();
-    this._observePlaybackRate();
-    this._observeDuration();
+    this.updateMeta();
+    this.observeTimeUpdate();
+    this.observeVolume();
+    this.observePlaybackRate();
+    this.observeDuration();
     this.trigger('ready', event);
     this.trigger('canplay', event);
     this.trigger('canplaythrough', event); // TODO check if no event here
@@ -355,7 +355,7 @@ export default class Html5YouTube {
     } else if (state === PlayerState.BUFFERING) {
       this.trigger('buffer', event);
     } else if (state === PlayerState.CUED) {
-      this._updateMeta();
+      this.updateMeta();
       this.trigger('canplay', event); // TODO check if no event here
       this.trigger('canplaythrough', event); // TODO check if no event here
     }
@@ -414,14 +414,14 @@ export default class Html5YouTube {
    * It can be placed for compat.
    * @param {Object} options
    */
-  protected _buildPlayer (options: IOptions) {
-    Html5YouTube.prepareYTScript(() => this._setupVideo(options));
+  protected buildPlayer (options: IOptions) {
+    Html5YouTube.prepareYTScript(() => this.setupVideo(options));
   }
 
   /**
    * @see #destroy
    */
-  protected _destroyPlayer () {
+  protected destroyPlayer () {
     if (this.player) {
       this.player.destroy();
     }
@@ -433,7 +433,7 @@ export default class Html5YouTube {
    * but they doesn't work correctly
    * It can be placed for compat.
    */
-  protected _initializeEventer () {
+  protected initializeEventer () {
     this.eventer = document.createElement('yt-api-player');
     document.body.appendChild(this.eventer);
   }
@@ -442,17 +442,17 @@ export default class Html5YouTube {
    * It can be placed for compat.
    * @see #destroy
    */
-  protected _clearEventer () {
+  protected clearEventer () {
     document.body.removeChild(this.eventer);
   }
 
   /**
    * Setup video UI.
    */
-  protected _setupVideo (options: IOptions) {
-    const videoOptions = this._getVideoOptions(options);
-    this.player = this._createPlayer(videoOptions.el, {
-      events: this._getVideoEvents(),
+  protected setupVideo (options: IOptions) {
+    const videoOptions = this.getVideoOptions(options);
+    this.player = this.createPlayer(videoOptions.el, {
+      events: this.getVideoEvents(),
       height: videoOptions.height,
       playerVars: videoOptions.playerVars,
       videoId: videoOptions.videoId,
@@ -461,7 +461,7 @@ export default class Html5YouTube {
   }
 
   // TODO specify return type
-  protected _getVideoOptions (options: IOptions) {
+  protected getVideoOptions (options: IOptions) {
     const el = options && options.el;
     if (!el || !el.getAttribute) {
       throw new Error('`options.el` is require.');
@@ -472,7 +472,7 @@ export default class Html5YouTube {
       undefined;
     const playerVars: { [key: string]: any } = {}; // TODO
     ytPlayerVars.forEach((propName) => {
-      playerVars[propName] = this._getPlayerVarsOption(options, propName);
+      playerVars[propName] = this.getPlayerVarsOption(options, propName);
     });
 
     let width;
@@ -493,7 +493,7 @@ export default class Html5YouTube {
     };
   }
 
-  protected _getPlayerVarsOption (options: IOptions, name: string) {
+  protected getPlayerVarsOption (options: IOptions, name: string) {
     let value: any;
 
     if (
@@ -503,7 +503,7 @@ export default class Html5YouTube {
       value = options[name];
     } else {
       const attribute = options.el.getAttribute('data-youtube-' + name);
-      value = this._parseDataAttribute(attribute);
+      value = this.parseDataAttribute(attribute);
     }
     if (options[name] === undefined) {  // or null
     } else {
@@ -530,12 +530,12 @@ export default class Html5YouTube {
   /**
    * Parse data attributes to number or string
    * @example
-   * this._parseDataAttribute('true') // 1
-   * this._parseDataAttribute('0') // 0
-   * this._parseDataAttribute('2EEsa_pqGAs') // '2EEsa_pqGAs'
+   * this.parseDataAttribute('true') // 1
+   * this.parseDataAttribute('0') // 0
+   * this.parseDataAttribute('2EEsa_pqGAs') // '2EEsa_pqGAs'
    */
   // TODO protected
-  protected _parseDataAttribute (value: string | any) {
+  protected parseDataAttribute (value: string | any) {
     // TODO replace with original isNaN
     // NaN is the only value to return false when compared to itself
     const isNaN = (v: any) => v !== v;
@@ -556,7 +556,7 @@ export default class Html5YouTube {
     // TODO return value always
   }
 
-  protected _getVideoEvents () {
+  protected getVideoEvents () {
     const events: { [key: string]: (event: Event) => void } = {
       onApiChange: (event) => this.onApiChange(event),
       onError: (event) => this.onError(event),
@@ -569,7 +569,7 @@ export default class Html5YouTube {
     return events;
   }
 
-  protected _createPlayer (el: HTMLElement, options: YT.PlayerOptions) {
+  protected createPlayer (el: HTMLElement, options: YT.PlayerOptions) {
     return new YT.Player(el, options);
   }
 
@@ -579,7 +579,7 @@ export default class Html5YouTube {
   /**
    * @see #destroy
    */
-  protected _removeAllEventListeners () {
+  protected removeAllEventListeners () {
     // TODO replace for-in
     const allEvents = this.events;
     // tslint:disable-next-line:forin
@@ -598,7 +598,7 @@ export default class Html5YouTube {
     }
   }
 
-  protected _pushListener (type: string, listener: (event: Event) => void) {
+  protected pushListener (type: string, listener: (event: Event) => void) {
     const bound = listener.bind(this);
 
     let events = this.events[type];
@@ -614,7 +614,7 @@ export default class Html5YouTube {
     return bound;
   }
 
-  protected _popListener (type: string, listener: (event: Event) => void) {
+  protected popListener (type: string, listener: (event: Event) => void) {
     const events = this.events[type];
     if (events) {
       for (let i = 0, l = events.length; i < l; i++) {
@@ -631,14 +631,14 @@ export default class Html5YouTube {
   // ----------------------------------------------------------------
   // Properties
 
-  protected _updateMeta () {
+  protected updateMeta () {
     this.vSrc = this.currentSrc = this.player!.getVideoUrl();
   }
 
   /**
    * Start observing currentTime's change.
    */
-  protected _observeTimeUpdate () {
+  protected observeTimeUpdate () {
     this.tmTimeUpdate = window.setInterval(() => {
       const time = this.player!.getCurrentTime();
       if (time !== this.vCurrentTime) {
@@ -651,7 +651,7 @@ export default class Html5YouTube {
   /**
    * Start observing volume's change.
    */
-  protected _observeVolume () {
+  protected observeVolume () {
     this.tmVolume = window.setInterval(() => {
       const muted = this.player!.isMuted();
       const volume = this.player!.getVolume();
@@ -666,7 +666,7 @@ export default class Html5YouTube {
   /**
    * Start observing playbackRate's change.
    */
-  protected _observePlaybackRate () {
+  protected observePlaybackRate () {
     this.tmPlaybackRate = window.setInterval(() => {
       const playbackRate = this.player!.getPlaybackRate();
       if (playbackRate !== this.vPlaybackRate) {
@@ -679,7 +679,7 @@ export default class Html5YouTube {
   /**
    * Start observing duration's change.
    */
-  protected _observeDuration () {
+  protected observeDuration () {
     this.tmDuration = window.setInterval(() => {
       const duration = this.player!.getDuration() || 0;
       if (duration !== this.duration) {
@@ -692,14 +692,14 @@ export default class Html5YouTube {
   /**
    * @see #destroy
    */
-  protected _stopAllObservers () {
+  protected stopAllObservers () {
     clearInterval(this.tmTimeUpdate);
     clearInterval(this.tmVolume);
     clearInterval(this.tmPlaybackRate);
     clearInterval(this.tmDuration);
   }
 
-  protected _resetProperties () {
+  protected resetProperties () {
     this.currentTime = 0;
     this.volume = 0;
     this.muted = false;
