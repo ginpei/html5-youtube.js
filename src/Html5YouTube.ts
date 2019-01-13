@@ -534,7 +534,6 @@ export default class Html5YouTube {
    * this.parseDataAttribute('0') // 0
    * this.parseDataAttribute('2EEsa_pqGAs') // '2EEsa_pqGAs'
    */
-  // TODO protected
   protected parseDataAttribute (value: string | any) {
     // TODO replace with original isNaN
     // NaN is the only value to return false when compared to itself
