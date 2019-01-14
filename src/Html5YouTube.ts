@@ -1,3 +1,5 @@
+import YtScriptLoader from './YtScriptLoader';
+
 /**
  * These values are used to detect states in onStateChange event.
  * They are same as YouTube API's `YT.PlayerState`.
@@ -52,51 +54,7 @@ export default class Html5YouTube {
   // TODO maybe 1.25 and 1.75 available
   public static availablePlaybackRates = [0.25, 0.5, 1, 1.5, 2];
 
-  protected static ytStatus = 0;
-  protected static ytCallbacks: Array<() => void> = [];
-
-  /**
-   * Load YouTube API script.
-   * @param {Function} callback
-   */
-  protected static prepareYTScript (callback: () => void) {
-    // Status is changed as: initial->loading->ready.
-    // * The callback will run later if initial
-    // * The callback is queued and will run if loading
-    // * The callback run immediately if ready
-    //
-
-    const status = this.ytStatus;
-    if (status === 0) {
-      // initial; not started
-
-      // initialize the callback queue
-      const callbacks = this.ytCallbacks;
-      callbacks.push(callback);
-
-      // load YouTube script
-      const url = 'https://www.youtube.com/iframe_api';
-      const elScript = document.createElement('script');
-      elScript.src = url;
-      document.body.appendChild(elScript);
-
-      // set callbacks
-      window.onYouTubeIframeAPIReady = () => {
-        callbacks.forEach((f) => f());
-        delete this.ytCallbacks;
-        this.ytStatus = 2;
-      };
-
-      // update status
-      this.ytStatus = 1;
-    } else if (status === 1) {
-      // loading; started but not loaded yet
-      this.ytCallbacks.push(callback);
-    } else if (status === 2) {
-      // ready; script is completely loaded
-      callback();
-    }
-  }
+  protected static ytScriptLoader = new YtScriptLoader();
 
   public player: YT.Player | undefined;
 
@@ -422,7 +380,7 @@ export default class Html5YouTube {
    * @param {Object} options
    */
   protected buildPlayer (options: YT.PlayerOptions) {
-    Html5YouTube.prepareYTScript(() => this.setupVideo(options));
+    Html5YouTube.ytScriptLoader.addCallback(() => this.setupVideo(options));
   }
 
   /**
