@@ -35,7 +35,7 @@
 			<br />
 			<label><input class="js-logging" type="checkbox" checked />Log all events in console</label>
 		</div>
-		<script src="../out/Html5YouTube.js"></script>
+		<script src="../out/web/html5-youtube.js"></script>
 		<script>
 (function() {
 	var elPlayer = document.querySelector('.js-player');
@@ -59,7 +59,7 @@
 		this.innerHTML = text;
 	};
 
-	var player = window.player = youtube({ el:elPlayer });
+	var player = window.player = new Html5YouTube(elPlayer);
 
 	player.addEventListener('canplay', function(event) {
 		elVideos.disabled = false;
