@@ -173,26 +173,6 @@ describe('Html5YouTube', () => {
       });
     });
 
-    it('loads the video by specified ID from the beginning', () => {
-      player.destroy();
-
-      let result;
-      const createPlayer = Html5YouTube.prototype.createPlayer;
-      Html5YouTube.prototype.createPlayer = (options) => {
-        result = options.videoId;
-      };
-      player = new Html5YouTube(elPlayer, { videoId: 'video123' });
-      Html5YouTube.prototype.createPlayer = createPlayer;
-
-      expect(result).toBe('video123');
-    });
-
-    describe('instance', () => {
-      it('is an instance', () => {
-        expect(player instanceof Html5YouTube).toBeTruthy();
-      });
-    });
-
     describe('src', () => {
       let videoId2; // find out better name
       beforeEach(() => {
