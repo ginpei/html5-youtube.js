@@ -48,31 +48,31 @@ class Html5YouTube extends Html5YouTubeOriginal {
 describe('Html5YouTube', () => {
   let player: Html5YouTube;
   let elPlayer: HTMLElement;
-  let videoId: string;
 
   beforeEach(() => {
-    // create materials
     elPlayer = document.createElement('div');
-    videoId = '123';
-
-    // build an instance
-    player = new Html5YouTube(elPlayer, { videoId });
   });
 
   afterEach(() => {
-    player.destroy();
+    if (player) {
+      player.destroy();
+    }
   });
 
   describe('Statics', () => {
     describe('interface', () => {
       it('builds new instance', () => {
-        const instance = new Html5YouTube(elPlayer, { videoId });
+        const instance = new Html5YouTube(elPlayer, { videoId: 'video123' });
         expect(instance instanceof Html5YouTube).toBeTruthy();
       });
     });
   });
 
   describe('Constructing', () => {
+    beforeEach(() => {
+      player = new Html5YouTube(elPlayer);
+    });
+
     it('loads the video by specified ID from the beginning', () => {
       player.destroy();
 
@@ -81,10 +81,10 @@ describe('Html5YouTube', () => {
       Html5YouTube.prototype.createPlayer = (options) => {
         result = options.videoId;
       };
-      player = new Html5YouTube(elPlayer, { videoId });
+      player = new Html5YouTube(elPlayer, { videoId: 'video123' });
       Html5YouTube.prototype.createPlayer = createPlayer;
 
-      expect(result).toBe(videoId);
+      expect(result).toBe('video123');
     });
 
     describe('instance', () => {
@@ -95,9 +95,9 @@ describe('Html5YouTube', () => {
 
     describe('video options', () => {
       it('has videoId if ID is specified as a data attribute on the element', () => {
-        elPlayer.setAttribute('data-youtube-videoid', videoId);
+        elPlayer.setAttribute('data-youtube-videoid', 'video123');
         const videoOptions = player.getVideoOptions({});
-        expect(videoOptions.videoId).toBe(videoId);
+        expect(videoOptions.videoId).toBe('video123');
       });
 
       describe('playerVars settings', () => {
@@ -176,6 +176,7 @@ describe('Html5YouTube', () => {
     beforeEach(() => {
         callback1 = jest.fn();
         callback2 = jest.fn();
+        player = new Html5YouTube(elPlayer);
     });
 
     describe('addEventListener()', () => {
