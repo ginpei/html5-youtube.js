@@ -1,3 +1,4 @@
+import * as ee from 'event-emitter';
 import YtScriptLoader from './YtScriptLoader';
 
 /**
@@ -40,12 +41,6 @@ const ytPlayerVars = [
   'theme',
 ];
 
-interface IYTEvent extends CustomEvent {
-  originalEvent?: any;
-  player?: Html5YouTube;
-  playerData?: any;
-}
-
 export default class Html5YouTube {
   /**
    * The definition of available playbackRate values on YouTube API.
@@ -64,16 +59,7 @@ export default class Html5YouTube {
   public paused = false;
   public ended = false;
 
-  protected eventer = document.createElement('yt-api-player');
-  protected events: {
-    [key: string]: Array<
-      | {
-          bound: (event: Event) => void;
-          listener: (event: Event) => void;
-        }
-      | undefined
-    >;
-  } = {};
+  protected eventEmitter = ee();
 
   protected unsetVideoId = '';
   protected tmTimeUpdate = 0;
@@ -175,10 +161,8 @@ export default class Html5YouTube {
     }
 
     if (!this.player) {
-      this.events = {};
       this.resetProperties();
 
-      this.initializeEventer();
       this.buildPlayer(options);
     }
   }
@@ -188,8 +172,6 @@ export default class Html5YouTube {
    */
   public destroy () {
     if (this.player) {
-      this.removeAllEventListeners();
-      this.clearEventer();
       this.stopAllObservers();
       this.resetProperties();
       this.destroyPlayer();
@@ -201,14 +183,13 @@ export default class Html5YouTube {
 
   /**
    * Attach an event handler function.
+   * The `listener` function will be invoked without `this` bindings.
    * @param type A event type like `"play"`, '"timeupdate"` or `"onReady"`.
    * @param listener A function to execute when the event is triggered.
    * @see #removeEventListener
    */
   public addEventListener (type: string, listener: (event: Event) => void) {
-    // TODO replace with arrow function
-    const bound = this.pushListener(type, listener);
-    this.eventer.addEventListener(type, bound);
+    this.eventEmitter.on(type, listener);
   }
 
   /**
@@ -216,10 +197,7 @@ export default class Html5YouTube {
    * @see #addEventListener
    */
   public removeEventListener (type: string, listener: (event: Event) => void) {
-    const data = this.popListener(type, listener);
-    if (data) {
-      this.eventer.removeEventListener(type, data.bound);
-    }
+    this.eventEmitter.off(type, listener);
   }
 
   /**
@@ -241,26 +219,17 @@ export default class Html5YouTube {
   }
 
   /**
-   * TODO remove
    * Trigger an event.
    * It can be placed for compat.
    * @param type A event type like `"play"`, '"timeupdate"` or `"onReady"`.
    */
-  public trigger (type: string, originalEvent?: any) {
-    const event: IYTEvent = document.createEvent('CustomEvent');
-    event.initEvent(type, false, true);
-    event.player = this;
-
-    if (originalEvent) {
-      event.playerData = originalEvent.data;
-      event.originalEvent = originalEvent;
-    }
-
-    this.eventer.dispatchEvent(event);
+  public emit (type: string, ...args: any[]) {
+    this.eventEmitter.emit(type, ...args);
+    return this;
   }
 
   public onApiChange (event: Event) {
-    this.trigger('onApiChange', event);
+    this.emit('onApiChange', event);
   }
 
   /**
@@ -268,20 +237,20 @@ export default class Html5YouTube {
    * @see https://developers.google.com/youtube/iframe_api_reference#onError
    */
   public onError (event: Event) {
-    this.trigger('onError', event);
-    this.trigger('error', event);
+    this.emit('onError', event);
+    this.emit('error', event);
   }
 
   public onPlaybackQualityChange (event: Event) {
-    this.trigger('onPlaybackQualityChange', event);
+    this.emit('onPlaybackQualityChange', event);
   }
 
   public onPlaybackRateChange (event: Event) {
-    this.trigger('onPlaybackRateChange', event);
+    this.emit('onPlaybackRateChange', event);
   }
 
   public onReady (event: Event) {
-    this.trigger('onReady', event);
+    this.emit('onReady', event);
 
     if (this.unsetVideoId) {
       this.player!.cueVideoById(this.unsetVideoId);
@@ -293,36 +262,36 @@ export default class Html5YouTube {
     this.observeVolume();
     this.observePlaybackRate();
     this.observeDuration();
-    this.trigger('ready', event);
-    this.trigger('canplay', event);
-    this.trigger('canplaythrough', event); // TODO check if no event here
+    this.emit('ready', event);
+    this.emit('canplay', event);
+    this.emit('canplaythrough', event); // TODO check if no event here
   }
 
   public onStateChange (event: any) {
-    this.trigger('onStateChange', event);
+    this.emit('onStateChange', event);
 
     const state = event.data;
 
     this.played = this.paused = this.ended = false;
 
     if (state === PlayerState.UNSTARTED) {
-      this.trigger('emptied', event);
+      this.emit('emptied', event);
     } else if (state === PlayerState.ENDED) {
       this.ended = true;
-      this.trigger('ended', event);
+      this.emit('ended', event);
     } else if (state === PlayerState.PLAYING) {
       this.played = true;
-      this.trigger('play', event);
-      this.trigger('playing', event);
+      this.emit('play', event);
+      this.emit('playing', event);
     } else if (state === PlayerState.PAUSED) {
       this.paused = true;
-      this.trigger('pause', event);
+      this.emit('pause', event);
     } else if (state === PlayerState.BUFFERING) {
-      this.trigger('buffer', event);
+      this.emit('buffer', event);
     } else if (state === PlayerState.CUED) {
       this.updateMeta();
-      this.trigger('canplay', event); // TODO check if no event here
-      this.trigger('canplaythrough', event); // TODO check if no event here
+      this.emit('canplay', event); // TODO check if no event here
+      this.emit('canplaythrough', event); // TODO check if no event here
     }
   }
 
@@ -391,24 +360,6 @@ export default class Html5YouTube {
       this.player.destroy();
     }
     this.player = undefined;
-  }
-
-  /**
-   * YT.Player has add/removeEventListener methods
-   * but they doesn't work correctly
-   * It can be placed for compat.
-   */
-  protected initializeEventer () {
-    this.eventer = document.createElement('yt-api-player');
-    document.body.appendChild(this.eventer);
-  }
-
-  /**
-   * It can be placed for compat.
-   * @see #destroy
-   */
-  protected clearEventer () {
-    document.body.removeChild(this.eventer);
   }
 
   /**
@@ -532,61 +483,6 @@ export default class Html5YouTube {
   }
 
   // ----------------------------------------------------------------
-  // Events
-
-  /**
-   * @see #destroy
-   */
-  protected removeAllEventListeners () {
-    // TODO replace for-in
-    const allEvents = this.events;
-    // tslint:disable-next-line:forin
-    for (const type in allEvents) {
-      const events = allEvents[type];
-      for (let i = 0, l = events.length; i < l; i++) {
-        const data = events[i];
-        if (data) {
-          this.removeEventListener(type, data.listener);
-          delete data.listener;
-          delete data.bound;
-          events[i] = undefined;
-        }
-      }
-      delete allEvents[type];
-    }
-  }
-
-  protected pushListener (type: string, listener: (event: Event) => void) {
-    const bound = listener.bind(this);
-
-    let events = this.events[type];
-    if (!events) {
-      events = this.events[type] = [];
-    }
-
-    events.push({
-      bound,
-      listener,
-    });
-
-    return bound;
-  }
-
-  protected popListener (type: string, listener: (event: Event) => void) {
-    const events = this.events[type];
-    if (events) {
-      for (let i = 0, l = events.length; i < l; i++) {
-        const data = events[i];
-        if (data && data.listener === listener) {
-          events[i] = undefined;
-          return data;
-        }
-      }
-    }
-    return undefined;
-  }
-
-  // ----------------------------------------------------------------
   // Properties
 
   protected updateMeta () {
@@ -601,7 +497,7 @@ export default class Html5YouTube {
       const time = this.player!.getCurrentTime();
       if (time !== this.vCurrentTime) {
         this.vCurrentTime = time;
-        this.trigger('timeupdate'); // TODO check if event is required
+        this.emit('timeupdate'); // TODO check if event is required
       }
     }, 100);
   }
@@ -616,7 +512,7 @@ export default class Html5YouTube {
       if (muted !== this.vMuted || volume !== this.vVolume) {
         this.vMuted = muted;
         this.vVolume = volume;
-        this.trigger('volumechange');
+        this.emit('volumechange');
       }
     }, 100);
   }
@@ -629,7 +525,7 @@ export default class Html5YouTube {
       const playbackRate = this.player!.getPlaybackRate();
       if (playbackRate !== this.vPlaybackRate) {
         this.vPlaybackRate = playbackRate;
-        this.trigger('ratechange');
+        this.emit('ratechange');
       }
     }, 100);
   }
@@ -642,7 +538,7 @@ export default class Html5YouTube {
       const duration = this.player!.getDuration() || 0;
       if (duration !== this.duration) {
         this.duration = duration;
-        this.trigger('durationchange');
+        this.emit('durationchange');
       }
     }, 100);
   }

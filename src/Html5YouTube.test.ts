@@ -153,40 +153,49 @@ describe('Html5YouTube', () => {
   });
 
   describe('Events', () => {
-    describe('on()', () => {
-      it('adds a listener', () => {
-        let called = 0;
-        player.on('play', () => {
-          called++;
-        });
-        player.play();
-        expect(called).toBe(1);
-      });
+    let callback1: () => void;
+    let callback2: () => void;
 
-      it('returns its own', () => {
-        expect(player.on('', () => undefined)).toBe(player);
+    beforeEach(() => {
+        callback1 = jest.fn();
+        callback2 = jest.fn();
+    });
+
+    describe('addEventListener()', () => {
+      it('adds listeners', () => {
+        player.addEventListener('play', callback1);
+        player.play();
+        expect(callback1).toBeCalled();
+      });
+    });
+
+    describe('removeEventListener()', () => {
+      it('removes listeners', () => {
+        player.addEventListener('play', callback1);
+        player.removeEventListener('play', callback1);
+        player.play();
+        expect(callback1).not.toBeCalled();
+      });
+    });
+
+    describe('on()', () => {
+      it('adds listeners', () => {
+        player.on('play', callback1);
+        player.on('play', callback2);
+        player.play();
+        expect(callback1).toBeCalled();
+        expect(callback2).toBeCalled();
       });
     });
 
     describe('off()', () => {
-      let called;
-      let listener;
-      beforeEach(() => {
-        called = 0;
-        listener = () => {
-          called++;
-        };
-        player.on('play', listener);
-      });
-
-      it('removes a listener', () => {
-        player.off('play', listener);
+      it('removes listeners', () => {
+        player.on('play', callback1);
+        player.on('play', callback2);
+        player.off('play', callback2);
         player.play();
-        expect(called).toBe(0);
-      });
-
-      it('returns its own', () => {
-        expect(player.off('play', listener)).toBe(player);
+        expect(callback1).toBeCalled();
+        expect(callback2).not.toBeCalled();
       });
     });
   });
