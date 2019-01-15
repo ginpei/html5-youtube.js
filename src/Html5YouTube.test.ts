@@ -7,45 +7,45 @@ declare global {
   }
 }
 
-describe('Html5YouTube', () => {
-  window.YT = {
-    PlayerState: {
-      BUFFERING: 3,
-      CUED: 5,
-      ENDED: 0,
-      PAUSED: 2,
-      PLAYING: 1,
-      UNSTARTED: -1,
-    },
-  };
+window.YT = {
+  PlayerState: {
+    BUFFERING: 3,
+    CUED: 5,
+    ENDED: 0,
+    PAUSED: 2,
+    PLAYING: 1,
+    UNSTARTED: -1,
+  },
+};
 
-  class Html5YouTube extends Html5YouTubeOriginal {
-    public createPlayer (options: YT.PlayerOptions) {
-      const ytPlayer: any = {
-        cueVideoById: () => undefined,
-        destroy: () => undefined,
-        mute: () => undefined,
-        playVideo: () => this.onStateChange({
-          data: YT.PlayerState.PLAYING,
-          target: undefined,
-        }),
-        seekTo: () => undefined,
-        setPlaybackRate: () => undefined,
-        setVolume: () => undefined,
-        unMute: () => undefined,
-      };
-      return ytPlayer;
-    }
-
-    public getVideoOptions (options: YT.PlayerOptions) {
-      return super.getVideoOptions(options);
-    }
-
-    protected buildPlayer (callback: () => void) {
-      callback();
-    }
+class Html5YouTube extends Html5YouTubeOriginal {
+  public createPlayer (options: YT.PlayerOptions) {
+    const ytPlayer: any = {
+      cueVideoById: () => undefined,
+      destroy: () => undefined,
+      mute: () => undefined,
+      playVideo: () => this.onStateChange({
+        data: YT.PlayerState.PLAYING,
+        target: undefined,
+      }),
+      seekTo: () => undefined,
+      setPlaybackRate: () => undefined,
+      setVolume: () => undefined,
+      unMute: () => undefined,
+    };
+    return ytPlayer;
   }
 
+  public getVideoOptions (options: YT.PlayerOptions) {
+    return super.getVideoOptions(options);
+  }
+
+  protected buildPlayer (callback: () => void) {
+    callback();
+  }
+}
+
+describe('Html5YouTube', () => {
   let player: Html5YouTube;
   let elParent: HTMLElement;
   let elPlayer: HTMLElement;
