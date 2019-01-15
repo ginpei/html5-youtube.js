@@ -2,10 +2,6 @@ import Html5YouTubeOriginal, { PlayerState } from './Html5YouTube';
 
 describe('Html5YouTube', () => {
   class Html5YouTube extends Html5YouTubeOriginal {
-    public buildPlayer (options: YT.PlayerOptions) {
-      this.setupVideo(options);
-    }
-
     public createPlayer (options: YT.PlayerOptions) {
       const ytPlayer: any = {
         cueVideoById: () => undefined,
@@ -22,6 +18,10 @@ describe('Html5YouTube', () => {
 
     public getVideoOptions (options: YT.PlayerOptions) {
       return super.getVideoOptions(options);
+    }
+
+    protected buildPlayer (callback: () => void) {
+      callback();
     }
   }
 

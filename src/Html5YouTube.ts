@@ -163,7 +163,7 @@ export default class Html5YouTube {
     if (!this.player) {
       this.resetProperties();
 
-      this.buildPlayer(options);
+      this.buildPlayer(() => this.setupVideo(options));
     }
   }
 
@@ -348,8 +348,11 @@ export default class Html5YouTube {
    * It can be placed for compat.
    * @param {Object} options
    */
-  protected buildPlayer (options: YT.PlayerOptions) {
-    Html5YouTube.ytScriptLoader.addCallback(() => this.setupVideo(options));
+  protected buildPlayer (callback: () => void) {
+    // Promise does not suit here
+    // since wanted to call it back immediately from the second time
+    // (and for tests)
+    Html5YouTube.ytScriptLoader.addCallback(callback);
   }
 
   /**
