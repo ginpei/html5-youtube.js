@@ -1,6 +1,24 @@
-import Html5YouTubeOriginal, { PlayerState } from './Html5YouTube';
+import Html5YouTubeOriginal from './Html5YouTube';
+
+declare global {
+  // tslint:disable-next-line:interface-name
+  interface Window {
+    YT: any;
+  }
+}
 
 describe('Html5YouTube', () => {
+  window.YT = {
+    PlayerState: {
+      BUFFERING: 3,
+      CUED: 5,
+      ENDED: 0,
+      PAUSED: 2,
+      PLAYING: 1,
+      UNSTARTED: -1,
+    },
+  };
+
   class Html5YouTube extends Html5YouTubeOriginal {
     public createPlayer (options: YT.PlayerOptions) {
       const ytPlayer: any = {
@@ -8,7 +26,7 @@ describe('Html5YouTube', () => {
         destroy: () => undefined,
         mute: () => undefined,
         playVideo: () => this.onStateChange({
-          data: PlayerState.PLAYING,
+          data: YT.PlayerState.PLAYING,
           target: undefined,
         }),
         seekTo: () => undefined,

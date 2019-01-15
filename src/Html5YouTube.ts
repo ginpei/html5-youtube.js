@@ -1,20 +1,6 @@
 import * as ee from 'event-emitter';
 import YtScriptLoader from './YtScriptLoader';
 
-/**
- * These values are used to detect states in onStateChange event.
- * They are same as YouTube API's `YT.PlayerState`.
- * @see https://developers.google.com/youtube/iframe_api_reference#onStateChange
- */
-export enum PlayerState {
-  UNSTARTED = -1,
-  ENDED = 0,
-  PLAYING = 1,
-  PAUSED = 2,
-  BUFFERING = 3,
-  CUED = 5,
-}
-
 const ytPlayerVars = [
   'autohide',
   'autoplay',
@@ -273,21 +259,21 @@ export default class Html5YouTube {
 
     this.played = this.paused = this.ended = false;
 
-    if (state === PlayerState.UNSTARTED) {
+    if (state === YT.PlayerState.UNSTARTED) {
       this.emit('emptied', event);
-    } else if (state === PlayerState.ENDED) {
+    } else if (state === YT.PlayerState.ENDED) {
       this.ended = true;
       this.emit('ended', event);
-    } else if (state === PlayerState.PLAYING) {
+    } else if (state === YT.PlayerState.PLAYING) {
       this.played = true;
       this.emit('play', event);
       this.emit('playing', event);
-    } else if (state === PlayerState.PAUSED) {
+    } else if (state === YT.PlayerState.PAUSED) {
       this.paused = true;
       this.emit('pause', event);
-    } else if (state === PlayerState.BUFFERING) {
+    } else if (state === YT.PlayerState.BUFFERING) {
       this.emit('buffer', event);
-    } else if (state === PlayerState.CUED) {
+    } else if (state === YT.PlayerState.CUED) {
       this.updateMeta();
       this.emit('canplay', event); // TODO check if no event here
       this.emit('canplaythrough', event); // TODO check if no event here

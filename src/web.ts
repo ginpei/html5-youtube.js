@@ -1,4 +1,4 @@
-import Html5YouTube, { PlayerState } from './Html5YouTube';
+import Html5YouTube from './Html5YouTube';
 
 declare global {
   // tslint:disable-next-line:interface-name
@@ -8,4 +8,3 @@ declare global {
 }
 
 window.Html5YouTube = Html5YouTube;
-window.Html5YouTube.PlayerState = PlayerState;
