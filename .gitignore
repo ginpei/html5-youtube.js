@@ -2,3 +2,4 @@
 node_modules
 examples/video.mp4
 out
+coverage
