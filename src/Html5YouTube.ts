@@ -228,7 +228,7 @@ export default class Html5YouTube {
     return this;
   }
 
-  public onApiChange (event: Event) {
+  public onApiChange (event: YT.PlayerEvent) {
     this.emit('onApiChange', event);
   }
 
@@ -236,20 +236,20 @@ export default class Html5YouTube {
    * @param {Number} event.playerData The error ID.
    * @see https://developers.google.com/youtube/iframe_api_reference#onError
    */
-  public onError (event: Event) {
+  public onError (event: YT.OnErrorEvent) {
     this.emit('onError', event);
     this.emit('error', event);
   }
 
-  public onPlaybackQualityChange (event: Event) {
+  public onPlaybackQualityChange (event: YT.OnPlaybackQualityChangeEvent) {
     this.emit('onPlaybackQualityChange', event);
   }
 
-  public onPlaybackRateChange (event: Event) {
+  public onPlaybackRateChange (event: YT.OnPlaybackRateChangeEvent) {
     this.emit('onPlaybackRateChange', event);
   }
 
-  public onReady (event: Event) {
+  public onReady (event: YT.PlayerEvent) {
     this.emit('onReady', event);
 
     if (this.unsetVideoId) {
@@ -267,7 +267,7 @@ export default class Html5YouTube {
     this.emit('canplaythrough', event); // TODO check if no event here
   }
 
-  public onStateChange (event: any) {
+  public onStateChange (event: YT.OnStateChangeEvent) {
     this.emit('onStateChange', event);
 
     const state = event.data;
@@ -469,7 +469,7 @@ export default class Html5YouTube {
   }
 
   protected getVideoEvents () {
-    const events: { [key: string]: (event: Event) => void } = {
+    const events: { [key: string]: (event: any) => void } = {
       onApiChange: (event) => this.onApiChange(event),
       onError: (event) => this.onError(event),
       onPlaybackQualityChange: (event) => this.onPlaybackQualityChange(event),

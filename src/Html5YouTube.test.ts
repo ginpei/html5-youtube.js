@@ -7,7 +7,10 @@ describe('Html5YouTube', () => {
         cueVideoById: () => undefined,
         destroy: () => undefined,
         mute: () => undefined,
-        playVideo: () => this.onStateChange({ data: PlayerState.PLAYING }),
+        playVideo: () => this.onStateChange({
+          data: PlayerState.PLAYING,
+          target: undefined,
+        }),
         seekTo: () => undefined,
         setPlaybackRate: () => undefined,
         setVolume: () => undefined,
