@@ -1,32 +1,6 @@
 import * as ee from 'event-emitter';
 import YtScriptLoader from './YtScriptLoader';
 
-const ytPlayerVars = [
-  'autohide',
-  'autoplay',
-  'cc_load_policy',
-  'color',
-  'controls',
-  'disablekb',
-  'enablejsapi',
-  'end',
-  'fs',
-  'hl',
-  'iv_load_policy',
-  'list',
-  'listType',
-  'loop',
-  'modestbranding',
-  'origin',
-  'playerapiid',
-  'playlist',
-  'playsinline',
-  'rel',
-  'showinfo',
-  'start',
-  'theme',
-];
-
 export default class Html5YouTube {
   /**
    * The definition of available playbackRate values on YouTube API.
@@ -149,7 +123,10 @@ export default class Html5YouTube {
     if (!this.player) {
       this.resetProperties();
 
-      this.buildPlayer(() => this.setupVideo(options));
+      this.loadYtScript(() => {
+        const combinedOptions = this.assembleOptions(options);
+        this.player = this.createPlayer(combinedOptions);
+      });
     }
   }
 
@@ -329,10 +306,9 @@ export default class Html5YouTube {
   // Constructing
 
   /**
-   * Load YouTube API and setup video UI.
-   * @param {Object} options
+   * Load YouTube API.
    */
-  protected buildPlayer (callback: () => void) {
+  protected loadYtScript (callback: () => void) {
     // Promise does not suit here
     // since wanted to call it back immediately from the second time
     // (and for tests)
@@ -349,111 +325,43 @@ export default class Html5YouTube {
     this.player = undefined;
   }
 
-  /**
-   * Setup video UI.
-   */
-  protected setupVideo (options: YT.PlayerOptions) {
-    const videoOptions = this.getVideoOptions(options);
-    this.player = this.createPlayer({
-      events: this.getVideoEvents(),
-      height: videoOptions.height,
-      playerVars: videoOptions.playerVars,
-      videoId: videoOptions.videoId,
-      width: videoOptions.width,
-    });
-  }
-
-  // TODO specify return type
-  protected getVideoOptions (options: YT.PlayerOptions) {
+  protected assembleOptions (options: YT.PlayerOptions) {
     const videoId =
-      options.videoId || this.el.getAttribute('data-youtube-videoid') || undefined;
-    const playerVars: { [key: string]: any } = {}; // TODO
-    ytPlayerVars.forEach((propName) => {
-      playerVars[propName] = this.getPlayerVarsOption(options.playerVars, propName);
-    });
+      options.videoId || this.el.getAttribute('data-youtube-videoid');
 
-    let width;
-    let height = this.el.clientHeight;
-    if (height) {
-      width = this.el.clientWidth;
-    } else {
-      height = 390;
-      width = 640;
-    }
+    const size = this.findVideoSize(options);
+    const events = this.getVideoEvents();
 
-    return {
-      height,
-      playerVars,
-      videoId,
-      width,
+    const json = this.el.getAttribute('data-youtube-playerVars');
+    const playerVars: YT.PlayerVars = {
+      ...(json ? JSON.parse(json) : {}),
+      ...options.playerVars,
     };
+
+    const combined: YT.PlayerOptions = {
+      videoId,
+      ...size,
+      ...options,
+      events,
+      playerVars,
+    };
+    return combined;
   }
 
-  protected getPlayerVarsOption (options: YT.PlayerVars = {}, name: string) {
-    let value: any;
-
-    if (
-      name in options &&
-      (options[name] !== undefined || options[name] !== null)
-    ) {
-      value = options[name];
-    } else {
-      const attribute = this.el.getAttribute('data-youtube-' + name);
-      value = this.parseDataAttribute(attribute);
-    }
-    if (options[name] === undefined || options[name] === null) {
-      // do nothing
-    } else {
-      value = options[name];
+  protected findVideoSize (options: YT.PlayerOptions) {
+    if (options.width || options.height) {
+      return undefined;
     }
 
-    if (
-      (typeof value === 'number' && value >= 0) ||
-      typeof value === 'string'
-    ) {
-      // OK, nothing to do
-    } else if (typeof value === 'boolean') {
-      // Convert booleans to number
-      value = Number(value);
-    } else {
-      // Let's set the value to nothing
-      // and let the youtube player fallback to defaults
-      value = undefined;
-    }
-
-    return value;
-  }
-
-  /**
-   * Parse data attributes to number or string
-   * @example
-   * this.parseDataAttribute('true') // 1
-   * this.parseDataAttribute('0') // 0
-   * this.parseDataAttribute('2EEsa_pqGAs') // '2EEsa_pqGAs'
-   */
-  protected parseDataAttribute (value: string | any) {
-    // TODO replace with original isNaN
-    // NaN is the only value to return false when compared to itself
-    const isNaN = (v: any) => v !== v;
-
-    if (typeof value === 'string') {
-      const toNum = Number(value);
-      if (!isNaN(toNum) && typeof toNum === 'number') {
-        return Number(value);
-      } else if (value === 'true') {
-        return true;
-      } else if (value === 'false') {
-        return false;
-      } else {
-        return value;
-      }
-    }
-
-    // TODO return value always
+    const { clientHeight } = this.el;
+    const size = clientHeight > 0
+      ? { height: clientHeight, width: this.el.clientWidth }
+      : undefined;
+    return size;
   }
 
   protected getVideoEvents () {
-    const events: { [key: string]: (event: any) => void } = {
+    const events: YT.Events = {
       onApiChange: (event) => this.onApiChange(event),
       onError: (event) => this.onError(event),
       onPlaybackQualityChange: (event) => this.onPlaybackQualityChange(event),
@@ -465,6 +373,9 @@ export default class Html5YouTube {
     return events;
   }
 
+  /**
+   * Create YouTube player.
+   */
   protected createPlayer (options: YT.PlayerOptions) {
     return new YT.Player(this.el, options);
   }

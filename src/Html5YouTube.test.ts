@@ -36,11 +36,7 @@ class Html5YouTube extends Html5YouTubeOriginal {
     return ytPlayer;
   }
 
-  public getVideoOptions (options: YT.PlayerOptions) {
-    return super.getVideoOptions(options);
-  }
-
-  protected buildPlayer (callback: () => void) {
+  protected loadYtScript (callback: () => void) {
     callback();
   }
 }
@@ -73,6 +69,110 @@ describe('Html5YouTube', () => {
       player = new Html5YouTube(elPlayer);
     });
 
+    describe('options', () => {
+      let createPlayer: jest.SpyInstance<(options: YT.PlayerOptions) => any>;
+
+      beforeEach(() => {
+        createPlayer = jest.spyOn(Html5YouTube.prototype, 'createPlayer');
+      });
+
+      afterEach(() => {
+        createPlayer.mockRestore();
+      });
+
+      describe('video ID', () => {
+        beforeEach(() => {
+          elPlayer.setAttribute('data-youtube-videoId', 'video123');
+        });
+
+        it('picks it up from HTML', () => {
+          player = new Html5YouTube(elPlayer);
+          const options: YT.PlayerOptions = createPlayer.mock.calls[0][0];
+          expect(options.videoId).toBe('video123');
+        });
+
+        it('uses given options over attribute in HTML', () => {
+          player = new Html5YouTube(elPlayer, { videoId: 'video999' });
+          const options: YT.PlayerOptions = createPlayer.mock.calls[0][0];
+          expect(options.videoId).toBe('video999');
+        });
+      });
+
+      describe('size', () => {
+        function setSize (el: HTMLElement, size: { height: number, width: number }) {
+          Object.defineProperty(el, 'clientWidth', { value: size.width });
+          Object.defineProperty(el, 'clientHeight', { value: size.height });
+        }
+
+        it('uses element size', () => {
+          setSize(elPlayer, { height: 111, width: 222 });
+
+          player = new Html5YouTube(elPlayer);
+          const options: YT.PlayerOptions = createPlayer.mock.calls[0][0];
+          expect(options.height).toBe(111);
+          expect(options.width).toBe(222);
+        });
+
+        it('respects given options', () => {
+          setSize(elPlayer, { height: 111, width: 222 });
+
+          player = new Html5YouTube(elPlayer, { height: 333, width: 444 });
+          const options: YT.PlayerOptions = createPlayer.mock.calls[0][0];
+          expect(options.height).toBe(333);
+          expect(options.width).toBe(444);
+        });
+
+        it('if height is 0, considers no size is set', () => {
+          setSize(elPlayer, { height: 0, width: 222 });
+
+          player = new Html5YouTube(elPlayer);
+          const options: YT.PlayerOptions = createPlayer.mock.calls[0][0];
+          expect('height' in options).toBeFalsy();
+          expect('width' in options).toBeFalsy();
+        });
+      });
+
+      describe('playerVars', () => {
+        it('sets empty if nothing given', () => {
+          player = new Html5YouTube(elPlayer);
+          const options: YT.PlayerOptions = createPlayer.mock.calls[0][0];
+          expect(options.playerVars).toEqual({});
+        });
+
+        it('picks them up from HTML attribute', () => {
+          elPlayer.setAttribute('data-youtube-playerVars', JSON.stringify({
+            autohide: 1,
+            cc_load_policy: 2,
+          } as YT.PlayerVars));
+
+          player = new Html5YouTube(elPlayer);
+          const options: YT.PlayerOptions = createPlayer.mock.calls[0][0];
+          expect(options.playerVars).toEqual({
+            autohide: 1,
+            cc_load_policy: 2,
+          });
+        });
+
+        it('merges given options with HTML attribute', () => {
+          elPlayer.setAttribute('data-youtube-playerVars', JSON.stringify({
+            autohide: 1,
+            cc_load_policy: 2,
+          } as YT.PlayerVars));
+
+          player = new Html5YouTube(elPlayer, { playerVars: {
+            cc_load_policy: 3,
+            color: 'red',
+          } });
+          const options: YT.PlayerOptions = createPlayer.mock.calls[0][0];
+          expect(options.playerVars).toEqual({
+            autohide: 1, // from attr
+            cc_load_policy: 3, // overwritten
+            color: 'red', // from options
+          });
+        });
+      });
+    });
+
     it('loads the video by specified ID from the beginning', () => {
       player.destroy();
 
@@ -90,56 +190,6 @@ describe('Html5YouTube', () => {
     describe('instance', () => {
       it('is an instance', () => {
         expect(player instanceof Html5YouTube).toBeTruthy();
-      });
-    });
-
-    describe('video options', () => {
-      it('has videoId if ID is specified as a data attribute on the element', () => {
-        elPlayer.setAttribute('data-youtube-videoid', 'video123');
-        const videoOptions = player.getVideoOptions({});
-        expect(videoOptions.videoId).toBe('video123');
-      });
-
-      describe('playerVars settings', () => {
-        it('uses the value specified in options if specified on the element', () => {
-          elPlayer.setAttribute('data-youtube-controls', '1');
-          const videoOptions = player.getVideoOptions({
-            playerVars: {
-              controls: 0,
-            },
-          });
-          expect(videoOptions.playerVars.controls).toBe(0);
-        });
-
-        it('let youtube fallback to default settings if not specified', () => {
-          elPlayer.removeAttribute('data-youtube-controls');
-          const videoOptions = player.getVideoOptions({});
-          expect(videoOptions.playerVars.controls).toBe(undefined);
-        });
-
-        it('turns setting on if "true" is specified', () => {
-          elPlayer.setAttribute('data-youtube-controls', 'true');
-          const videoOptions = player.getVideoOptions({});
-          expect(videoOptions.playerVars.controls).toBe(1);
-        });
-
-        it('let youtube fallback to default settings if invalid number like "-1" is specified', () => {
-          elPlayer.setAttribute('data-youtube-controls', '-1');
-          const videoOptions = player.getVideoOptions({});
-          expect(videoOptions.playerVars.controls).toBe(undefined);
-        });
-
-        it('turns setting off if "false" is specified', () => {
-          elPlayer.setAttribute('data-youtube-controls', 'false');
-          const videoOptions = player.getVideoOptions({});
-          expect(videoOptions.playerVars.controls).toBe(0);
-        });
-
-        it('accepts strings like "playlist" as valid values', () => {
-          elPlayer.setAttribute('data-youtube-listType', 'playlist');
-          const videoOptions = player.getVideoOptions({});
-          expect(videoOptions.playerVars.listType).toBe('playlist');
-        });
       });
     });
 
