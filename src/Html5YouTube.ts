@@ -220,7 +220,6 @@ export default class Html5YouTube {
 
   /**
    * Trigger an event.
-   * It can be placed for compat.
    * @param type A event type like `"play"`, '"timeupdate"` or `"onReady"`.
    */
   public emit (type: string, ...args: any[]) {
@@ -345,7 +344,6 @@ export default class Html5YouTube {
 
   /**
    * Load YouTube API and setup video UI.
-   * It can be placed for compat.
    * @param {Object} options
    */
   protected buildPlayer (callback: () => void) {
