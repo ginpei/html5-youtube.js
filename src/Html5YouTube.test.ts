@@ -47,17 +47,13 @@ class Html5YouTube extends Html5YouTubeOriginal {
 
 describe('Html5YouTube', () => {
   let player: Html5YouTube;
-  let elParent: HTMLElement;
   let elPlayer: HTMLElement;
   let videoId: string;
 
   beforeEach(() => {
     // create materials
-    elParent = document.createElement('div');
     elPlayer = document.createElement('div');
     videoId = '123';
-
-    elParent.appendChild(elPlayer);
 
     // build an instance
     player = new Html5YouTube(elPlayer, { videoId });
