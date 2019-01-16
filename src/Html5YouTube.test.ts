@@ -96,6 +96,11 @@ describe('Html5YouTube', () => {
           const options: YT.PlayerOptions = createPlayer.mock.calls[0][0];
           expect(options.videoId).toBe('video999');
         });
+
+        it('applies to the property', () => {
+          player = new Html5YouTube(elPlayer);
+          expect(player.videoId).toBe('video123');
+        });
       });
 
       describe('size', () => {
