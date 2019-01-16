@@ -92,22 +92,33 @@ export default class Html5YouTube {
   protected vPlaybackRate = 1;
 
   /**
-   * Returns the address of the current media resource.
-   * Can be set, to change the video URL.
-   * @type number
+   * The video URL in YouTube.com.
    */
   public get src () {
     return this.vSrc;
   }
   public set src (value) {
+    const videoId: string = this.parseVideoUrl(value).v;
+    this.vSrc = value;
     if (this.player) {
-      this.player.cueVideoById(value);
+      this.player.cueVideoById(videoId);
     } else {
       // TODO check if this is OK
-      this.unsetVideoId = value;
+      this.unsetVideoId = videoId;
     }
   }
   protected vSrc = '';
+
+  /**
+   * The ID of the video.
+   */
+  public get videoId () {
+    const videoId: string = this.parseVideoUrl(this.vSrc).v;
+    return videoId;
+  }
+  public set videoId (value) {
+    this.src = `https://www.youtube.com/watch?v=${value}`;
+  }
 
   // ----------------------------------------------------------------
   // Constructing
@@ -126,6 +137,8 @@ export default class Html5YouTube {
       this.loadYtScript(() => {
         const combinedOptions = this.assembleOptions(options);
         this.player = this.createPlayer(combinedOptions);
+
+        this.videoId = combinedOptions.videoId;
       });
     }
   }
@@ -462,5 +475,30 @@ export default class Html5YouTube {
     this.played = false;
     this.paused = false;
     this.ended = false;
+  }
+
+  // ----------------------------------------------------------------
+  // Utilities
+
+  protected parseVideoUrl (url: string): { [key: string]: any } {
+    const m1 = url.match(/^https?:\/\/www.youtube.com\/v\/([^&\/\?]*)(?:\?.*)?$/);
+    if (m1) {
+      return { v: m1[1] };
+    }
+
+    const m2 = url.match(/^https?:\/\/www.youtube.com\/watch\?(.*)$/);
+    if (m2) {
+      const sAllParams = m2[1];
+      const params = sAllParams
+        .split('&')
+        .reduce((acc, sPair) => {
+          const [key, value] = sPair.split('=');
+          acc[key] = value;
+          return acc;
+        }, {});
+      return params;
+    }
+
+    return {};
   }
 }
