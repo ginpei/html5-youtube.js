@@ -3,7 +3,7 @@
     "module": "commonjs",
     "target": "es6",
     "outDir": "out",
-    "declaration": true,
+    "declaration": false, // set in CLI option to avoid web's
     "lib": [
       "es6",
       "dom"
@@ -22,7 +22,6 @@
     "**/*.test.*",
     "node_modules",
     "out",
-    "**/test.ts",
-    "**/web.ts"
+    "**/web/*"
   ]
 }

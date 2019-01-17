@@ -29,7 +29,7 @@
   "scripts": {
     "start": "npm test",
     "dev": "npm test -- --watch",
-    "build": "rm -rf out && tsc && webpack --config webpack.dev.js",
+    "build": "rm -rf out && tsc --declaration && webpack --config webpack.dev.js",
     "build-prod": "npm run build && webpack --config webpack.prod.js",
     "minify": "uglifyjs -c -m --comments \"/@license/\" -- html5-youtube.js > html5-youtube.min.js && uglifyjs -c -m --comments \"/@license/\" -- html5-youtube.compat.js > html5-youtube.compat.min.js",
     "test": "jest",

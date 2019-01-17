@@ -3,7 +3,7 @@ const path = require('path');
 module.exports = {
   output: {
     filename: '[name].js',
-    path: path.resolve(__dirname, 'out')
+    path: path.resolve(__dirname, 'out/web')
   },
   module: {
     rules: [
