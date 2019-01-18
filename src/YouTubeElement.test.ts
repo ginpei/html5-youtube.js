@@ -206,7 +206,7 @@ describe('YouTubeElement', () => {
         ) => void>;
 
         beforeEach(() => {
-          cueVideoById = jest.spyOn(youtube.player, 'cueVideoById');
+          cueVideoById = jest.spyOn(youtube.player!, 'cueVideoById');
         });
 
         it('general URL', () => {
@@ -275,7 +275,7 @@ describe('YouTubeElement', () => {
       });
 
       it('loads new video', () => {
-        const cueVideoById = jest.spyOn(youtube.player, 'cueVideoById');
+        const cueVideoById = jest.spyOn(youtube.player!, 'cueVideoById');
         youtube.videoId = 'video22';
         expect(cueVideoById).toBeCalledWith('video22');
       });

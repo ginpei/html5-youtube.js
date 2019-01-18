@@ -31,8 +31,8 @@ describe('YtScriptLoader', () => {
   });
 
   describe('callbacks', () => {
-    let callback1;
-    let callback2;
+    let callback1: jest.Mock<{}>;
+    let callback2: jest.Mock<{}>;
 
     beforeEach(() => {
       loader = new YtScriptLoader();
@@ -51,14 +51,14 @@ describe('YtScriptLoader', () => {
     });
 
     it('calls back all callback functions', () => {
-      window.onYouTubeIframeAPIReady();
+      window.onYouTubeIframeAPIReady!();
 
-      expect(callback1).toBeCalled();
-      expect(callback2).toBeCalled();
+      expect(callback1!).toBeCalled();
+      expect(callback2!).toBeCalled();
     });
 
     it('calls back immediately if it has been loaded', () => {
-      window.onYouTubeIframeAPIReady();
+      window.onYouTubeIframeAPIReady!();
 
       const callback3 = jest.fn();
       loader.addCallback(callback3);

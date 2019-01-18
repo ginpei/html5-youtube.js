@@ -8,7 +8,8 @@ class Html5YouTube extends Html5YouTubeOriginal {
       mute: () => undefined,
       playVideo: () => this.onStateChange({
         data: YT.PlayerState.PLAYING,
-        target: undefined,
+        target: {} as YT.Player,
+        type: 'onStateChange',
       }),
       seekTo: () => undefined,
       setPlaybackRate: () => undefined,
