@@ -14,8 +14,6 @@
     "@types/event-emitter": "^0.3.3",
     "@types/jest": "^23.3.12",
     "@types/youtube": "0.0.35",
-    "clean-webpack-plugin": "^1.0.0",
-    "html-webpack-plugin": "^3.2.0",
     "jest": "^23.6.0",
     "ts-jest": "^23.10.5",
     "ts-loader": "^5.3.3",
@@ -23,7 +21,6 @@
     "typescript": "^3.2.2",
     "webpack": "^4.28.3",
     "webpack-cli": "^3.2.0",
-    "webpack-dev-server": "^3.1.14",
     "webpack-merge": "^4.2.1"
   },
   "scripts": {
