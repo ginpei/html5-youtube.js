@@ -1,10 +1,3 @@
-declare global {
-  // tslint:disable-next-line:interface-name
-  interface Window {
-    onYouTubeIframeAPIReady: () => void;
-  }
-}
-
 enum YtScriptStatus {
   initial,
   loading,

@@ -56,7 +56,7 @@ export default class YouTubeElement extends EventEmittable {
         const combinedOptions = this.assembleOptions(options);
         this.player = this.createPlayer(combinedOptions);
 
-        this.videoId = combinedOptions.videoId;
+        this.videoId = combinedOptions.videoId || '';
       });
     }
   }
@@ -95,7 +95,7 @@ export default class YouTubeElement extends EventEmittable {
 
   protected assembleOptions (options: YT.PlayerOptions) {
     const videoId =
-      options.videoId || this.el.getAttribute('data-youtube-videoid');
+      options.videoId || this.el.getAttribute('data-youtube-videoid') || '';
 
     const size = this.findVideoSize(options);
 
@@ -151,7 +151,7 @@ export default class YouTubeElement extends EventEmittable {
           const [key, value] = sPair.split('=');
           acc[key] = value;
           return acc;
-        }, {});
+        }, {} as { [key: string]: any });
       return params;
     }
 

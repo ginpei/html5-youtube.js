@@ -1,3 +1,3 @@
 interface Window {
-  onYouTubeIframeAPIReady: () => void;
+  onYouTubeIframeAPIReady: (() => void) | undefined;
 }
