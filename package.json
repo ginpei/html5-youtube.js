@@ -24,13 +24,11 @@
     "webpack-merge": "^4.2.1"
   },
   "scripts": {
-    "start": "npm test",
-    "dev": "npm test -- --watch",
+    "start": "npm test -- --watch",
     "build": "rm -rf out && tsc --declaration && webpack --config webpack.dev.js",
     "build-prod": "npm run build && webpack --config webpack.prod.js",
-    "minify": "uglifyjs -c -m --comments \"/@license/\" -- html5-youtube.js > html5-youtube.min.js && uglifyjs -c -m --comments \"/@license/\" -- html5-youtube.compat.js > html5-youtube.compat.min.js",
     "test": "jest",
-    "download-video": "curl -o examples/video.mp4 http://www.html5rocks.com/en/tutorials/video/basics/Chrome_ImF.mp4"
+    "download-video": "curl -o examples/video.mp4 https://www.html5rocks.com/en/tutorials/video/basics/Chrome_ImF.mp4"
   },
   "repository": {
     "type": "git",
