@@ -76,6 +76,9 @@ export default class Html5YouTube extends YouTubeElement {
   }
   protected vPlaybackRate = 1;
 
+  // ----------------------------------------------------------------
+  // Constructor
+
   public constructor (protected el: HTMLElement, options: YT.PlayerOptions = {}) {
     super(el, options);
     this.resetProperties();
