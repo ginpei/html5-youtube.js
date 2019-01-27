@@ -255,47 +255,47 @@ export default class Html5YouTube extends YouTubeElement {
       }
 
       this.reflectPlayerValue(
-        'timeupdate',
-        player.getCurrentTime(),
         this.vCurrentTime,
+        player.getCurrentTime(),
         (v) => this.vCurrentTime = v,
+        'timeupdate',
       );
 
       this.reflectPlayerValue(
-        'volumechange',
-        player.getVolume(),
         this.vVolume,
+        player.getVolume(),
         (v) => this.vVolume = v,
-      );
-
-      this.reflectPlayerValue(
         'volumechange',
-        player.isMuted(),
+      );
+
+      this.reflectPlayerValue(
         this.vMuted,
+        player.isMuted(),
         (v) => this.vMuted = v,
+        'volumechange',
       );
 
       this.reflectPlayerValue(
-        'ratechange',
-        player.getPlaybackRate(),
         this.vPlaybackRate,
+        player.getPlaybackRate(),
         (v) => this.vPlaybackRate = v,
+        'ratechange',
       );
 
       this.reflectPlayerValue(
-        'durationchange',
-        player.getDuration(),
         this.vDuration,
+        player.getDuration(),
         (v) => this.vDuration = v,
+        'durationchange',
       );
     }, interval);
   }
 
   protected reflectPlayerValue<T> (
-    eventType: string,
-    value: T,
     currentValue: T,
+    value: T,
     update: (value: T) => void,
+    eventType: string,
   ) {
     const player = this.player;
     if (!player) {
