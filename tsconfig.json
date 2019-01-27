@@ -14,7 +14,6 @@
     "noUnusedLocals": true /* Report errors on unused locals. */
   },
   "exclude": [
-    "**/*.test.*",
     "**/web/*", // managed by Webpack
     "node_modules",
     "out"
