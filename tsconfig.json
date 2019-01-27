@@ -1,17 +1,22 @@
 {
   "compilerOptions": {
-    "module": "commonjs",
+    /* Basic Options */
     "target": "es6",
-    "outDir": "out",
-    "declaration": false, // set in CLI option to avoid web's
+    "module": "commonjs",
     "lib": [
       "es6",
       "dom"
     ],
+    "declaration": false, // set in CLI option to avoid web's
     "sourceMap": true,
+    "outDir": "out",
     "rootDir": "src",
-    "strict": true,   /* enable all strict type-checking options */
-    "noUnusedLocals": true /* Report errors on unused locals. */
+
+    /* Strict Type-Checking Options */
+    "strict": true,
+
+    /* Additional Checks */
+    "noUnusedLocals": true
   },
   "exclude": [
     "**/web/*", // managed by Webpack
