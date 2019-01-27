@@ -9,8 +9,8 @@ export default class Html5YouTube extends YouTubeElement {
   protected tmPlayerValues = 0;
 
   /**
-   * Returns the current playback position, in seconds,
-   * as a position between zero time and the current duration.
+   * Returns the official playback position, in seconds.
+   *
    * Can be set, to seek to the given time.
    */
   public get currentTime () {
@@ -24,9 +24,10 @@ export default class Html5YouTube extends YouTubeElement {
   protected vCurrentTime = 0;
 
   /**
-   * Returns the current playback volume multiplier,
+   * Returns the current playback volume,
    * as a number in the range 0.0 to 1.0,
    * where 0.0 is the quietest and 1.0 the loudest.
+   *
    * Can be set, to change the volume multiplier.
    */
   public get volume () {
@@ -40,10 +41,9 @@ export default class Html5YouTube extends YouTubeElement {
   protected vVolume = 0;
 
   /**
-   * Returns true if all audio is muted
-   * (regardless of other attributes either on the controller
-   * or on any media elements slaved to this controller),
-   * and false otherwise.
+   * Returns true if audio is muted, overriding the volume attribute,
+   * and false if the volume attribute is being honored.
+   *
    * Can be set, to change whether the audio is muted or not.
    */
   public get muted () {
@@ -57,10 +57,9 @@ export default class Html5YouTube extends YouTubeElement {
   protected vMuted = false;
 
   /**
-   * Returns the default rate of playback,
-   * for when the user is not fast-forwarding
-   * or reversing through the media resource.
-   * Can be set, to change the default rate of playback.
+   * Returns the current rate playback, where 1.0 is normal speed.
+   *
+   * Can be set, to change the rate of playback.
    */
   public get playbackRate () {
     return this.vPlaybackRate;
@@ -73,12 +72,15 @@ export default class Html5YouTube extends YouTubeElement {
   protected vPlaybackRate = 1;
 
   /**
-   * TODO
+   * Returns the length of the media resource, in seconds,
+   * assuming that the start of the media resource is at time zero.
+   * (NOTE: Unlike the original HTML5 `duration`,
+   *  this always returns a number.)
    */
   public get duration () {
     return this.vDuration;
   }
-  protected vDuration = 1;
+  protected vDuration = 0;
 
   // ----------------------------------------------------------------
   // Constructor
