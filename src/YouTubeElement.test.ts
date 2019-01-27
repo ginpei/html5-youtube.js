@@ -55,7 +55,7 @@ describe('YouTubeElement', () => {
     }
   });
 
-  describe('Constructing', () => {
+  describe('constructor', () => {
     beforeEach(() => {
       youtube = new YouTubeElement(elPlayer);
     });
@@ -140,7 +140,7 @@ describe('YouTubeElement', () => {
           elPlayer.setAttribute('data-youtube-playerVars', JSON.stringify({
             autohide: 1,
             cc_load_policy: 2,
-          } as YT.PlayerVars));
+          }));
 
           youtube = new YouTubeElement(elPlayer);
           const options: YT.PlayerOptions = createPlayer.mock.calls[0][0];
@@ -153,18 +153,18 @@ describe('YouTubeElement', () => {
         it('merges given options with HTML attribute', () => {
           elPlayer.setAttribute('data-youtube-playerVars', JSON.stringify({
             autohide: 1,
-            cc_load_policy: 2,
-          } as YT.PlayerVars));
+            color: 'black',
+          }));
 
           youtube = new YouTubeElement(elPlayer, { playerVars: {
-            cc_load_policy: 3,
+            cc_load_policy: 2,
             color: 'red',
           } });
           const options: YT.PlayerOptions = createPlayer.mock.calls[0][0];
           expect(options.playerVars).toEqual({
             autohide: 1, // from attr
-            cc_load_policy: 3, // overwritten
-            color: 'red', // from options
+            cc_load_policy: 2, // from options
+            color: 'red', // overwritten
           });
         });
       });
