@@ -1,16 +1,12 @@
 import YouTubeElement from './YouTubeElement';
 
 export default class Html5YouTube extends YouTubeElement {
-  public duration = 0;
   public currentSrc = '';
   public played = false;
   public paused = false;
   public ended = false;
 
-  protected tmTimeUpdate = 0;
-  protected tmVolume = 0;
-  protected tmPlaybackRate = 0;
-  protected tmDuration = 0;
+  protected tmPlayerValues = 0;
 
   /**
    * Returns the current playback position, in seconds,
@@ -76,6 +72,14 @@ export default class Html5YouTube extends YouTubeElement {
   }
   protected vPlaybackRate = 1;
 
+  /**
+   * TODO
+   */
+  public get duration () {
+    return this.vDuration;
+  }
+  protected vDuration = 1;
+
   // ----------------------------------------------------------------
   // Constructor
 
@@ -91,7 +95,7 @@ export default class Html5YouTube extends YouTubeElement {
     super.destroy();
 
     if (this.player) {
-      this.stopAllObservers();
+      this.stopObservingPlayerValues();
       this.resetProperties();
     }
   }
@@ -129,10 +133,7 @@ export default class Html5YouTube extends YouTubeElement {
     }
 
     this.updateMeta();
-    this.observeTimeUpdate();
-    this.observeVolume();
-    this.observePlaybackRate();
-    this.observeDuration();
+    this.observePlayerValues();
     this.emit('ready', event);
     this.emit('canplay', event);
     this.emit('canplaythrough', event); // TODO check if no event here
@@ -241,67 +242,77 @@ export default class Html5YouTube extends YouTubeElement {
   }
 
   /**
-   * Start observing currentTime's change.
+   * Start observing change of values YouTube Player gives.
    */
-  protected observeTimeUpdate () {
-    this.tmTimeUpdate = window.setInterval(() => {
-      const time = this.player!.getCurrentTime();
-      if (time !== this.vCurrentTime) {
-        this.vCurrentTime = time;
-        this.emit('timeupdate'); // TODO check if event is required
+  protected observePlayerValues () {
+    const interval = 100;
+    this.tmPlayerValues = window.setInterval(() => {
+      const player = this.player;
+      if (!player) {
+        return;
       }
-    }, 100);
+
+      this.reflectPlayerValue(
+        'timeupdate',
+        player.getCurrentTime(),
+        this.vCurrentTime,
+        (v) => this.vCurrentTime = v,
+      );
+
+      this.reflectPlayerValue(
+        'volumechange',
+        player.getVolume(),
+        this.vVolume,
+        (v) => this.vVolume = v,
+      );
+
+      this.reflectPlayerValue(
+        'volumechange',
+        player.isMuted(),
+        this.vMuted,
+        (v) => this.vMuted = v,
+      );
+
+      this.reflectPlayerValue(
+        'ratechange',
+        player.getPlaybackRate(),
+        this.vPlaybackRate,
+        (v) => this.vPlaybackRate = v,
+      );
+
+      this.reflectPlayerValue(
+        'durationchange',
+        player.getDuration(),
+        this.vDuration,
+        (v) => this.vDuration = v,
+      );
+    }, interval);
   }
 
-  /**
-   * Start observing volume's change.
-   */
-  protected observeVolume () {
-    this.tmVolume = window.setInterval(() => {
-      const muted = this.player!.isMuted();
-      const volume = this.player!.getVolume();
-      if (muted !== this.vMuted || volume !== this.vVolume) {
-        this.vMuted = muted;
-        this.vVolume = volume;
-        this.emit('volumechange');
-      }
-    }, 100);
-  }
+  protected reflectPlayerValue<T> (
+    eventType: string,
+    value: T,
+    currentValue: T,
+    update: (value: T) => void,
+  ) {
+    const player = this.player;
+    if (!player) {
+      return;
+    }
 
-  /**
-   * Start observing playbackRate's change.
-   */
-  protected observePlaybackRate () {
-    this.tmPlaybackRate = window.setInterval(() => {
-      const playbackRate = this.player!.getPlaybackRate();
-      if (playbackRate !== this.vPlaybackRate) {
-        this.vPlaybackRate = playbackRate;
-        this.emit('ratechange');
-      }
-    }, 100);
-  }
+    if (value !== currentValue) {
+      update(value);
 
-  /**
-   * Start observing duration's change.
-   */
-  protected observeDuration () {
-    this.tmDuration = window.setInterval(() => {
-      const duration = this.player!.getDuration() || 0;
-      if (duration !== this.duration) {
-        this.duration = duration;
-        this.emit('durationchange');
-      }
-    }, 100);
+      const event: YT.PlayerEvent = { target: player, type: eventType };
+      this.emit(eventType, event);
+    }
   }
 
   /**
    * @see #destroy
    */
-  protected stopAllObservers () {
-    clearInterval(this.tmTimeUpdate);
-    clearInterval(this.tmVolume);
-    clearInterval(this.tmPlaybackRate);
-    clearInterval(this.tmDuration);
+  protected stopObservingPlayerValues () {
+    clearInterval(this.tmPlayerValues);
   }
 
   protected resetProperties () {
@@ -310,7 +321,7 @@ export default class Html5YouTube extends YouTubeElement {
     this.muted = false;
     this.playbackRate = 1;
     this.src = '';
-    this.duration = 0;
+    this.vDuration = 0;
     this.currentSrc = '';
     this.played = false;
     this.paused = false;
