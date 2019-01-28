@@ -178,7 +178,6 @@ describe('Html5YouTube', () => {
     });
 
     describe('duration', () => {
-      // TODO make it actually a getter
       it('getter', () => {
         (player.player!.getDuration as jest.Mock).mockReturnValue(123);
         jest.advanceTimersByTime(100);
