@@ -90,33 +90,29 @@ describe('Html5YouTube', () => {
     });
 
     describe('currentTime', () => {
-      it('setter', () => {
-        const seekTo = spyOn(player.player!, 'seekTo');
-        player.currentTime = 12.3;
-        expect(seekTo).toBeCalledWith(12.3, true);
-      });
-
       it('getter', () => {
         (player.player!.getCurrentTime as jest.Mock).mockReturnValue(12.3);
         jest.advanceTimersByTime(100);
         expect(player.currentTime).toBe(12.3);
       });
 
-      it('if not ready', () => {
-        player.player = undefined;
-        player.currentTime = 12.3;
-        expect(player.currentTime).toBe(0);
+      describe('setter', () => {
+        it('updates YouTube player value', () => {
+          const seekTo = spyOn(player.player!, 'seekTo');
+          player.currentTime = 12.3;
+          expect(seekTo).toBeCalledWith(12.3, true);
+        });
+
+        it('throws no errors', () => {
+          player.player = undefined;
+          player.currentTime = 12.3;
+          expect(player.currentTime).toBe(0);
+        });
       });
     });
 
     describe('volume', () => {
       // HTML5 Media API accepts 0-1, while YouTube API accepts 0-100
-
-      it('setter', () => {
-        const setVolume = spyOn(player.player!, 'setVolume');
-        player.volume = 0.12;
-        expect(setVolume).toBeCalledWith(12);
-      });
 
       it('getter', () => {
         (player.player!.getVolume as jest.Mock).mockReturnValue(12);
@@ -124,56 +120,68 @@ describe('Html5YouTube', () => {
         expect(player.volume).toBe(0.12);
       });
 
-      it('if not ready', () => {
-        player.player = undefined;
-        player.volume = 0.12;
-        expect(player.volume).toBe(0);
+      describe('setter', () => {
+        it('updates YouTube player value', () => {
+          const setVolume = spyOn(player.player!, 'setVolume');
+          player.volume = 0.12;
+          expect(setVolume).toBeCalledWith(12);
+        });
+
+        it('throws no errors', () => {
+          player.player = undefined;
+          player.volume = 0.12;
+          expect(player.volume).toBe(0);
+        });
       });
     });
 
     describe('mute', () => {
-      it('set mute', () => {
-        const mute = spyOn(player.player!, 'mute');
-        player.muted = true;
-        expect(mute).toBeCalled();
-      });
-
-      it('set unMute', () => {
-        const unMute = spyOn(player.player!, 'unMute');
-        player.muted = false;
-        expect(unMute).toBeCalled();
-      });
-
       it('getter', () => {
         (player.player!.isMuted as jest.Mock).mockReturnValue(true);
         jest.advanceTimersByTime(100);
         expect(player.muted).toBe(true);
       });
 
-      it('if not ready', () => {
-        player.player = undefined;
-        player.muted = true;
-        expect(player.muted).toBe(false);
+      describe('setter', () => {
+        it('sets mute', () => {
+          const mute = spyOn(player.player!, 'mute');
+          player.muted = true;
+          expect(mute).toBeCalled();
+        });
+
+        it('sets unMute', () => {
+          const unMute = spyOn(player.player!, 'unMute');
+          player.muted = false;
+          expect(unMute).toBeCalled();
+        });
+
+        it('throws no errors', () => {
+          player.player = undefined;
+          player.muted = true;
+          expect(player.muted).toBe(false);
+        });
       });
     });
 
     describe('playbackRate', () => {
-      it('setter', () => {
-        const setPlaybackRate = spyOn(player.player!, 'setPlaybackRate');
-        player.playbackRate = 1.5;
-        expect(setPlaybackRate).toBeCalledWith(1.5);
-      });
-
       it('getter', () => {
         (player.player!.getPlaybackRate as jest.Mock).mockReturnValue(1.5);
         jest.advanceTimersByTime(100);
         expect(player.playbackRate).toBe(1.5);
       });
 
-      it('if not ready', () => {
-        player.player = undefined;
-        player.playbackRate = 1.5;
-        expect(player.playbackRate).toBe(1);
+      describe('setter', () => {
+        it('updates YouTube player value', () => {
+          const setPlaybackRate = spyOn(player.player!, 'setPlaybackRate');
+          player.playbackRate = 1.5;
+          expect(setPlaybackRate).toBeCalledWith(1.5);
+        });
+
+        it('throws no errors', () => {
+          player.player = undefined;
+          player.playbackRate = 1.5;
+          expect(player.playbackRate).toBe(1);
+        });
       });
     });
 
