@@ -2,7 +2,7 @@
 <html lang="en">
 	<head>
 		<meta charset="UTF-8">
-		<title>HTML5 &lt;video&gt;</title>
+		<title>HTML5 &lt;video&gt; (to compare)</title>
 		<style>
 			.player {
 				height: 300px;
@@ -11,7 +11,7 @@
 		</style>
 	</head>
 	<body>
-		<h1>HTML5 &lt;video&gt;</h1>
+		<h1>HTML5 &lt;video&gt; (to compare)</h1>
 		<p>
 			<em>This is the demo of HTML5 video, not html5-youtube.js.</em>
 			Before run, you have to download video file using this command:
@@ -43,7 +43,7 @@
 		</div>
 		<script>
 (function() {
-	var youtube = {
+	var Html5YouTube = {
 		availablePlaybackRates: [0.25, 0.5, 1, 1.5, 2]
 	};
 
@@ -85,7 +85,7 @@
 		elCurrentTimeText.setTime(player.currentTime);
 		elVolume.checked = player.muted;
 		elVolume.value = player.volume;
-		elPlaybackRate.value = youtube.availablePlaybackRates.indexOf(player.playbackRate);
+		elPlaybackRate.value = Html5YouTube.availablePlaybackRates.indexOf(player.playbackRate);
 		elPlaybackRateText.innerHTML = player.playbackRate;
 	});
 	player.addEventListener('play', function(event) {
@@ -113,7 +113,7 @@
 		elVolume.value = player.volume;
 	});
 	player.addEventListener('ratechange', function(event) {
-		elPlaybackRate.value = youtube.availablePlaybackRates.indexOf(player.playbackRate);
+		elPlaybackRate.value = Html5YouTube.availablePlaybackRates.indexOf(player.playbackRate);
 		elPlaybackRateText.innerHTML = player.playbackRate;
 	});
 	player.addEventListener('error', function(event) {
@@ -160,7 +160,7 @@
 		player.volume = this.value;
 	});
 	elPlaybackRate.addEventListener('change', function(event) {
-		player.playbackRate = youtube.availablePlaybackRates[this.value];
+		player.playbackRate = Html5YouTube.availablePlaybackRates[this.value];
 	});
 
 	player.src = videoId;

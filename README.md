@@ -2,6 +2,12 @@ Note: "youtube.js" has been renamed "html5-youtube.js".
 
 # html5-youtube.js
 
+[![NPM](https://nodei.co/npm/html5-youtube.png)](https://nodei.co/npm/html5-youtube/)
+
+<!-- TODO change branch to master -->
+[![Build Status](https://travis-ci.org/ginpei/html5-youtube.js.svg?branch=v2)](https://travis-ci.org/ginpei/html5-youtube.js)
+[![Maintainability](https://api.codeclimate.com/v1/badges/cd4a8c29404801838810/maintainability)](https://codeclimate.com/github/ginpei/html5-youtube.js/maintainability)
+
 YouTube Player API wrapper like HTML5 video API.
 
 * [YouTube Player API Reference for iframe Embeds - YouTube — Google Developers](https://developers.google.com/youtube/iframe_api_reference)

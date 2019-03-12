@@ -1,0 +1,26 @@
+{
+  "compilerOptions": {
+    /* Basic Options */
+    "target": "es6",
+    "module": "commonjs",
+    "lib": [
+      "es6",
+      "dom"
+    ],
+    "declaration": false, // set in CLI option to avoid web's
+    "sourceMap": true,
+    "outDir": "out",
+    "rootDir": "src",
+
+    /* Strict Type-Checking Options */
+    "strict": true,
+
+    /* Additional Checks */
+    "noUnusedLocals": true
+  },
+  "exclude": [
+    "**/web/*", // managed by Webpack
+    "node_modules",
+    "out"
+  ]
+}

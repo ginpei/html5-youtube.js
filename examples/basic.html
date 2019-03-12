@@ -7,11 +7,11 @@
 	<body>
 		<h1>html5-youtube.js</h1>
 		<div id="my-youtube-player" data-youtube-videoid="KFstP0C9sVk"></div>
-		<script src="../html5-youtube.js"></script>
+		<script src="../out/web/html5-youtube.js"></script>
 		<script>
 var elPlayer = document.getElementById('my-youtube-player');
 
-youtube({ el:elPlayer });
+const player = new Html5YouTube(elPlayer);
 		</script>
 	</body>
 </html>

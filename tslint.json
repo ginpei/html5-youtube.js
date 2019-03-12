@@ -1,0 +1,66 @@
+{
+  "extends": ["tslint:recommended"],
+  "linterOptions": {
+    "exclude": [
+      "config/**/*.js",
+      "node_modules/**/*.ts",
+      "coverage/lcov-report/*.js"
+    ]
+  },
+  "rules": {
+		"curly": true,
+		"class-name": true,
+    "eofline": true,
+    "indent": [true, "spaces", 2],
+		"linebreak-style": [true, "LF"],
+		"max-line-length": [
+      true,
+      {
+        "limit": 120,
+        "ignore-pattern": "^import |^export {(.*?)}|^\\s*//|^\\s*\\* "
+      }
+    ],
+		"no-duplicate-variable": true,
+		"no-string-throw": true,
+		"no-unused-expression": true,
+    "no-console": false,
+    "no-trailing-whitespace": true,
+    "semicolon": [
+      true,
+      "always"
+    ],
+    "space-before-function-paren": [true, "always"],
+    "space-within-parens": true,
+    "trailing-comma": [true, { "multiline": "always", "singleline": "never" }],
+		"triple-equals": true,
+    "typedef-whitespace": [
+      true,
+      {
+        "call-signature": "nospace",
+        "index-signature": "nospace",
+        "parameter": "nospace",
+        "property-declaration": "nospace",
+        "variable-declaration": "nospace"
+      },
+      {
+        "call-signature": "onespace",
+        "index-signature": "onespace",
+        "parameter": "onespace",
+        "property-declaration": "onespace",
+        "variable-declaration": "onespace"
+      }
+    ],
+    "quotemark": [true, "single", "jsx-double"],
+    "whitespace": [
+      true,
+      "check-branch",
+      "check-decl",
+      "check-operator",
+      "check-module",
+      "check-separator",
+      "check-rest-spread",
+      "check-type-operator",
+      "check-preblock"
+    ]
+  }
+}
