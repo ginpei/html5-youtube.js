@@ -1,6 +1,6 @@
 {
   "name": "html5-youtube",
-  "version": "2.0.0-rc.1",
+  "version": "2.0.0-rc.2",
   "description": "YouTube Player API wrapper like HTML5 video API.",
   "main": "out/Html5YouTube.js",
   "types": "out/Html5YouTube.d.ts",
