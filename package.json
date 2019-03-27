@@ -8,12 +8,12 @@
     "example": "examples"
   },
   "dependencies": {
+    "@types/event-emitter": "^0.3.3",
+    "@types/youtube": "0.0.35",
     "event-emitter": "^0.3.5"
   },
   "devDependencies": {
-    "@types/event-emitter": "^0.3.3",
     "@types/jest": "^23.3.12",
-    "@types/youtube": "0.0.35",
     "jest": "^24.5.0",
     "ts-jest": "^24.0.0",
     "ts-loader": "^5.3.3",
